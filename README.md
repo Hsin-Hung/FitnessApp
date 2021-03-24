@@ -1,3 +1,6 @@
-# CS501FitnessApp
+# How to run the demo?
 
-https://docs.google.com/document/d/1RH23igtt_PtkAcdY9t3HWrfhdLL7GjZBpHnW08tlOcY/edit?usp=sharing
+There are two versions of this app, one is implemented for demo and the other one is just a skeleton. 
+
+![image-20210323230519337](C:\Users\a\AppData\Roaming\Typora\typora-user-images\image-20210323230519337.png)
+
