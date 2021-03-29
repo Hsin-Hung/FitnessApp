@@ -1,6 +1,7 @@
 package com.example.fitnessapp;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -8,28 +9,152 @@ import androidx.core.content.ContextCompat;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.Toast;
 
+import com.stripe.android.PaymentConfiguration;
+import com.stripe.android.paymentsheet.PaymentResult;
+import com.stripe.android.paymentsheet.PaymentSheet;
+
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+import okhttp3.ResponseBody;
+
 public class StripeActivity extends AppCompatActivity {
 
+    private static final String BACKEND_URL = "https://fitnessapp501.herokuapp.com/";
+    private static final String STRIPE_PUBLISHABLE_KEY = "pk_test_51IYoiTG4EHiTjcivFbozomjXG35nqPyiiYYFKlwEMGE4YgBuccRWmph6vGhLjaURKkMloROx88jky9YLILUyNbDA00akeGEl3N";
 
+    private PaymentSheet paymentSheet;
+
+    private String paymentIntentClientSecret;
+    private String customerId;
+    private String ephemeralKeySecret;
+    private Button buyButton;
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_stripe);
 
+        // Use a layout that has a button with `android:id="@+id/buy_button"`
+        setContentView(R.layout.activity_stripe);
+        buyButton = (Button) findViewById(R.id.buy_button);
+
+        buyButton.setEnabled(false);
+
+        PaymentConfiguration.init(this, STRIPE_PUBLISHABLE_KEY);
+        paymentSheet = new PaymentSheet(this, result -> {
+            onPaymentSheetResult(result);
+        });
+        buyButton.setOnClickListener(v -> presentPaymentSheet());
+
+        fetchInitData();
     }
 
+    private void fetchInitData() {
+        final String requestJson = "{}";
+        final RequestBody requestBody = RequestBody.create(
+                requestJson,
+                MediaType.get("application/json; charset=utf-8")
+        );
 
-    public void stripeTest(View view){
+        final Request request = new Request.Builder()
+                .url(BACKEND_URL + "payment-sheet")
+                .post(requestBody)
+                .build();
 
+        new OkHttpClient()
+                .newCall(request)
+                .enqueue(new Callback() {
+                    @Override
+                    public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                        // Handle failure
+                        System.out.println(e);
+                    }
 
+                    @Override
+                    public void onResponse(
+                            @NotNull Call call,
+                            @NotNull Response response
+                    ) throws IOException {
+                        if (!response.isSuccessful()) {
+                            // Handle failure
 
+                        } else {
+                            final JSONObject responseJson = parseResponse(response.body());
+                            paymentIntentClientSecret = responseJson.optString("paymentIntent");
+                            customerId = responseJson.optString("customer");
+                            ephemeralKeySecret = responseJson.optString("ephemeralKey");
+
+                            runOnUiThread(() -> buyButton.setEnabled(true));
+                        }
+                    }
+                });
+    }
+
+    private JSONObject parseResponse(ResponseBody responseBody) {
+        if (responseBody != null) {
+            try {
+                return new JSONObject(responseBody.string());
+            } catch (IOException | JSONException e) {
+                Log.e("App", "Error parsing response", e);
+            }
+        }
+        return new JSONObject();
+    }
+
+    private void presentPaymentSheet() {
+
+        paymentSheet.present(
+                paymentIntentClientSecret,
+                new PaymentSheet.Configuration(
+                        "Example, Inc.",
+                        new PaymentSheet.CustomerConfiguration(
+                                customerId,
+                                ephemeralKeySecret
+                        )
+                )
+        );
+    }
+
+    private void onPaymentSheetResult(
+            final PaymentResult paymentResult
+    ) {
+        if (paymentResult instanceof PaymentResult.Canceled) {
+            Toast.makeText(
+                    this,
+                    "Payment Canceled",
+                    Toast.LENGTH_LONG
+            ).show();
+        } else if (paymentResult instanceof PaymentResult.Failed) {
+            Toast.makeText(
+                    this,
+                    "Payment Failed. See logcat for details.",
+                    Toast.LENGTH_LONG
+            ).show();
+
+            Log.e("App", "Got error: ", ((PaymentResult.Failed) paymentResult).getError());
+        } else if (paymentResult instanceof PaymentResult.Completed) {
+            Toast.makeText(
+                    this,
+                    "Payment Complete",
+                    Toast.LENGTH_LONG
+            ).show();
+        }
     }
 }

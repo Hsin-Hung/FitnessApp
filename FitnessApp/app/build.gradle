@@ -43,6 +43,7 @@ dependencies {
     implementation platform('com.google.firebase:firebase-bom:26.7.0')
     implementation 'com.google.firebase:firebase-analytics'
     implementation 'com.google.firebase:firebase-auth'
-
+    implementation 'com.github.stripe:stripe-android:mc-beta-1-SNAPSHOT'
+    implementation 'com.squareup.okhttp3:okhttp:4.9.0'
     implementation 'com.google.android.gms:play-services-wallet:18.1.2'
 }

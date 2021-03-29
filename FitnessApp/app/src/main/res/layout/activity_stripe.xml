@@ -8,26 +8,16 @@
     tools:context=".StripeActivity">
 
     <Button
-        android:id="@+id/stripeBTN"
+        android:id="@+id/buy_button"
         android:layout_width="154dp"
         android:layout_height="79dp"
         android:backgroundTint="#D32828"
-        android:onClick="stripeTest"
-        android:text="Stripe Test"
+        android:text="Checkout"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.848" />
 
-    <TextView
-        android:id="@+id/stripeResTV"
-        android:layout_width="345dp"
-        android:layout_height="196dp"
-        android:gravity="center"
-        android:textColor="#000000"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/stripeBTN" />
 </androidx.constraintlayout.widget.ConstraintLayout>
