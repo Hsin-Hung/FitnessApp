@@ -27,9 +27,8 @@ public class GoogleFitActivity extends AppCompatActivity {
 
     private final int  REQUEST_CODE = 1;
     private static final int SIGN_IN_REQUEST_CODE = 2;
-    private TextView testingTV, greetTV;
+    private TextView testingTV;
     private FitnessOptions fitnessOptions;
-    private String name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +36,6 @@ public class GoogleFitActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         testingTV = (TextView) findViewById(R.id.testingTV);
-        greetTV = (TextView) findViewById(R.id.greetTV);
 
         fitnessOptions =
                 FitnessOptions.builder()
@@ -54,21 +52,12 @@ public class GoogleFitActivity extends AppCompatActivity {
                 // subscription was to a DataSource. Alternatively, a Subscription object can be used.
                 .unsubscribe(DataType.TYPE_STEP_COUNT_DELTA)
                 .addOnSuccessListener(res->{
-                    System.out.println("Successfully unsubscribed !");
+                    Toast.makeText(this, "UNSUBSCRIBED !", Toast.LENGTH_SHORT).show();
                 }).addOnFailureListener(e -> {
-                    System.out.println("Failed unsubscribed !");
+                    Toast.makeText(this, "FAILED TO UNSUBSCRIBE !", Toast.LENGTH_SHORT).show();
                 });
 
         super.onDestroy();
-    }
-
-    @Override
-    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-
-        name = savedInstanceState.getString("name");
-        greetTV.setText(name);
-
     }
 
     @Override
@@ -151,11 +140,11 @@ public class GoogleFitActivity extends AppCompatActivity {
                 .subscribe(DataType.TYPE_STEP_COUNT_CUMULATIVE)
                 .addOnSuccessListener(sub ->{
 
-                    System.out.println("Successfully subscribed.");
+                    Toast.makeText(this, "SUCCESSFULLY SUBSCRIBED !", Toast.LENGTH_SHORT).show();
 
                 }).addOnFailureListener(fail -> {
 
-                    System.out.println("Failed subscribed.");
+            Toast.makeText(this, "FAILED TO SUBSCRIBED !", Toast.LENGTH_SHORT).show();
 
                  });
 
@@ -172,10 +161,12 @@ public class GoogleFitActivity extends AppCompatActivity {
                     if (!dataSet.isEmpty())
                         total.set(Integer.parseInt(dataSet.getDataPoints()
                                 .get(0).getValue(Field.FIELD_STEPS).toString()));
-                    System.out.println("Total steps: "+ total.toString());
+
+                    testingTV.setText("Total steps: "+ total.toString());
+
                 })
                 .addOnFailureListener(e -> {
-                    System.out.println( "There was a problem getting the step count.");
+                    testingTV.setText("There was a problem getting the step count.");
                 });
 
     }
