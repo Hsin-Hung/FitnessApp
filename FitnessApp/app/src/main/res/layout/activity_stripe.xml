@@ -20,4 +20,31 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.848" />
 
+    <Button
+        android:id="@+id/fetchDataBTN"
+        android:layout_width="129dp"
+        android:layout_height="61dp"
+        android:layout_marginBottom="56dp"
+        android:backgroundTint="#21349E"
+        android:onClick="fetchInitData"
+        android:text="Fetch Data"
+        app:layout_constraintBottom_toTopOf="@+id/buy_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/amountPayET"
+        app:layout_constraintVertical_bias="0.768" />
+
+    <EditText
+        android:id="@+id/amountPayET"
+        android:layout_width="268dp"
+        android:layout_height="65dp"
+        android:ems="10"
+        android:hint="enter amount"
+        android:inputType="numberDecimal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.362" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

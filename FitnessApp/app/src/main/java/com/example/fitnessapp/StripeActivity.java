@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.stripe.android.PaymentConfiguration;
@@ -46,13 +47,14 @@ public class StripeActivity extends AppCompatActivity {
     private String ephemeralKeySecret;
 
     private Button buyButton;
-
+    private EditText amountPayET;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stripe);
 
+        amountPayET = (EditText) findViewById(R.id.amountPayET);
         buyButton = (Button) findViewById(R.id.buy_button);
 
         buyButton.setEnabled(false);
@@ -64,11 +66,17 @@ public class StripeActivity extends AppCompatActivity {
 
         buyButton.setOnClickListener(v -> presentPaymentSheet());
 
-        fetchInitData();
     }
 
-    private void fetchInitData() {
-        final String requestJson = "{}";
+    public void fetchInitData(View view) {
+
+       String amount = amountPayET.getText().toString();
+
+       if(amount.isEmpty()){
+           amount = "1099";
+        }
+
+        final String requestJson = "{\"amount\":"+amount+"}";
         final RequestBody requestBody = RequestBody.create(
                 requestJson,
                 MediaType.get("application/json; charset=utf-8")
@@ -95,7 +103,7 @@ public class StripeActivity extends AppCompatActivity {
                     ) throws IOException {
                         if (!response.isSuccessful()) {
                             // Handle failure
-
+                            System.out.println("not successylt");
                         } else {
                             final JSONObject responseJson = parseResponse(response.body());
                             paymentIntentClientSecret = responseJson.optString("paymentIntent");
