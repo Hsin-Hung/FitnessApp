@@ -88,6 +88,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
+            System.out.println("FAIL: "+ e);
             updateUI(null);
         }
     }
@@ -104,6 +105,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                             updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
+                            System.out.println("FAIL: ");
                             updateUI(null);
                         }
                     }
@@ -115,6 +117,10 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         if(user != null){
             Intent intent = new Intent(this, DemoMenuActivity.class);
             startActivity(intent);
+        }else{
+
+            Toast.makeText(this, "SIGN IN FAIL !", Toast.LENGTH_SHORT).show();
+
         }
 
     }
