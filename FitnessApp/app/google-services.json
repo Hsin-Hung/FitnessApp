@@ -14,6 +14,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "802577278466-ijhilk8kj9ffg9gd79m6h09aaa7lkntc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.fitnessapp",
+            "certificate_hash": "e99819281c0f1bdda7b2c0c90e1ab520c74555ab"
+          }
+        },
+        {
+          "client_id": "802577278466-jjflak3us5jp4nactjqoj95lj1178b28.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.fitnessapp",
+            "certificate_hash": "7d63ace055f3f366acbaec7f2642e87e11623523"
+          }
+        },
+        {
           "client_id": "802577278466-sre5u41de4lvnv6kplgkrfmmg81rrq33.apps.googleusercontent.com",
           "client_type": 3
         }

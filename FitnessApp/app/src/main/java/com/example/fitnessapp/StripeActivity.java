@@ -37,6 +37,8 @@ import okhttp3.ResponseBody;
 
 public class StripeActivity extends AppCompatActivity {
 
+    private final String DEFAULT_PAYMENT_VALUE = "1099"; // $10.99
+
     private static final String BACKEND_URL = "https://fitnessapp501.herokuapp.com/";
     private static final String STRIPE_PUBLISHABLE_KEY = "pk_test_51IYoiTG4EHiTjcivFbozomjXG35nqPyiiYYFKlwEMGE4YgBuccRWmph6vGhLjaURKkMloROx88jky9YLILUyNbDA00akeGEl3N";
 
@@ -77,7 +79,7 @@ public class StripeActivity extends AppCompatActivity {
        String amount = amountPayET.getText().toString();
 
        if(amount.isEmpty()){
-           amount = "1099";
+           amount = DEFAULT_PAYMENT_VALUE;
         }
 
         // request the pay amount entered
