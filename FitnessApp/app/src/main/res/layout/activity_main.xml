@@ -12,7 +12,7 @@
         android:layout_width="205dp"
         android:layout_height="49dp"
         android:backgroundTint="#C64343"
-        android:onClick="googleFitDemo"
+        android:onClick="googleFitRegister"
         android:text="GoogleFit Register"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

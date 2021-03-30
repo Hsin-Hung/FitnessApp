@@ -12,9 +12,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.FitnessApp">
+        <activity android:name=".SignUpActivity"></activity>
+
         <meta-data
             android:name="com.google.android.gms.wallet.api.enabled"
             android:value="true" />
+
         <activity android:name=".LobbyActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

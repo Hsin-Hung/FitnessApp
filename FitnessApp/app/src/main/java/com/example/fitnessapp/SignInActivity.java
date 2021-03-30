@@ -5,7 +5,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -24,14 +26,24 @@ import com.google.firebase.auth.GoogleAuthProvider;
 
 public class SignInActivity extends AppCompatActivity implements View.OnClickListener {
 
+    private static final String TAG = "MyActivity";
     final int RC_SIGN_IN = 1;
     GoogleSignInClient mGoogleSignInClient;
     private FirebaseAuth mAuth;
+    SignInButton googleSignInBTN;
+    EditText emailET, passET;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
+
+        emailET = (EditText) findViewById(R.id.emailSignInET);
+        passET = (EditText) findViewById(R.id.passSignInET);
+
+        googleSignInBTN = (SignInButton) findViewById(R.id.sign_in_button);
+        googleSignInBTN.setOnClickListener(this);
 
         // Configure sign-in to request the user's ID, email address, and basic
     // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
@@ -42,7 +54,6 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
         // Build a GoogleSignInClient with the options specified by gso.
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-        findViewById(R.id.sign_in_button).setOnClickListener(this);
         mAuth = FirebaseAuth.getInstance();
     }
 
@@ -52,8 +63,6 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         super.onStart();
 // Check for existing Google Sign In account, if the user is already signed in
 // the GoogleSignInAccount will be non-null.
-//        FirebaseUser currentUser = mAuth.getCurrentUser();
-//        updateUI(currentUser);
     }
 
     @Override
@@ -83,12 +92,13 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
+            Log.d(TAG, "firebaseAuthWithGoogle:" + account.getId());
             firebaseAuthWithGoogle(account.getIdToken());
             // Signed in successfully, show authenticated UI.
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
-            System.out.println("FAIL: "+ e);
+            Log.w(TAG, "Google sign in failed", e);
             updateUI(null);
         }
     }
@@ -101,11 +111,12 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
+                            Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
                             updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
-                            System.out.println("FAIL: ");
+                            Log.w(TAG, "signInWithCredential:failure", task.getException());
                             updateUI(null);
                         }
                     }
@@ -118,9 +129,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
             Intent intent = new Intent(this, DemoMenuActivity.class);
             startActivity(intent);
         }else{
-
             Toast.makeText(this, "SIGN IN FAIL !", Toast.LENGTH_SHORT).show();
-
         }
 
     }
@@ -132,8 +141,32 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
             case R.id.sign_in_button:
                 signIn();
                 break;
-            // ...
         }
+
+    }
+
+    public void signInWithEP(View view){
+
+        String email = emailET.getText().toString(), password = passET.getText().toString();
+
+        mAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d(TAG, "signInWithEmail:success");
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            updateUI(user);
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w(TAG, "signInWithEmail:failure", task.getException());
+                            Toast.makeText(SignInActivity.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                            updateUI(null);
+                        }
+                    }
+                });
 
     }
 }

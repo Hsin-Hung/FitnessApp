@@ -9,16 +9,19 @@ import android.widget.TextView;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class DemoMenuActivity extends AppCompatActivity {
 
     TextView greetTV;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_demo_menu);
-
+        mAuth = FirebaseAuth.getInstance();
         greetTV = (TextView) findViewById(R.id.greetTV);
         showGreeting();
 
@@ -26,9 +29,11 @@ public class DemoMenuActivity extends AppCompatActivity {
 
     private void showGreeting(){
 
-        GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(this);
-        if(acct!=null){
-            greetTV.setText("HELLO " + acct.getDisplayName());
+
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+
+        if( currentUser!=null){
+            greetTV.setText("HELLO " +  currentUser.getDisplayName());
         }
 
     }

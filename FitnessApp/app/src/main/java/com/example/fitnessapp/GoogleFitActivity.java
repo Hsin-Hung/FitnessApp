@@ -60,6 +60,9 @@ public class GoogleFitActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
+
+
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
@@ -86,8 +89,9 @@ public class GoogleFitActivity extends AppCompatActivity {
     }
 
 
+    // request background collection of by subscribing to fitness data
     @RequiresApi(api = Build.VERSION_CODES.M)
-    public void googleFitDemo(View view){
+    public void googleFitRegister(View view){
 
         if (oAuthPermissionsApproved()) {
             start();
@@ -96,15 +100,6 @@ public class GoogleFitActivity extends AppCompatActivity {
                     getGoogleAccount(), fitnessOptions);
         }
 
-    }
-
-    private boolean oAuthPermissionsApproved() {
-        return GoogleSignIn.hasPermissions(getGoogleAccount(), fitnessOptions);
-    }
-
-    private GoogleSignInAccount getGoogleAccount() {
-        return GoogleSignIn.getAccountForExtension(
-                this, fitnessOptions);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -126,11 +121,23 @@ public class GoogleFitActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.ACTIVITY_RECOGNITION},
                     REQUEST_CODE);
-
         }
 
-
     }
+
+
+
+
+    private boolean oAuthPermissionsApproved() {
+        return GoogleSignIn.hasPermissions(getGoogleAccount(), fitnessOptions);
+    }
+
+    private GoogleSignInAccount getGoogleAccount() {
+        return GoogleSignIn.getAccountForExtension(
+                this, fitnessOptions);
+    }
+
+
 
 
 

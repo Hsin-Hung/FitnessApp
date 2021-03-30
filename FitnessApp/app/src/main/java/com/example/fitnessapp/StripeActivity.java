@@ -44,15 +44,15 @@ public class StripeActivity extends AppCompatActivity {
     private String paymentIntentClientSecret;
     private String customerId;
     private String ephemeralKeySecret;
+
     private Button buyButton;
 
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // Use a layout that has a button with `android:id="@+id/buy_button"`
         setContentView(R.layout.activity_stripe);
+
         buyButton = (Button) findViewById(R.id.buy_button);
 
         buyButton.setEnabled(false);
@@ -61,6 +61,7 @@ public class StripeActivity extends AppCompatActivity {
         paymentSheet = new PaymentSheet(this, result -> {
             onPaymentSheetResult(result);
         });
+
         buyButton.setOnClickListener(v -> presentPaymentSheet());
 
         fetchInitData();
@@ -123,7 +124,7 @@ public class StripeActivity extends AppCompatActivity {
         paymentSheet.present(
                 paymentIntentClientSecret,
                 new PaymentSheet.Configuration(
-                        "Example, Inc.",
+                        "FitnessApp, Inc.",
                         new PaymentSheet.CustomerConfiguration(
                                 customerId,
                                 ephemeralKeySecret
