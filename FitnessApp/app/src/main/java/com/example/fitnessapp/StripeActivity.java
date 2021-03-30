@@ -59,6 +59,7 @@ public class StripeActivity extends AppCompatActivity {
 
         buyButton.setEnabled(false);
 
+        // create the payment configuration with the Stripe public key
         PaymentConfiguration.init(this, STRIPE_PUBLISHABLE_KEY);
         paymentSheet = new PaymentSheet(this, result -> {
             onPaymentSheetResult(result);
@@ -68,6 +69,9 @@ public class StripeActivity extends AppCompatActivity {
 
     }
 
+
+    // fetch the data needed to call the stripe API : Payment Intent, Customer, Ephemeral Key by
+    // creating a post request to backend server hosted on Heroku
     public void fetchInitData(View view) {
 
        String amount = amountPayET.getText().toString();
@@ -76,7 +80,10 @@ public class StripeActivity extends AppCompatActivity {
            amount = "1099";
         }
 
+        // request the pay amount entered
         final String requestJson = "{\"amount\":"+amount+"}";
+
+        // create the request body
         final RequestBody requestBody = RequestBody.create(
                 requestJson,
                 MediaType.get("application/json; charset=utf-8")
@@ -87,6 +94,7 @@ public class StripeActivity extends AppCompatActivity {
                 .post(requestBody)
                 .build();
 
+        // init the post request
         new OkHttpClient()
                 .newCall(request)
                 .enqueue(new Callback() {
@@ -116,6 +124,7 @@ public class StripeActivity extends AppCompatActivity {
                 });
     }
 
+    // helper function to parse JSON
     private JSONObject parseResponse(ResponseBody responseBody) {
         if (responseBody != null) {
             try {
@@ -127,6 +136,8 @@ public class StripeActivity extends AppCompatActivity {
         return new JSONObject();
     }
 
+
+    // present the Pre-build UI payment sheet with the retrieved objects (Payment Intent, Customer, Ephemeral Key)
     private void presentPaymentSheet() {
 
         paymentSheet.present(
@@ -141,6 +152,7 @@ public class StripeActivity extends AppCompatActivity {
         );
     }
 
+    // after payment, it shows the result of the payment
     private void onPaymentSheetResult(
             final PaymentResult paymentResult
     ) {

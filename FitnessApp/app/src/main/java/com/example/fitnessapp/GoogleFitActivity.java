@@ -37,6 +37,7 @@ public class GoogleFitActivity extends AppCompatActivity {
 
         testingTV = (TextView) findViewById(R.id.testingTV);
 
+        // create the fitness option for getting step counts to pass to GoogleSignIn
         fitnessOptions =
                 FitnessOptions.builder()
                         .addDataType(DataType.TYPE_STEP_COUNT_CUMULATIVE)
@@ -47,6 +48,8 @@ public class GoogleFitActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
+
+        // FOR DEMO PURPOSES ONLY: this shows how you can unsubscribe to the recording client
         Fitness.getRecordingClient(this, GoogleSignIn.getAccountForExtension(this, fitnessOptions))
                 // This example shows unsubscribing from a DataType. A DataSource should be used where the
                 // subscription was to a DataSource. Alternatively, a Subscription object can be used.
@@ -65,6 +68,7 @@ public class GoogleFitActivity extends AppCompatActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
             case REQUEST_CODE:
                 // If request is cancelled, the result arrays are empty.
@@ -74,7 +78,7 @@ public class GoogleFitActivity extends AppCompatActivity {
                     // in your app.
                     recordClientReg();
 
-                }  else {
+                } else {
                     // Explain to the user that the feature is unavailable because
                     // the features requires a permission that the user has denied.
                     // At the same time, respect the user's decision. Don't link to
@@ -89,13 +93,16 @@ public class GoogleFitActivity extends AppCompatActivity {
     }
 
 
-    // request background collection of by subscribing to fitness data
+    // request background collection and tracking of step data by subscribing to fitness data
     @RequiresApi(api = Build.VERSION_CODES.M)
     public void googleFitRegister(View view){
 
+        // check if user has permission
         if (oAuthPermissionsApproved()) {
             start();
         } else {
+
+            // if no permission, then request the permission
             GoogleSignIn.requestPermissions(this, SIGN_IN_REQUEST_CODE,
                     getGoogleAccount(), fitnessOptions);
         }
@@ -112,12 +119,14 @@ public class GoogleFitActivity extends AppCompatActivity {
 
         }else{
 
+            //Permission is needed to use this app
             if(shouldShowRequestPermissionRationale(Manifest.permission.ACTIVITY_RECOGNITION)){
 
                 Toast.makeText(this, "ACTIVITY_RECOGNITION permission is needed to use this app !", Toast.LENGTH_SHORT).show();
 
             }
 
+            // Request the permission
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.ACTIVITY_RECOGNITION},
                     REQUEST_CODE);
@@ -127,11 +136,12 @@ public class GoogleFitActivity extends AppCompatActivity {
 
 
 
-
+    // check if the current user is authorized to use the requested google fit api and has permission enabled
     private boolean oAuthPermissionsApproved() {
         return GoogleSignIn.hasPermissions(getGoogleAccount(), fitnessOptions);
     }
 
+    // get the current signed in google account
     private GoogleSignInAccount getGoogleAccount() {
         return GoogleSignIn.getAccountForExtension(
                 this, fitnessOptions);
@@ -140,7 +150,7 @@ public class GoogleFitActivity extends AppCompatActivity {
 
 
 
-
+    // create a Recording Client and subscribe to it
     public void recordClientReg(){
 
         Fitness.getRecordingClient(this, getGoogleAccount())
@@ -159,6 +169,7 @@ public class GoogleFitActivity extends AppCompatActivity {
 
     }
 
+    // Show the daily steps taken by getting the History Client and read the daily total steps
     public void showDailySteps(View view){
 
         AtomicInteger total = new AtomicInteger();
