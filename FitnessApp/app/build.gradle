@@ -33,7 +33,7 @@ android {
             storeFile file("../debug.keystore")
         }
     }
-}testte
+}
 
 
 dependencies {
