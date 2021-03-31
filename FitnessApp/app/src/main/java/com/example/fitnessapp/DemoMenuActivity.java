@@ -53,4 +53,18 @@ public class DemoMenuActivity extends AppCompatActivity {
         startActivity(intent);
 
     }
+
+    public void signOut(View view){
+
+        FirebaseAuth.getInstance().signOut();
+        Intent intent = new Intent(this, LobbyActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        //Do nothing
+    }
 }
