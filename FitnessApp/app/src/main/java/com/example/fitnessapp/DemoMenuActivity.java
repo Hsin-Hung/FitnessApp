@@ -2,6 +2,7 @@ package com.example.fitnessapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -65,6 +66,14 @@ public class DemoMenuActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        //Do nothing
+        AlertDialog.Builder a = new AlertDialog.Builder(this);
+        a.setMessage("Do you want to sign out?");
+        a.setPositiveButton("Yes, sign out.", (dialog, which) -> {
+            signOut(findViewById(R.id.signOutBTN));
+        });
+        a.setNegativeButton("Nope      ", (dialog, which) -> {
+
+        });
+        a.show();
     }
 }
