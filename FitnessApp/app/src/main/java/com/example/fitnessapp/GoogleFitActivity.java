@@ -7,12 +7,9 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
-import android.app.AlertDialog;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -87,15 +84,8 @@ public class GoogleFitActivity extends AppCompatActivity {
                     // At the same time, respect the user's decision. Don't link to
                     // system settings in an effort to convince the user to change
                     // their decision.
-                    AlertDialog.Builder a = new AlertDialog.Builder(this);
-                    a.setMessage("Fitness app needs the access your physical activity in order to work appropriately, now go to enable it?");
-                    a.setPositiveButton("Yes, please.", (dialog, which) -> {
-                        startActivityForResult(new Intent(Settings.ACTION_PRIVACY_SETTINGS), 0);
-                    });
-                    a.setNegativeButton("Nope, never.", (dialog, which) -> {
 
-                    });
-                    a.show();
+                    Toast.makeText(this, "ACTIVITY_RECOGNITION permission is not granted !", Toast.LENGTH_SHORT).show();
                 }
                 return;
         }

@@ -46,8 +46,6 @@
         android:id="@+id/signOutBTN"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="484dp"
-        android:layout_marginEnd="24dp"
         android:backgroundTint="#2854C3"
         android:onClick="signOut"
         android:text="SIgn Out"
