@@ -88,11 +88,11 @@ public class GoogleFitActivity extends AppCompatActivity {
                     // system settings in an effort to convince the user to change
                     // their decision.
                     AlertDialog.Builder a = new AlertDialog.Builder(this);
-                    a.setMessage("Fitness app needs the access your physical activity in order to work appropriately, now go to enable it?");
-                    a.setPositiveButton("Yes, please.", (dialog, which) -> {
-                        startActivityForResult(new Intent(Settings.ACTION_PRIVACY_SETTINGS), 0);
-                    });
-                    a.setNegativeButton("Nope, never.", (dialog, which) -> {
+                    a.setMessage("You have already registered!");
+//                    a.setPositiveButton("Yes, please.", (dialog, which) -> {
+//                        startActivityForResult(new Intent(Settings.ACTION_PRIVACY_SETTINGS), 0);
+//                    });
+                    a.setNegativeButton("Okay!", (dialog, which) -> {
 
                     });
                     a.show();
