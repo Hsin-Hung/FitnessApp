@@ -5,14 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background_color"
-    tools:context=".LobbyActivity">
+    tools:context=".LaunchActivity">
 
     <ImageView
         android:id="@+id/imageView2"
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:layout_marginTop="112dp"
-        app:layout_constraintBottom_toTopOf="@+id/signInBTN"
+        app:layout_constraintBottom_toTopOf="@+id/launch_logIn_btn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
@@ -21,12 +21,12 @@
         app:srcCompat="@drawable/fitness_app_logo" />
 
     <Button
-        android:id="@+id/signInBTN"
+        android:id="@+id/launch_logIn_btn"
         android:layout_width="139dp"
         android:layout_height="58dp"
         android:backgroundTint="#3F51B5"
         android:onClick="signIn"
-        android:text="Sign In"
+        android:text="@string/log_in"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -34,15 +34,15 @@
         app:layout_constraintVertical_bias="0.563" />
 
     <Button
-        android:id="@+id/signUpBTN"
+        android:id="@+id/launch_signup_btn"
         android:layout_width="139dp"
         android:layout_height="58dp"
         android:backgroundTint="#3F51B5"
         android:onClick="signUp"
-        android:text="Sign Up"
+        android:text="@string/sign_up"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/signInBTN"
+        app:layout_constraintTop_toBottomOf="@+id/launch_logIn_btn"
         app:layout_constraintVertical_bias="0.101" />
 </androidx.constraintlayout.widget.ConstraintLayout>

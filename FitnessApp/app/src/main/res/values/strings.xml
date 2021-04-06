@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">FitnessApp</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="log_in">Log In</string>
+    <string name="usernameHint">enter username</string>
+    <string name="emailHint">enter e-mail</string>
+    <string name="passHint">enter password</string>
+    <string name="confirmPassHint">confirm password</string>
+    <string name="createChallenge">CREATE A CHALLENGE</string>
+    <string name="joinChallenge">JOIN A CHALLENGE</string>
 </resources>

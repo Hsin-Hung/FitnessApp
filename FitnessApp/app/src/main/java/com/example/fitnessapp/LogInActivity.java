@@ -24,7 +24,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
-public class SignInActivity extends AppCompatActivity implements View.OnClickListener {
+public class LogInActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = "MyActivity";
     final int RC_SIGN_IN = 1;
@@ -37,10 +37,10 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sign_in);
+        setContentView(R.layout.activity_log_in);
 
-        emailET = (EditText) findViewById(R.id.emailSignInET);
-        passET = (EditText) findViewById(R.id.passSignInET);
+        emailET = (EditText) findViewById(R.id.email_signin_et);
+        passET = (EditText) findViewById(R.id.pass_signin_et);
 
         googleSignInBTN = (SignInButton) findViewById(R.id.sign_in_button);
         googleSignInBTN.setOnClickListener(this);
@@ -125,12 +125,12 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
     public void updateUI(FirebaseUser user){
 
-        if(user != null){
-            Intent intent = new Intent(this, DemoMenuActivity.class);
-            startActivity(intent);
-        }else{
-            Toast.makeText(this, "SIGN IN FAIL !", Toast.LENGTH_SHORT).show();
-        }
+//        if(user != null){
+//            Intent intent = new Intent(this, DemoMenuActivity.class);
+//            startActivity(intent);
+//        }else{
+//            Toast.makeText(this, "SIGN IN FAIL !", Toast.LENGTH_SHORT).show();
+//        }
 
     }
 
@@ -161,7 +161,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
-                            Toast.makeText(SignInActivity.this, "Authentication failed.",
+                            Toast.makeText(LogInActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
                             updateUI(null);
                         }

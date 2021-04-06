@@ -3,7 +3,6 @@ package com.example.fitnessapp;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -32,9 +31,9 @@ public class SignUpActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
-        emailET = (EditText) findViewById(R.id.emailSignUpET);
-        passwordET = (EditText) findViewById(R.id.passSignUpET);
-        infoTV = (TextView) findViewById(R.id.infoTV);
+        emailET = (EditText) findViewById(R.id.email_et);
+        passwordET = (EditText) findViewById(R.id.pass_et);
+        infoTV = (TextView) findViewById(R.id.error_tv);
         infoTV.setText("");
 
     }
@@ -73,12 +72,12 @@ public class SignUpActivity extends AppCompatActivity {
 
     private void updateUI(FirebaseUser user){
 
-        if(user != null){
-            Intent intent = new Intent(this, DemoMenuActivity.class);
-            startActivity(intent);
-        }else{
-            Toast.makeText(this, "SIGN UP FAIL !", Toast.LENGTH_SHORT).show();
-        }
+//        if(user != null){
+//            Intent intent = new Intent(this, DemoMenuActivity.class);
+//            startActivity(intent);
+//        }else{
+//            Toast.makeText(this, "SIGN UP FAIL !", Toast.LENGTH_SHORT).show();
+//        }
 
 
     }

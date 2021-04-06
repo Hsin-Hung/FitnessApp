@@ -7,52 +7,73 @@
     android:background="@color/background_color"
     tools:context=".SignUpActivity">
 
+    <com.google.android.gms.common.SignInButton
+        android:id="@+id/sign_in_button"
+        android:layout_width="152dp"
+        android:layout_height="69dp"
+        tools:layout_editor_absoluteX="129dp"
+        tools:layout_editor_absoluteY="623dp" />
+
     <EditText
-        android:id="@+id/emailSignUpET"
+        android:id="@+id/email_et"
         android:layout_width="300dp"
         android:layout_height="42dp"
         android:ems="10"
-        android:hint="enter email"
+        android:hint="@string/emailHint"
         android:inputType="textEmailAddress"
         android:textColor="#000000"
-        app:layout_constraintBottom_toTopOf="@+id/button4"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        tools:layout_editor_absoluteX="55dp"
+        tools:layout_editor_absoluteY="230dp" />
 
     <EditText
-        android:id="@+id/passSignUpET"
+        android:id="@+id/username_et"
         android:layout_width="300dp"
         android:layout_height="42dp"
         android:ems="10"
-        android:hint="enter password"
+        android:hint="@string/usernameHint"
+        android:inputType="textEmailAddress"
+        android:textColor="#000000"
+        tools:layout_editor_absoluteX="55dp"
+        tools:layout_editor_absoluteY="149dp" />
+
+    <EditText
+        android:id="@+id/pass_et"
+        android:layout_width="300dp"
+        android:layout_height="42dp"
+        android:ems="10"
+        android:hint="@string/passHint"
         android:inputType="textPassword"
         android:textColor="#000000"
-        app:layout_constraintBottom_toTopOf="@+id/button4"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/emailSignUpET" />
+        tools:layout_editor_absoluteX="55dp"
+        tools:layout_editor_absoluteY="313dp" />
+
+    <EditText
+        android:id="@+id/confirm_pass_et"
+        android:layout_width="300dp"
+        android:layout_height="42dp"
+        android:ems="10"
+        android:hint="@string/confirmPassHint"
+        android:inputType="textPassword"
+        android:textColor="#000000"
+        tools:layout_editor_absoluteX="55dp"
+        tools:layout_editor_absoluteY="389dp" />
 
     <Button
-        android:id="@+id/button4"
-        android:layout_width="136dp"
-        android:layout_height="54dp"
+        android:id="@+id/signup_btn"
+        android:layout_width="148dp"
+        android:layout_height="66dp"
         android:backgroundTint="#2854C3"
         android:onClick="signUp"
         android:text="Sign Up"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        tools:layout_editor_absoluteX="129dp"
+        tools:layout_editor_absoluteY="455dp" />
 
     <TextView
-        android:id="@+id/infoTV"
-        android:layout_width="318dp"
-        android:layout_height="221dp"
+        android:id="@+id/error_tv"
+        android:layout_width="343dp"
+        android:layout_height="46dp"
         android:textColor="#D11717"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button4" />
+        tools:layout_editor_absoluteX="34dp"
+        tools:layout_editor_absoluteY="548dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
