@@ -9,71 +9,84 @@
 
     <com.google.android.gms.common.SignInButton
         android:id="@+id/sign_in_button"
-        android:layout_width="152dp"
-        android:layout_height="69dp"
-        tools:layout_editor_absoluteX="129dp"
-        tools:layout_editor_absoluteY="623dp" />
+        android:layout_width="137dp"
+        android:layout_height="56dp"
+        android:layout_marginTop="28dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/signup_btn" />
 
     <EditText
         android:id="@+id/email_et"
         android:layout_width="300dp"
-        android:layout_height="42dp"
+        android:layout_height="70dp"
         android:ems="10"
         android:hint="@string/emailHint"
         android:inputType="textEmailAddress"
         android:textColor="#000000"
-        tools:layout_editor_absoluteX="55dp"
-        tools:layout_editor_absoluteY="230dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/username_et" />
 
     <EditText
         android:id="@+id/username_et"
         android:layout_width="300dp"
-        android:layout_height="42dp"
+        android:layout_height="70dp"
+        android:layout_marginTop="80dp"
         android:ems="10"
         android:hint="@string/usernameHint"
         android:inputType="textEmailAddress"
         android:textColor="#000000"
-        tools:layout_editor_absoluteX="55dp"
-        tools:layout_editor_absoluteY="149dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/pass_et"
         android:layout_width="300dp"
-        android:layout_height="42dp"
+        android:layout_height="70dp"
         android:ems="10"
         android:hint="@string/passHint"
         android:inputType="textPassword"
         android:textColor="#000000"
-        tools:layout_editor_absoluteX="55dp"
-        tools:layout_editor_absoluteY="313dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/email_et" />
 
     <EditText
         android:id="@+id/confirm_pass_et"
         android:layout_width="300dp"
-        android:layout_height="42dp"
+        android:layout_height="70dp"
         android:ems="10"
         android:hint="@string/confirmPassHint"
         android:inputType="textPassword"
         android:textColor="#000000"
-        tools:layout_editor_absoluteX="55dp"
-        tools:layout_editor_absoluteY="389dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pass_et" />
 
     <Button
         android:id="@+id/signup_btn"
-        android:layout_width="148dp"
-        android:layout_height="66dp"
+        android:layout_width="134dp"
+        android:layout_height="63dp"
+        android:layout_marginTop="36dp"
         android:backgroundTint="#2854C3"
         android:onClick="signUp"
         android:text="Sign Up"
-        tools:layout_editor_absoluteX="129dp"
-        tools:layout_editor_absoluteY="455dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/confirm_pass_et" />
 
     <TextView
         android:id="@+id/error_tv"
-        android:layout_width="343dp"
-        android:layout_height="46dp"
+        android:layout_width="344dp"
+        android:layout_height="21dp"
+        android:layout_marginTop="16dp"
         android:textColor="#D11717"
-        tools:layout_editor_absoluteX="34dp"
-        tools:layout_editor_absoluteY="548dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.492"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sign_in_button" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

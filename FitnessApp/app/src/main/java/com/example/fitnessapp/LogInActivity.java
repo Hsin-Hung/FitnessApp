@@ -125,12 +125,12 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
 
     public void updateUI(FirebaseUser user){
 
-//        if(user != null){
-//            Intent intent = new Intent(this, DemoMenuActivity.class);
-//            startActivity(intent);
-//        }else{
-//            Toast.makeText(this, "SIGN IN FAIL !", Toast.LENGTH_SHORT).show();
-//        }
+        if(user != null){
+            Intent intent = new Intent(this, HomeActivity.class);
+            startActivity(intent);
+        }else{
+            Toast.makeText(this, "SIGN IN FAIL !", Toast.LENGTH_SHORT).show();
+        }
 
     }
 

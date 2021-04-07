@@ -2,10 +2,10 @@
     <string name="app_name">FitnessApp</string>
     <string name="sign_up">Sign Up</string>
     <string name="log_in">Log In</string>
-    <string name="usernameHint">enter username</string>
-    <string name="emailHint">enter e-mail</string>
-    <string name="passHint">enter password</string>
-    <string name="confirmPassHint">confirm password</string>
+    <string name="usernameHint">username</string>
+    <string name="emailHint">e-mail</string>
+    <string name="passHint">password</string>
+    <string name="confirmPassHint">reenter password</string>
     <string name="createChallenge">CREATE A CHALLENGE</string>
     <string name="joinChallenge">JOIN A CHALLENGE</string>
     <string name="create">CREATE</string>
