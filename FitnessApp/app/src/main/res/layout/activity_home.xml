@@ -9,8 +9,8 @@
 
     <Button
         android:id="@+id/create_chall_homebtn"
-        android:layout_width="166dp"
-        android:layout_height="0dp"
+        android:layout_width="160dp"
+        android:layout_height="80dp"
         android:layout_marginTop="267dp"
         android:layout_marginBottom="88dp"
         android:backgroundTint="@color/btn_color"
@@ -22,8 +22,8 @@
 
     <Button
         android:id="@+id/join_chall_homebtn"
-        android:layout_width="169dp"
-        android:layout_height="0dp"
+        android:layout_width="160dp"
+        android:layout_height="80dp"
         android:layout_marginBottom="212dp"
         android:backgroundTint="@color/btn_color"
         android:text="@string/joinChallenge"
