@@ -8,7 +8,7 @@
     tools:context=".HomeActivity">
 
     <Button
-        android:id="@+id/create_challenge_btn"
+        android:id="@+id/create_chall_homebtn"
         android:layout_width="166dp"
         android:layout_height="78dp"
         android:backgroundTint="@color/btn_color"
@@ -17,7 +17,7 @@
         tools:layout_editor_absoluteY="267dp" />
 
     <Button
-        android:id="@+id/join_challenge_btn"
+        android:id="@+id/join_chall_homebtn"
         android:layout_width="169dp"
         android:layout_height="86dp"
         android:backgroundTint="@color/btn_color"

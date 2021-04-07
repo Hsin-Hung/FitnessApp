@@ -4,6 +4,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background_color"
     tools:context=".JoinChallengeActivity">
+
+    <ListView
+        android:id="@+id/rooms_view"
+        android:layout_width="347dp"
+        android:layout_height="617dp"
+        tools:layout_editor_absoluteX="28dp"
+        tools:layout_editor_absoluteY="114dp" />
+
+    <SearchView
+        android:id="@+id/chall_room_searchView"
+        android:layout_width="373dp"
+        android:layout_height="72dp"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="26dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

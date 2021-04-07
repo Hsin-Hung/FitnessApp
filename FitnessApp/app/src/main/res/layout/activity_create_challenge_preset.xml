@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_color"
+    tools:context=".CreateChallengePresetActivity">
+
+    <Button
+        android:id="@+id/create_chall_btn"
+        android:layout_width="126dp"
+        android:layout_height="71dp"
+        android:backgroundTint="@color/btn_color"
+        android:text="@string/create"
+        tools:layout_editor_absoluteX="142dp"
+        tools:layout_editor_absoluteY="577dp" />
+
+    <Spinner
+        android:id="@+id/chall_type_spinner"
+        android:layout_width="171dp"
+        android:layout_height="49dp"
+        tools:layout_editor_absoluteX="197dp"
+        tools:layout_editor_absoluteY="100dp" />
+
+    <EditText
+        android:id="@+id/chall_descr_et"
+        android:layout_width="326dp"
+        android:layout_height="79dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        tools:layout_editor_absoluteX="42dp"
+        tools:layout_editor_absoluteY="214dp" />
+
+    <EditText
+        android:id="@+id/endDate_et"
+        android:layout_width="165dp"
+        android:layout_height="50dp"
+        android:ems="10"
+        android:inputType="date"
+        tools:layout_editor_absoluteX="163dp"
+        tools:layout_editor_absoluteY="312dp" />
+
+    <RadioButton
+        android:id="@+id/bet_rbtn"
+        android:layout_width="84dp"
+        android:layout_height="46dp"
+        android:text="@string/bet"
+        tools:layout_editor_absoluteX="27dp"
+        tools:layout_editor_absoluteY="394dp" />
+
+    <EditText
+        android:id="@+id/bet_amount_et"
+        android:layout_width="202dp"
+        android:layout_height="45dp"
+        android:ems="10"
+        android:hint="@string/betAmountHint"
+        android:inputType="number"
+        tools:layout_editor_absoluteX="157dp"
+        tools:layout_editor_absoluteY="394dp" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="149dp"
+        android:layout_height="28dp"
+        android:text="@string/challengeType"
+        android:textColor="#000000"
+        tools:layout_editor_absoluteX="28dp"
+        tools:layout_editor_absoluteY="121dp" />
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="149dp"
+        android:layout_height="28dp"
+        android:text="@string/challengeRoomName"
+        android:textColor="#000000"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="54dp" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="185dp"
+        android:layout_height="20dp"
+        android:text="@string/challengeDescription"
+        android:textColor="#000000"
+        tools:layout_editor_absoluteX="42dp"
+        tools:layout_editor_absoluteY="178dp" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="116dp"
+        android:layout_height="26dp"
+        android:text="@string/endDate"
+        android:textColor="#000000"
+        tools:layout_editor_absoluteX="28dp"
+        tools:layout_editor_absoluteY="322dp" />
+
+    <EditText
+        android:id="@+id/room_pass_et"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPassword"
+        tools:layout_editor_absoluteX="149dp"
+        tools:layout_editor_absoluteY="475dp" />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="125dp"
+        android:layout_height="22dp"
+        android:text="@string/roomPassword"
+        android:textColor="#000000"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="491dp" />
+
+    <EditText
+        android:id="@+id/editTextTextPersonName2"
+        android:layout_width="195dp"
+        android:layout_height="38dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        tools:layout_editor_absoluteX="184dp"
+        tools:layout_editor_absoluteY="44dp" />
+</androidx.constraintlayout.widget.ConstraintLayout>

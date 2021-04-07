@@ -8,4 +8,17 @@
     <string name="confirmPassHint">confirm password</string>
     <string name="createChallenge">CREATE A CHALLENGE</string>
     <string name="joinChallenge">JOIN A CHALLENGE</string>
+    <string name="create">CREATE</string>
+    <string name="join">JOIN</string>
+    <string name="challengeRoomName">Room Name (*)</string>
+    <string name="challengeType">Challenge Type (*)</string>
+    <string name="challengeDescription">Challenge description</string>
+    <string name="bet">bet</string>
+    <string name="betAmountHint">enter bet amount</string>
+    <string name="endDate">End Date (*)</string>
+    <string name="start">START</string>
+    <string name="ready">READY</string>
+    <string name="invite">INVITE</string>
+    <string name="roomPassword">Room Password</string>
+    <string name="hostName">Host</string>
 </resources>
