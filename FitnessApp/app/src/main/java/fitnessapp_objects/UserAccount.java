@@ -14,7 +14,7 @@ public class UserAccount {
     private FitnessData fitnessData;
     private ArrayList<String> friendList;
     private ArrayList<Achievement> achievements;
-    private ArrayList<ChallengeHistory> challengeHistories;
+    private ChallengeHistory challengeHistory;
 
     private static UserAccount userAccount_instance = null;
 
@@ -82,12 +82,12 @@ public class UserAccount {
         this.achievements = achievements;
     }
 
-    public ArrayList<ChallengeHistory> getChallengeHistories() {
-        return challengeHistories;
+    public ChallengeHistory getChallengeHistories() {
+        return challengeHistory;
     }
 
-    public void setChallengeHistories(ArrayList<ChallengeHistory> challengeHistories) {
-        this.challengeHistories = challengeHistories;
+    public void setChallengeHistories(ChallengeHistory challengeHistories) {
+        this.challengeHistory = challengeHistories;
     }
 
     // if you want to add more fields to an user account and persist them to firestore. Add them in this method.

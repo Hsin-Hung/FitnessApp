@@ -33,7 +33,7 @@ public class HomeActivity extends AppCompatActivity {
 
     }
 
-    public void joiChallenge(View view){
+    public void joinChallenge(View view){
 
         Intent intent = new Intent(this, JoinChallengeActivity.class);
         startActivity(intent);

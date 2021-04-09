@@ -27,7 +27,7 @@
         android:layout_height="80dp"
         android:layout_marginBottom="212dp"
         android:backgroundTint="@color/btn_color"
-        android:onClick="joiChallenge"
+        android:onClick="joinChallenge"
         android:text="@string/joinChallenge"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
