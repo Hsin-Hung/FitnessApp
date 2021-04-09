@@ -27,7 +27,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.28"
         app:layout_constraintStart_toEndOf="@+id/textView2"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName2" />
+        app:layout_constraintTop_toBottomOf="@+id/room_name_et" />
 
     <EditText
         android:id="@+id/chall_descr_et"
@@ -147,7 +147,7 @@
         app:layout_constraintTop_toBottomOf="@+id/bet_rbtn" />
 
     <EditText
-        android:id="@+id/editTextTextPersonName2"
+        android:id="@+id/room_name_et"
         android:layout_width="195dp"
         android:layout_height="38dp"
         android:layout_marginStart="24dp"
