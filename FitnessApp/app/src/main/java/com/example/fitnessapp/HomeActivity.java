@@ -26,6 +26,23 @@ public class HomeActivity extends AppCompatActivity {
         System.out.println(UserAccount.getInstance().getName());
     }
 
+    public void createChallenge(View view){
+
+        FirebaseAuth.getInstance().signOut();
+        Intent intent = new Intent(this, CreateChallengePresetActivity.class);
+        startActivity(intent);
+
+    }
+
+    public void joiChallenge(View view){
+
+        FirebaseAuth.getInstance().signOut();
+        Intent intent = new Intent(this, JoinChallengeActivity.class);
+        startActivity(intent);
+
+    }
+
+
 
     public void signOut(View view){
 
