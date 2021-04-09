@@ -4,6 +4,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 import java.util.*;
 
+//UserAccount is a singleton, call UserAccount.getInstance() to get the user account.
 public class UserAccount {
 
     private String userID;
@@ -89,13 +90,14 @@ public class UserAccount {
         this.challengeHistories = challengeHistories;
     }
 
-
+    // if you want to add more fields to an user account and persist them to firestore. Add them in this method.
     public Map<String, Object> getFirestoreUserMap(){
 
         Map<String, Object> user = new HashMap<>();
 
         user.put("name", name);
         user.put("email", email);
+        // ...
 
         return user;
     }
