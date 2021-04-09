@@ -24,12 +24,14 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
 import fitnessapp_objects.Database;
+import fitnessapp_objects.UserAccount;
 
 public class LaunchActivity extends AppCompatActivity implements View.OnClickListener{
 
     GoogleSignInClient mGoogleSignInClient;
     SignInButton googleSignInBTN;
     private FirebaseAuth mAuth;
+    private UserAccount userAccount;
     final int RC_SIGN_IN = 1;
     private static final String TAG = "LaunchActivity";
 
@@ -51,6 +53,7 @@ public class LaunchActivity extends AppCompatActivity implements View.OnClickLis
         // Build a GoogleSignInClient with the options specified by gso.
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
         mAuth = FirebaseAuth.getInstance();
+        userAccount = UserAccount.getInstance();
     }
 
     public void signIn(View view){
@@ -109,6 +112,8 @@ public class LaunchActivity extends AppCompatActivity implements View.OnClickLis
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
+                            userAccount.setName(user.getDisplayName());
+                            userAccount.setEmail(user.getEmail());
                             Database.getInstance().updateUserAccount();
                             updateUI(user);
                         } else {

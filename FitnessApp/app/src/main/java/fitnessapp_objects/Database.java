@@ -71,6 +71,8 @@ public class Database {
 
         String uid = mAuth.getCurrentUser().getUid();
 
+        System.out.println("update db: "+ uid);
+        System.out.println("update db: "+ userAccount.getFirestoreUserMap().get("email"));
         db.collection("users").
                 document(uid)
                 .set(userAccount.getFirestoreUserMap())
