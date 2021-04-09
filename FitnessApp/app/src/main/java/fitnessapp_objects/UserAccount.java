@@ -90,7 +90,13 @@ public class UserAccount {
         this.challengeHistory = challengeHistories;
     }
 
-    // if you want to add more fields to an user account and persist them to firestore. Add them in this method.
+    /**
+     *
+     * this method will generate the Map needed for Database to update to firestore.
+     * Add more fields to the Map to store more fields on firestore.
+     *
+     * @return
+     */
     public Map<String, Object> getFirestoreUserMap(){
 
         Map<String, Object> user = new HashMap<>();

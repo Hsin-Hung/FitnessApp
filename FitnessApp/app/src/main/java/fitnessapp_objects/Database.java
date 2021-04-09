@@ -26,6 +26,7 @@ public class Database {
     private FirebaseAuth mAuth;
     private UserAccount userAccount;
 
+
     private Database(){
 
         mAuth = FirebaseAuth.getInstance();
@@ -39,32 +40,15 @@ public class Database {
 
     }
 
-    public boolean updateUserAccount(){
-
-        FirebaseUser user = mAuth.getCurrentUser();
-
-        db.collection("users").
-                document(user.getUid())
-                .set(userAccount.getFirestoreUserMap())
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "DocumentSnapshot successfully written!");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error writing document", e);
-                    }
-                });
-
-        return true;
-    }
-
-
-
-    // update the user account to firestore
+    /**
+     *
+     * update the firestore with the local user account
+     *
+     * @param handler: implement and pass this handler if the calling class wants to navigate
+     *               to some other screen immediately after the update completes. If not, then
+     *               just pass null.
+     * @return
+     */
     public boolean updateUserAccount(FirestoreCompletionHandler handler){
 
         FirebaseUser user = mAuth.getCurrentUser();
@@ -76,26 +60,42 @@ public class Database {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Log.d(TAG, "DocumentSnapshot successfully written!");
-                        handler.updateUI(true);
+                        if(handler!=null){
+                            handler.updateUI(true);
+                        }
+
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Log.w(TAG, "Error writing document", e);
-                        handler.updateUI(false);
+                        if(handler!=null){
+                            handler.updateUI(false);
+                        }
+
                     }
                 });
 
         return true;
     }
 
+
     public boolean storeChallengeRoom(ChallengeRoom room){
 
         return false;
     }
 
-    // update the UserAccount locally stored throughout this app's lifetime
+    /**
+     *
+     * update the local user account with what is stored on firestore
+     *
+     * @param uid: the uid of the current user
+     * @param handler: implement and pass this handler if the calling class wants to navigate
+     *                 to some other screen immediately after the update completes. If not, then
+     *                 just pass null.
+     * @return
+     */
     public boolean updateLocalUserAccount(String uid, FirestoreCompletionHandler handler){
 
         DocumentReference docRef = db.collection("users").document(uid);
