@@ -1,13 +1,21 @@
 package fitnessapp_objects;
 
-public enum Achievement {
+public class Achievement {
 
-    WIN_FIRST_CHALLENGE,
-    WIN_10_CHALLENGES,
-    WIN_100_CHALLENGES,
-    LOSE_FIRST_CHALLENGE,
-    WIN_FIRST_BET,CHALLENGE,
-    WIN_10_BET_CHALLENGES,
-    WIN_100_BET_CHALLENGES
+    private String name;
 
+    public Achievement(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public boolean hasAchieved(UserAccount account){
+
+
+        return false;
+
+    }
 }
