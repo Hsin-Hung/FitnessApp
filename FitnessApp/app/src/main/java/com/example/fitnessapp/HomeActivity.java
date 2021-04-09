@@ -28,7 +28,6 @@ public class HomeActivity extends AppCompatActivity {
 
     public void createChallenge(View view){
 
-        FirebaseAuth.getInstance().signOut();
         Intent intent = new Intent(this, CreateChallengePresetActivity.class);
         startActivity(intent);
 
@@ -36,7 +35,6 @@ public class HomeActivity extends AppCompatActivity {
 
     public void joiChallenge(View view){
 
-        FirebaseAuth.getInstance().signOut();
         Intent intent = new Intent(this, JoinChallengeActivity.class);
         startActivity(intent);
 
