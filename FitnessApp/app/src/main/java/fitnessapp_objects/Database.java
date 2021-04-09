@@ -39,6 +39,31 @@ public class Database {
 
     }
 
+    public boolean updateUserAccount(){
+
+        FirebaseUser user = mAuth.getCurrentUser();
+
+        db.collection("users").
+                document(user.getUid())
+                .set(userAccount.getFirestoreUserMap())
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "DocumentSnapshot successfully written!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error writing document", e);
+                    }
+                });
+
+        return true;
+    }
+
+
+
     // update the user account to firestore
     public boolean updateUserAccount(FirestoreCompletionHandler handler){
 

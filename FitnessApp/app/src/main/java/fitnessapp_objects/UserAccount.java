@@ -97,6 +97,7 @@ public class UserAccount {
 
         user.put("name", name);
         user.put("email", email);
+
         // ...
 
         return user;
