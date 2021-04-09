@@ -1,4 +1,4 @@
-package com.example.fitnessapp;
+package fitnessapp_objects;
 
 // All the firebase calling action will stay in this class
 public class DataBase {

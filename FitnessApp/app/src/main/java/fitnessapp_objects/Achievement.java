@@ -1,0 +1,13 @@
+package fitnessapp_objects;
+
+public enum Achievement {
+
+    WIN_FIRST_CHALLENGE,
+    WIN_10_CHALLENGES,
+    WIN_100_CHALLENGES,
+    LOSE_FIRST_CHALLENGE,
+    WIN_FIRST_BET,CHALLENGE,
+    WIN_10_BET_CHALLENGES,
+    WIN_100_BET_CHALLENGES
+
+}
