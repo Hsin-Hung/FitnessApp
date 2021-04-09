@@ -24,15 +24,17 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
 import fitnessapp_objects.Database;
+import fitnessapp_objects.FirestoreCompletionHandler;
 import fitnessapp_objects.UserAccount;
 
-public class LaunchActivity extends AppCompatActivity implements View.OnClickListener{
+public class LaunchActivity extends AppCompatActivity implements View.OnClickListener, FirestoreCompletionHandler {
 
-    GoogleSignInClient mGoogleSignInClient;
-    SignInButton googleSignInBTN;
+    private GoogleSignInClient mGoogleSignInClient;
+    private SignInButton googleSignInBTN;
     private FirebaseAuth mAuth;
     private UserAccount userAccount;
-    final int RC_SIGN_IN = 1;
+    private Database db;
+    private final int RC_SIGN_IN = 1;
     private static final String TAG = "LaunchActivity";
 
     @Override
@@ -53,9 +55,11 @@ public class LaunchActivity extends AppCompatActivity implements View.OnClickLis
         // Build a GoogleSignInClient with the options specified by gso.
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
         mAuth = FirebaseAuth.getInstance();
+        db = Database.getInstance();
         userAccount = UserAccount.getInstance();
     }
 
+    // go to the sign in page
     public void signIn(View view){
 
         Intent intent = new Intent(this, LogInActivity.class);
@@ -63,6 +67,7 @@ public class LaunchActivity extends AppCompatActivity implements View.OnClickLis
 
     }
 
+    // go to the sign up page
     public void signUp(View view){
 
         Intent intent = new Intent(this, SignUpActivity.class);
@@ -98,7 +103,7 @@ public class LaunchActivity extends AppCompatActivity implements View.OnClickLis
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
             Log.w(TAG, "Google sign in failed", e);
-            updateUI(null);
+            updateUI(false);
         }
     }
 
@@ -111,24 +116,30 @@ public class LaunchActivity extends AppCompatActivity implements View.OnClickLis
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
+
                             FirebaseUser user = mAuth.getCurrentUser();
-                            userAccount.setName(user.getDisplayName());
-                            userAccount.setEmail(user.getEmail());
-                            Database.getInstance().updateUserAccount();
-                            updateUI(user);
+                            boolean isNew = task.getResult().getAdditionalUserInfo().isNewUser();
+
+                            if(isNew){
+                                userAccount.setName(user.getDisplayName());
+                                userAccount.setEmail(user.getEmail());
+                                db.updateUserAccount(LaunchActivity.this);
+                            }else{
+                                db.updateLocalUserAccount(user.getUid(), LaunchActivity.this);
+                            }
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
-                            updateUI(null);
+                            updateUI(false);
                         }
                     }
                 });
     }
 
 
-    private void updateUI(FirebaseUser user){
+    public void updateUI(boolean isSuccess){
 
-        if(user != null){
+        if(isSuccess){
             Intent intent = new Intent(this, HomeActivity.class);
             startActivity(intent);
         }else{

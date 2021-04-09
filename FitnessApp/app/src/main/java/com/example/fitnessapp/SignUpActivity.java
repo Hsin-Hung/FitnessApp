@@ -23,18 +23,20 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.auth.User;
 
 import java.util.ArrayList;
+import java.util.concurrent.Semaphore;
 
 import fitnessapp_objects.Database;
+import fitnessapp_objects.FirestoreCompletionHandler;
 import fitnessapp_objects.UserAccount;
 
-public class SignUpActivity extends AppCompatActivity{
+public class SignUpActivity extends AppCompatActivity implements FirestoreCompletionHandler {
 
     private final String TAG = "SignUpActivity";
     private FirebaseAuth mAuth;
-    EditText usernameET, emailET, passwordET, confirmPasswordET;
-    TextView infoTV;
-    UserAccount userAccount;
-    Database db;
+    private EditText usernameET, emailET, passwordET, confirmPasswordET;
+    private TextView infoTV;
+    private UserAccount userAccount;
+    private Database db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,15 +92,14 @@ public class SignUpActivity extends AppCompatActivity{
                             userAccount.setUserID(user.getUid());
                             userAccount.setName(username);
                             userAccount.setEmail(email);
-                            db.updateUserAccount();
-                            updateUI(user);
+                            db.updateUserAccount(SignUpActivity.this);
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
                             infoTV.setText(task.getException().toString());
                             Toast.makeText(SignUpActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
-                            updateUI(null);
+                            updateUI(false);
                         }
                     }
                 });
@@ -107,9 +108,9 @@ public class SignUpActivity extends AppCompatActivity{
     }
 
 
-    private void updateUI(FirebaseUser user){
+    public void updateUI(boolean isSuccess){
 
-        if(user != null){
+        if(isSuccess){
             Intent intent = new Intent(this, HomeActivity.class);
             startActivity(intent);
         }else{

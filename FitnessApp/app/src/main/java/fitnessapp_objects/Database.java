@@ -9,6 +9,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -38,54 +39,26 @@ public class Database {
 
     }
 
-//    public boolean createNewUserAccount(String uid, String name, String email){
-//
-//// Create a new user with a first and last name
-//        Map<String, Object> user = new HashMap<>();
-//        user.put("name", name);
-//        user.put("email", email);
-//
-//        db.collection("users")
-//                .document(uid)
-//                .set(user)
-//                .addOnSuccessListener(new OnSuccessListener<Void>() {
-//                    @Override
-//                    public void onSuccess(Void aVoid) {
-//                        Log.d(TAG, "DocumentSnapshot successfully written!");
-//                    }
-//                })
-//                .addOnFailureListener(new OnFailureListener() {
-//                    @Override
-//                    public void onFailure(@NonNull Exception e) {
-//                        Log.w(TAG, "Error writing document", e);
-//                    }
-//                });
-//
-//
-//
-//        return true;
-//
-//    }
+    // update the user account to firestore
+    public boolean updateUserAccount(FirestoreCompletionHandler handler){
 
-    public boolean updateUserAccount(){
+        FirebaseUser user = mAuth.getCurrentUser();
 
-        String uid = mAuth.getCurrentUser().getUid();
-
-        System.out.println("update db: "+ uid);
-        System.out.println("update db: "+ userAccount.getFirestoreUserMap().get("email"));
         db.collection("users").
-                document(uid)
+                document(user.getUid())
                 .set(userAccount.getFirestoreUserMap())
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Log.d(TAG, "DocumentSnapshot successfully written!");
+                        handler.updateUI(true);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Log.w(TAG, "Error writing document", e);
+                        handler.updateUI(false);
                     }
                 });
 
@@ -97,7 +70,8 @@ public class Database {
         return false;
     }
 
-    public boolean updateLocalUserAccount(String uid){
+    // update the UserAccount locally stored throughout this app's lifetime
+    public boolean updateLocalUserAccount(String uid, FirestoreCompletionHandler handler){
 
         DocumentReference docRef = db.collection("users").document(uid);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -112,11 +86,15 @@ public class Database {
                         userAccount.setEmail(document.get("email").toString());
 
                         Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+                        handler.updateUI(true);
                     } else {
                         Log.d(TAG, "No such document");
+                        handler.updateUI(false);
                     }
+
                 } else {
                     Log.d(TAG, "get failed with ", task.getException());
+                    handler.updateUI(false);
                 }
             }
         });

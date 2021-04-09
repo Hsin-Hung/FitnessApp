@@ -25,13 +25,14 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
 import fitnessapp_objects.Database;
+import fitnessapp_objects.FirestoreCompletionHandler;
 
-public class LogInActivity extends AppCompatActivity{
+public class LogInActivity extends AppCompatActivity implements FirestoreCompletionHandler {
 
     private static final String TAG = "MyActivity";
     private FirebaseAuth mAuth;
-    EditText emailET, passET;
-    Database db;
+    private EditText emailET, passET;
+    private Database db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,9 +46,9 @@ public class LogInActivity extends AppCompatActivity{
         mAuth = FirebaseAuth.getInstance();
     }
 
-    public void updateUI(FirebaseUser user){
+    public void updateUI(boolean isSuccess){
 
-        if(user != null){
+        if(isSuccess){
             Intent intent = new Intent(this, HomeActivity.class);
             startActivity(intent);
         }else{
@@ -68,14 +69,13 @@ public class LogInActivity extends AppCompatActivity{
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            db.updateLocalUserAccount(user.getUid()); //TODO - need to deal with async call back before updating UI
-                            updateUI(user);
+                            db.updateLocalUserAccount(user.getUid(), LogInActivity.this);
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
                             Toast.makeText(LogInActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
-                            updateUI(null);
+                            updateUI(false);
                         }
                     }
                 });
