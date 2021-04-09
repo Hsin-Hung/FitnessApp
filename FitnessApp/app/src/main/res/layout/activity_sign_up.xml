@@ -7,15 +7,6 @@
     android:background="@color/background_color"
     tools:context=".SignUpActivity">
 
-    <com.google.android.gms.common.SignInButton
-        android:id="@+id/sign_in_button"
-        android:layout_width="137dp"
-        android:layout_height="56dp"
-        android:layout_marginTop="28dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/signup_btn" />
-
     <EditText
         android:id="@+id/email_et"
         android:layout_width="300dp"
@@ -82,11 +73,10 @@
         android:id="@+id/error_tv"
         android:layout_width="344dp"
         android:layout_height="21dp"
-        android:layout_marginTop="16dp"
         android:textColor="#D11717"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.492"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sign_in_button" />
+        tools:layout_editor_absoluteY="560dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -9,12 +9,23 @@ public class UserAccount {
     private String userID;
     private String name;
     private String email;
-    private FirebaseUser firebaseUser;
     private PaymentInfo paymentInfo;
     private FitnessData fitnessData;
-    private ArrayList<Friend> friendList;
+    private ArrayList<String> friendList;
     private ArrayList<Achievement> achievements;
     private ArrayList<ChallengeHistory> challengeHistories;
+
+    private static UserAccount userAccount_instance = null;
+
+    private UserAccount() {
+    }
+
+    public static UserAccount getInstance(){
+
+        if (userAccount_instance == null) userAccount_instance = new UserAccount();
+        return userAccount_instance;
+
+    }
 
     public String getUserID() {
         return userID;
@@ -23,6 +34,8 @@ public class UserAccount {
     public void setUserID(String userID) {
         this.userID = userID;
     }
+
+    public String getName() { return name; }
 
     public void setName(String name) {
         this.name = name;
@@ -34,14 +47,6 @@ public class UserAccount {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public FirebaseUser getFirebaseUser() {
-        return firebaseUser;
-    }
-
-    public void setFirebaseUser(FirebaseUser firebaseUser) {
-        this.firebaseUser = firebaseUser;
     }
 
     public PaymentInfo getPaymentInfo() {
@@ -60,11 +65,11 @@ public class UserAccount {
         this.fitnessData = fitnessData;
     }
 
-    public ArrayList<Friend> getFriendList() {
+    public ArrayList<String> getFriendList() {
         return friendList;
     }
 
-    public void setFriendList(ArrayList<Friend> friendList) {
+    public void setFriendList(ArrayList<String> friendList) {
         this.friendList = friendList;
     }
 
@@ -84,9 +89,15 @@ public class UserAccount {
         this.challengeHistories = challengeHistories;
     }
 
-    public UserAccount(){
 
+    public Map<String, Object> getFirestoreUserMap(){
 
+        Map<String, Object> user = new HashMap<>();
+
+        user.put("name", name);
+        user.put("email", email);
+
+        return user;
     }
 
 }

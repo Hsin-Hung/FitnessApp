@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">FitnessApp</string>
     <string name="sign_up">Sign Up</string>
+    <string name="sign_out">Sign Out</string>
     <string name="log_in">Log In</string>
     <string name="usernameHint">username</string>
     <string name="emailHint">e-mail</string>

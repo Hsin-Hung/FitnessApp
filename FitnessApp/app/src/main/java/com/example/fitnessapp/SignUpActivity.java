@@ -3,6 +3,7 @@ package com.example.fitnessapp;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -10,19 +11,30 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.auth.User;
 
-public class SignUpActivity extends AppCompatActivity {
+import java.util.ArrayList;
+
+import fitnessapp_objects.Database;
+import fitnessapp_objects.UserAccount;
+
+public class SignUpActivity extends AppCompatActivity{
 
     private final String TAG = "SignUpActivity";
     private FirebaseAuth mAuth;
-    EditText emailET, passwordET;
+    EditText usernameET, emailET, passwordET, confirmPasswordET;
     TextView infoTV;
-
+    UserAccount userAccount;
+    Database db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,10 +43,17 @@ public class SignUpActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
+        usernameET = (EditText) findViewById(R.id.username_et);
         emailET = (EditText) findViewById(R.id.email_et);
         passwordET = (EditText) findViewById(R.id.pass_et);
+        confirmPasswordET = (EditText) findViewById(R.id.confirm_pass_et);
         infoTV = (TextView) findViewById(R.id.error_tv);
+
+        userAccount = UserAccount.getInstance();
+        db = Database.getInstance();
+
         infoTV.setText("");
+
 
     }
 
@@ -43,7 +62,21 @@ public class SignUpActivity extends AppCompatActivity {
 
     public void signUp(View view){
 
-        String email = emailET.getText().toString(), password = passwordET.getText().toString();
+        infoTV.setText("");
+        String email = emailET.getText().toString(),
+                password = passwordET.getText().toString(),
+                confirmPassword = confirmPasswordET.getText().toString(),
+                username = usernameET.getText().toString();
+
+        if(username.isEmpty()){
+            infoTV.setText("Username mustn't be empty !");
+            return;
+        }
+
+        if(!password.equals(confirmPassword)){
+            infoTV.setText("Passwords don't match !");
+            return;
+        }
 
 
         mAuth.createUserWithEmailAndPassword(email, password)
@@ -54,6 +87,10 @@ public class SignUpActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "createUserWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
+                            userAccount.setUserID(user.getUid());
+                            userAccount.setName(username);
+                            userAccount.setEmail(email);
+                            db.updateUserAccount();
                             updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
@@ -72,13 +109,13 @@ public class SignUpActivity extends AppCompatActivity {
 
     private void updateUI(FirebaseUser user){
 
-//        if(user != null){
-//            Intent intent = new Intent(this, DemoMenuActivity.class);
-//            startActivity(intent);
-//        }else{
-//            Toast.makeText(this, "SIGN UP FAIL !", Toast.LENGTH_SHORT).show();
-//        }
-
+        if(user != null){
+            Intent intent = new Intent(this, HomeActivity.class);
+            startActivity(intent);
+        }else{
+            Toast.makeText(this, "SIGN IN FAIL !", Toast.LENGTH_SHORT).show();
+        }
 
     }
+
 }
