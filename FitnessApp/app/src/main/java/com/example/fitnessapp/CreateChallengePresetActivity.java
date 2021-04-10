@@ -20,6 +20,7 @@ public class CreateChallengePresetActivity extends AppCompatActivity implements 
     Button pickDateBTN;
     Spinner challTypeSpinner;
     RadioButton betRBTN;
+    DialogFragment dialogFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +52,8 @@ public class CreateChallengePresetActivity extends AppCompatActivity implements 
         int year = c.get(Calendar.YEAR);
         int month = c.get(Calendar.MONTH);
         int day = c.get(Calendar.DAY_OF_MONTH);
-        pickDateBTN.setText(year +"/"+ (month+1) +"/"+ day);
+        pickDateBTN.setText(year +"/"+ (month+1) +"/"+ (day+1));
+        dialogFragment = new DatePickerFragment(this);
     }
 
     @Override
@@ -66,8 +68,7 @@ public class CreateChallengePresetActivity extends AppCompatActivity implements 
     }
 
     public void showDatePickerDialog(View v) {
-        DialogFragment newFragment = new DatePickerFragment(this);
-        newFragment.show(getSupportFragmentManager(), "datePicker");
+        dialogFragment.show(getSupportFragmentManager(), "datePicker");
     }
 
     @Override
