@@ -10,152 +10,149 @@
     <Button
         android:id="@+id/create_chall_btn"
         android:layout_width="126dp"
-        android:layout_height="71dp"
-        android:layout_marginTop="40dp"
+        android:layout_height="43dp"
         android:backgroundTint="@color/btn_color"
         android:text="@string/create"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.494"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/room_pass_et" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.813" />
 
     <Spinner
         android:id="@+id/chall_type_spinner"
-        android:layout_width="171dp"
-        android:layout_height="49dp"
-        android:layout_marginTop="16dp"
+        android:layout_width="160dp"
+        android:layout_height="44dp"
+        app:layout_constraintBottom_toTopOf="@+id/textView3"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.28"
-        app:layout_constraintStart_toEndOf="@+id/textView2"
+        app:layout_constraintHorizontal_bias="0.836"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/room_name_et" />
 
     <EditText
         android:id="@+id/chall_descr_et"
-        android:layout_width="326dp"
-        android:layout_height="79dp"
-        android:layout_marginTop="12dp"
+        android:layout_width="327dp"
+        android:layout_height="64dp"
+        android:layout_marginTop="56dp"
         android:ems="10"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView3" />
-
-    <EditText
-        android:id="@+id/endDate_et"
-        android:layout_width="165dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="36dp"
-        android:ems="10"
-        android:inputType="date"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.338"
-        app:layout_constraintStart_toEndOf="@+id/textView4"
-        app:layout_constraintTop_toBottomOf="@+id/chall_descr_et" />
+        app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
     <RadioButton
         android:id="@+id/bet_rbtn"
-        android:layout_width="84dp"
-        android:layout_height="46dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="40dp"
+        android:layout_width="143dp"
+        android:layout_height="43dp"
+        android:layout_marginStart="28dp"
         android:text="@string/bet"
+        app:layout_constraintBottom_toTopOf="@+id/textView5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+        app:layout_constraintTop_toBottomOf="@+id/pick_date_btn" />
 
     <EditText
         android:id="@+id/bet_amount_et"
-        android:layout_width="202dp"
-        android:layout_height="45dp"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="16dp"
+        android:layout_width="143dp"
+        android:layout_height="44dp"
+        android:layout_marginBottom="20dp"
         android:ems="10"
         android:hint="@string/betAmountHint"
         android:inputType="number"
+        app:layout_constraintBottom_toTopOf="@+id/textView5"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.014"
-        app:layout_constraintStart_toEndOf="@+id/bet_rbtn"
-        app:layout_constraintTop_toBottomOf="@+id/endDate_et" />
+        app:layout_constraintHorizontal_bias="0.577"
+        app:layout_constraintStart_toEndOf="@+id/bet_rbtn" />
 
     <TextView
         android:id="@+id/textView2"
-        android:layout_width="149dp"
-        android:layout_height="28dp"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="32dp"
+        android:layout_width="160dp"
+        android:layout_height="43dp"
+        android:layout_marginTop="24dp"
         android:text="@string/challengeType"
         android:textColor="#000000"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.111"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView6" />
 
     <TextView
         android:id="@+id/textView6"
-        android:layout_width="149dp"
-        android:layout_height="28dp"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="44dp"
+        android:layout_width="172dp"
+        android:layout_height="43dp"
+        android:layout_marginTop="52dp"
         android:text="@string/challengeRoomName"
         android:textColor="#000000"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.066"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/textView3"
         android:layout_width="185dp"
-        android:layout_height="20dp"
-        android:layout_marginTop="32dp"
+        android:layout_height="43dp"
         android:text="@string/challengeDescription"
         android:textColor="#000000"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.053"
+        app:layout_constraintBottom_toTopOf="@+id/chall_descr_et"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
     <TextView
         android:id="@+id/textView4"
-        android:layout_width="116dp"
-        android:layout_height="26dp"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="36dp"
+        android:layout_width="117dp"
+        android:layout_height="43dp"
+        android:layout_marginStart="44dp"
         android:text="@string/endDate"
         android:textColor="#000000"
+        app:layout_constraintBottom_toTopOf="@+id/bet_rbtn"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/chall_descr_et" />
+        app:layout_constraintTop_toBottomOf="@+id/chall_descr_et"
+        app:layout_constraintVertical_bias="0.462" />
 
     <EditText
         android:id="@+id/room_pass_et"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
         android:ems="10"
         android:inputType="textPassword"
+        app:layout_constraintBottom_toTopOf="@+id/create_chall_btn"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.09"
-        app:layout_constraintStart_toEndOf="@+id/textView5"
-        app:layout_constraintTop_toBottomOf="@+id/bet_amount_et" />
+        app:layout_constraintTop_toBottomOf="@+id/bet_amount_et"
+        app:layout_constraintVertical_bias="0.375" />
 
     <TextView
         android:id="@+id/textView5"
-        android:layout_width="125dp"
-        android:layout_height="22dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
+        android:layout_width="127dp"
+        android:layout_height="51dp"
+        android:layout_marginBottom="68dp"
         android:text="@string/roomPassword"
         android:textColor="#000000"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/bet_rbtn" />
+        app:layout_constraintBottom_toTopOf="@+id/create_chall_btn"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
         android:id="@+id/room_name_et"
-        android:layout_width="195dp"
-        android:layout_height="38dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="44dp"
+        android:layout_width="172dp"
+        android:layout_height="44dp"
+        android:layout_marginTop="52dp"
         android:ems="10"
         android:inputType="textPersonName"
+        app:layout_constraintBottom_toTopOf="@+id/textView2"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.032"
+        app:layout_constraintHorizontal_bias="0.431"
         app:layout_constraintStart_toEndOf="@+id/textView6"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/pick_date_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#74BADA"
+        android:onClick="showDatePickerDialog"
+        android:text="@string/pickDate"
+        app:layout_constraintBottom_toTopOf="@+id/bet_amount_et"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textView4"
+        app:layout_constraintTop_toBottomOf="@+id/chall_descr_et" />
 </androidx.constraintlayout.widget.ConstraintLayout>

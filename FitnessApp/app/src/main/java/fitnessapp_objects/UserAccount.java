@@ -7,12 +7,12 @@ import java.util.*;
 //UserAccount is a singleton, call UserAccount.getInstance() to get the user account.
 public class UserAccount {
 
-    private String userID;
+    private String userID; // can get it from FirebaseAuth.getInstance().getCurrentUser().getUid()
     private String name;
     private String email;
     private PaymentInfo paymentInfo;
     private FitnessData fitnessData;
-    private ArrayList<String> friendList;
+    private ArrayList<String> friendList; //store friends as a list of uid
     private ArrayList<Achievement> achievements;
     private ChallengeHistory challengeHistory;
 
