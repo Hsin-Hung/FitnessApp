@@ -149,6 +149,7 @@ public class Database {
                                         break;
                                     case REMOVED:
                                         Log.d(TAG, "Removed participant: " + dataMap);
+                                        listener.removeParticipant(participants);
                                         break;
                                 }
                             }
