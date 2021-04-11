@@ -9,8 +9,8 @@
 
     <ListView
         android:id="@+id/rooms_view"
-        android:layout_width="347dp"
-        android:layout_height="617dp"
+        android:layout_width="361dp"
+        android:layout_height="491dp"
         android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -25,5 +25,17 @@
         app:layout_constraintHorizontal_bias="0.578"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/random_chall_btn"
+        android:layout_width="319dp"
+        android:layout_height="41dp"
+        android:backgroundTint="@color/btn_color"
+        android:onClick="randomChallenges"
+        android:text="@string/randomChallenges"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rooms_view" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

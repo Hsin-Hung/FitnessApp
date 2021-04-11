@@ -12,13 +12,12 @@ import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
 
-import fitnessapp_objects.ParticipantModel;
+import fitnessapp_objects.ChallengeRoomModel;
 
-public class ParticipantGVAdapter extends ArrayAdapter<ParticipantModel> {
+public class ChallengeRoomLVAdapter extends ArrayAdapter<ChallengeRoomModel> {
 
-
-    public ParticipantGVAdapter(@NonNull Context context, ArrayList<ParticipantModel> participantArrayList) {
-        super(context, 0, participantArrayList);
+    public ChallengeRoomLVAdapter(@NonNull Context context, ArrayList<ChallengeRoomModel> challengeRoomArrayList) {
+        super(context, 0, challengeRoomArrayList);
     }
 
     @NonNull
@@ -29,9 +28,11 @@ public class ParticipantGVAdapter extends ArrayAdapter<ParticipantModel> {
             // Layout Inflater inflates each item to be displayed in GridView.
             listitemView = LayoutInflater.from(getContext()).inflate(R.layout.participant_item, parent, false);
         }
-        ParticipantModel participantModel = getItem(position);
-        TextView participantTV = listitemView.findViewById(R.id.room_name_tv);
-        participantTV.setText(participantModel.getName());
+        ChallengeRoomModel challengeRoomModel = getItem(position);
+        TextView challengeRoomTV = listitemView.findViewById(R.id.room_name_tv);
+        challengeRoomTV.setText(challengeRoomModel.getName());
         return listitemView;
     }
+    
+    
 }

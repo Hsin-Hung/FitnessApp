@@ -24,6 +24,7 @@
     <string name="hostName">Host</string>
     <string name="pickDate">Pick Date</string>
     <string name="yourChallenges">Your Challenges</string>
+    <string name="randomChallenges">Random Challenges</string>
     <string-array name="challenge_types">
         <item>Steps</item>
         <item>Distance</item>

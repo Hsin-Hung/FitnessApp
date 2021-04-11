@@ -210,7 +210,7 @@ public class Database {
         return false;
     }
 
-    public boolean getChallengeRoom(String roomID){
+    public boolean getRandomChallengeRoom(){
 
         return false;
     }
