@@ -97,6 +97,10 @@ public class UserAccount {
         this.challengeHistory = challengeHistories;
     }
 
+    public void addNewChallenge(String challengeID){
+        challenges.add(challengeID);
+    }
+
     /**
      *
      * this method will generate the Map needed for Database to update to firestore.

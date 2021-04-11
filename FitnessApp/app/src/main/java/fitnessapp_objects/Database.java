@@ -86,6 +86,7 @@ public class Database {
     public boolean updateChallengeRoom(ChallengeRoom room, FirestoreCompletionHandler handler){
 
         FirebaseUser user = mAuth.getCurrentUser();
+        UserAccount userAccount = UserAccount.getInstance();
         // Get a new write batch
         WriteBatch batch = db.batch();
 
@@ -102,6 +103,7 @@ public class Database {
         batch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
+                userAccount.addNewChallenge(challengeRef.getId());
                 handler.updateUI(true);
             }
         });
