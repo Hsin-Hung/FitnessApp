@@ -26,11 +26,10 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
 
         this.onDatePickListener = onDatePickListener;
         c = Calendar.getInstance();
+        c.add(Calendar.DAY_OF_YEAR, 1);
         year = c.get(Calendar.YEAR);
         month = c.get(Calendar.MONTH);
         day = c.get(Calendar.DAY_OF_MONTH);
-        c.add(Calendar.DAY_OF_YEAR, 1);
-
     }
 
     public interface OnDatePickListener{
@@ -50,7 +49,7 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
 
     public void onDateSet(DatePicker view, int year, int month, int day) {
         // Do something with the date chosen by the user
-        onDatePickListener.setDate(year,month+1,day);
+        onDatePickListener.setDate(year,month,day);
         this.year = year;
         this.month = month;
         this.day = day;
