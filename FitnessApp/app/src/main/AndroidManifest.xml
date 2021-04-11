@@ -13,7 +13,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FitnessApp"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ChallengeLobbyActivity"></activity>
+        <activity android:name=".YourChallengesActivity"></activity>
+        <activity android:name=".ChallengeLobbyActivity" />
         <activity android:name=".JoinChallengeActivity" />
         <activity android:name=".CreateChallengePresetActivity" />
         <activity android:name=".HomeActivity" />

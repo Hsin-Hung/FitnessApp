@@ -26,6 +26,7 @@ public class ChallengeRoom {
         this.endDate = endDate;
         this.isBet = isBet;
         this.betAmount = betAmount;
+        participants = new ArrayList<>();
 
     }
 
@@ -92,6 +93,9 @@ public class ChallengeRoom {
     public void setParticipants(ArrayList<String> participants) {
         this.participants = participants;
     }
+    public void addParticipant(String id){
+        participants.add(id);
+    }
 
 
     public Map<String, Object> getFirestoreChallengeRoomMap(){
@@ -105,6 +109,7 @@ public class ChallengeRoom {
         challengeRoom.put("endDate", new Timestamp(endDate.getTime()));
         challengeRoom.put("isBet", isBet);
         challengeRoom.put("betAmount", betAmount);
+        challengeRoom.put("participants", participants);
 
 
         return challengeRoom;

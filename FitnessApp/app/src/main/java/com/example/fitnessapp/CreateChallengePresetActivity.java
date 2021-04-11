@@ -18,6 +18,8 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.TextView;
 
 import com.example.fitnessapp.DatePickerFragment.OnDatePickListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import org.w3c.dom.Text;
 
@@ -43,9 +45,10 @@ public class CreateChallengePresetActivity extends AppCompatActivity implements 
     ChallengeType challTypePicked;
     boolean isBet;
     final int PASSWORD_MIN_LEN = 6;
+    String createdRoomID;
 
     Database db;
-
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +78,7 @@ public class CreateChallengePresetActivity extends AppCompatActivity implements 
         setInitDate();
 
         db = Database.getInstance();
-
+        mAuth = FirebaseAuth.getInstance();
 
         betSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -158,15 +161,26 @@ public class CreateChallengePresetActivity extends AppCompatActivity implements 
 
     }
 
+    public void test(View view){
+
+        Intent intent = new Intent(this, ChallengeLobbyActivity.class);
+        startActivity(intent);
+
+    }
+
     public boolean updateDatabase(){
 
         String name = roomNameET.getText().toString();
-        int betAmount = Integer.parseInt(betAmountET.getText().toString());
+        int betAmount = 0;
+        if(!betAmountET.getText().toString().isEmpty()){
+            betAmount = Integer.parseInt(betAmountET.getText().toString());
+        }
 
         ChallengeRoom room = new ChallengeRoom(name, challTypePicked, challDescrET.getText().toString(), passwordET.getText().toString(), endDate, isBet, betAmount);
-
-        db.updateChallengeRoom(room, this);
-        return false;
+        FirebaseUser user = mAuth.getCurrentUser();
+        room.addParticipant(user.getUid());
+        createdRoomID = db.updateChallengeRoom(room, this);
+        return true;
     }
 
     @Override
@@ -175,8 +189,10 @@ public class CreateChallengePresetActivity extends AppCompatActivity implements 
         if(isSuccess){
             System.out.println("Successfully do all challenge room updates on firstore");
             Intent intent = new Intent(this, ChallengeLobbyActivity.class);
+            intent.putExtra("roomID", createdRoomID);
             startActivity(intent);
         }
 
     }
+
 }

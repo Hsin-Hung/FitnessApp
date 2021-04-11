@@ -3,6 +3,7 @@ package fitnessapp_objects;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -10,10 +11,13 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.WriteBatch;
 import com.google.firebase.firestore.auth.User;
 
@@ -83,7 +87,7 @@ public class Database {
     }
 
 
-    public boolean updateChallengeRoom(ChallengeRoom room, FirestoreCompletionHandler handler){
+    public String updateChallengeRoom(ChallengeRoom room, FirestoreCompletionHandler handler){
 
         FirebaseUser user = mAuth.getCurrentUser();
         UserAccount userAccount = UserAccount.getInstance();
@@ -109,7 +113,13 @@ public class Database {
         });
 
 
-        return true;
+        return challengeRef.getId();
+
+    }
+
+    public void startChallengeRoomChangeListener(String challengeID){
+
+
 
     }
 
