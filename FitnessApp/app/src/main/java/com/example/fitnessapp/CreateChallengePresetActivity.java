@@ -3,6 +3,7 @@ package com.example.fitnessapp;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -22,8 +23,14 @@ import org.w3c.dom.Text;
 
 import java.sql.Timestamp;
 import java.util.Calendar;
+import java.util.Date;
 
-public class CreateChallengePresetActivity extends AppCompatActivity implements OnItemSelectedListener, OnDatePickListener {
+import fitnessapp_objects.ChallengeRoom;
+import fitnessapp_objects.ChallengeType;
+import fitnessapp_objects.Database;
+import fitnessapp_objects.FirestoreCompletionHandler;
+
+public class CreateChallengePresetActivity extends AppCompatActivity implements OnItemSelectedListener, OnDatePickListener, FirestoreCompletionHandler {
 
     EditText roomNameET, challDescrET, betAmountET, passwordET;
     Button pickDateBTN;
@@ -32,10 +39,12 @@ public class CreateChallengePresetActivity extends AppCompatActivity implements 
     DialogFragment dialogFragment;
     TextView errorTV;
 
-    Timestamp endDateTimestamp;
-    int challTypePicked = 0;
-    boolean isBet = false;
+    Date endDate;
+    ChallengeType challTypePicked;
+    boolean isBet;
     final int PASSWORD_MIN_LEN = 6;
+
+    Database db;
 
 
     @Override
@@ -53,8 +62,8 @@ public class CreateChallengePresetActivity extends AppCompatActivity implements 
         pickDateBTN = (Button) findViewById(R.id.pick_date_btn);
         errorTV = (TextView) findViewById(R.id.create_chall_error_tv);
 
-
-        challTypePicked = 0;
+        isBet = false;
+        challTypePicked = ChallengeType.STEPS;
         betAmountET.setEnabled(false);
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
@@ -64,6 +73,8 @@ public class CreateChallengePresetActivity extends AppCompatActivity implements 
         challTypeSpinner.setAdapter(adapter);
         challTypeSpinner.setOnItemSelectedListener(this);
         setInitDate();
+
+        db = Database.getInstance();
 
 
         betSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -87,18 +98,19 @@ public class CreateChallengePresetActivity extends AppCompatActivity implements 
         int month = c.get(Calendar.MONTH);
         int day = c.get(Calendar.DAY_OF_MONTH);
         pickDateBTN.setText(year +"/"+ (month+1) +"/"+ day);
-        endDateTimestamp = new Timestamp(c.getTimeInMillis());
+
+        endDate = new Date(c.getTimeInMillis());
         dialogFragment = new DatePickerFragment(this);
     }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        challTypePicked = position;
+        challTypePicked = ChallengeType.values()[position];
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
-        challTypePicked = 0;
+        challTypePicked = ChallengeType.STEPS;
     }
 
     public void showDatePickerDialog(View v) {
@@ -111,8 +123,7 @@ public class CreateChallengePresetActivity extends AppCompatActivity implements 
         pickDateBTN.setText(dateString);
         Calendar c = Calendar.getInstance();
         c.set(year, month, day,0,0);
-        endDateTimestamp.setTime(c.getTimeInMillis());
-        System.out.println(endDateTimestamp.getTime());
+        endDate.setTime(c.getTimeInMillis());
     }
 
 
@@ -120,9 +131,9 @@ public class CreateChallengePresetActivity extends AppCompatActivity implements 
 
         if(roomNameET.getText().toString().isEmpty()){
             errorTV.setText("Room name cannot be empty !");
-        }else if(!(challTypePicked>=0 && challTypePicked<=2)){
+        }else if(challTypePicked == null){
             errorTV.setText("Need to pick a challenge type !");
-        }else if(endDateTimestamp==null){
+        }else if(endDate == null){
             errorTV.setText("Need to pick a challenge end date !");
         }else if(betSwitch.isChecked() && betAmountET.getText().toString().isEmpty()){
             errorTV.setText("Need to enter a bet amount !");
@@ -141,7 +152,30 @@ public class CreateChallengePresetActivity extends AppCompatActivity implements 
 
         if(checkAllFieldValid()){
 
+            updateDatabase();
 
+        }
+
+    }
+
+    public boolean updateDatabase(){
+
+        String name = roomNameET.getText().toString();
+        int betAmount = Integer.parseInt(betAmountET.getText().toString());
+
+        ChallengeRoom room = new ChallengeRoom(name, challTypePicked, challDescrET.getText().toString(), passwordET.getText().toString(), endDate, isBet, betAmount);
+
+        db.updateChallengeRoom(room, this);
+        return false;
+    }
+
+    @Override
+    public void updateUI(boolean isSuccess) {
+
+        if(isSuccess){
+            System.out.println("Successfully do all challenge room updates on firstore");
+            Intent intent = new Intent(this, ChallengeLobbyActivity.class);
+            startActivity(intent);
         }
 
     }

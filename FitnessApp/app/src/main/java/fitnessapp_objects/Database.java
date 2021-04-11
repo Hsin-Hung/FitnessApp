@@ -12,7 +12,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.WriteBatch;
 import com.google.firebase.firestore.auth.User;
 
 import java.util.*;
@@ -81,10 +83,34 @@ public class Database {
     }
 
 
-    public boolean storeChallengeRoom(ChallengeRoom room){
+    public boolean updateChallengeRoom(ChallengeRoom room, FirestoreCompletionHandler handler){
 
-        return false;
+        FirebaseUser user = mAuth.getCurrentUser();
+        // Get a new write batch
+        WriteBatch batch = db.batch();
+
+        DocumentReference challengeRef = db.collection("challenges").document();
+
+        // add the new challenge room data to firestore first
+        batch.set(challengeRef, room.getFirestoreChallengeRoomMap());
+
+        DocumentReference userAccountRef = db.collection("users").document(user.getUid());
+
+        // update the current user to have this new challenge room
+        batch.update(userAccountRef, "challengesJoined", FieldValue.arrayUnion(challengeRef.getId()));
+
+        batch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                handler.updateUI(true);
+            }
+        });
+
+
+        return true;
+
     }
+
 
     /**
      *

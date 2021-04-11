@@ -13,12 +13,15 @@ public class UserAccount {
     private PaymentInfo paymentInfo;
     private FitnessData fitnessData;
     private ArrayList<String> friendList; //store friends as a list of uid
+    private ArrayList<String> challenges; // all the challenges this user currently joined, represent by challenge doc ID
     private ArrayList<Achievement> achievements;
     private ChallengeHistory challengeHistory;
 
     private static UserAccount userAccount_instance = null;
 
     private UserAccount() {
+
+        challenges = new ArrayList<>();
     }
 
     public static UserAccount getInstance(){
@@ -41,6 +44,10 @@ public class UserAccount {
     public void setName(String name) {
         this.name = name;
     }
+
+    public ArrayList<String> getChallenges() { return challenges; }
+
+    public void setChallenges(ArrayList<String> challenges) { this.challenges = challenges; }
 
     public String getEmail() {
         return email;
@@ -103,6 +110,7 @@ public class UserAccount {
 
         user.put("name", name);
         user.put("email", email);
+        user.put("challengesJoined", challenges);
 
         // ...
 
