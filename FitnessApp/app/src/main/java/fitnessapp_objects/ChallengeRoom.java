@@ -15,7 +15,7 @@ public class ChallengeRoom {
     private boolean isBet;
     private int betAmount;
     private ChallengeType type;
-    private ArrayList<String> participants;
+    private ArrayList<Participant> participants;
 
     public ChallengeRoom(String name, ChallengeType type, String description, String password, Date endDate, boolean isBet,
                          int betAmount) {
@@ -86,15 +86,15 @@ public class ChallengeRoom {
         this.type = type;
     }
 
-    public ArrayList<String> getParticipants() {
+    public ArrayList<Participant> getParticipants() {
         return participants;
     }
 
-    public void setParticipants(ArrayList<String> participants) {
+    public void setParticipants(ArrayList<Participant> participants) {
         this.participants = participants;
     }
-    public void addParticipant(String id){
-        participants.add(id);
+    public void addParticipant(Participant participant){
+        participants.add(participant);
     }
 
 

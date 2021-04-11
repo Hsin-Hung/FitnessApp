@@ -1,15 +1,13 @@
 package fitnessapp_objects;
 
-public class ParticipantModel {
+public class Participant {
 
-    private String name;
-    private String id;
+    String name;
+    String id;
 
-    public ParticipantModel(String name, String id){
-
+    public Participant(String name, String id) {
         this.name = name;
         this.id = id;
-
     }
 
     public String getName() {

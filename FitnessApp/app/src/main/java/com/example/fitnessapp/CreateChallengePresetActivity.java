@@ -31,6 +31,8 @@ import fitnessapp_objects.ChallengeRoom;
 import fitnessapp_objects.ChallengeType;
 import fitnessapp_objects.Database;
 import fitnessapp_objects.FirestoreCompletionHandler;
+import fitnessapp_objects.Participant;
+import fitnessapp_objects.UserAccount;
 
 public class CreateChallengePresetActivity extends AppCompatActivity implements OnItemSelectedListener, OnDatePickListener, FirestoreCompletionHandler {
 
@@ -178,7 +180,8 @@ public class CreateChallengePresetActivity extends AppCompatActivity implements 
 
         ChallengeRoom room = new ChallengeRoom(name, challTypePicked, challDescrET.getText().toString(), passwordET.getText().toString(), endDate, isBet, betAmount);
         FirebaseUser user = mAuth.getCurrentUser();
-        room.addParticipant(user.getUid());
+        UserAccount userAccount = UserAccount.getInstance();
+        room.addParticipant(new Participant(userAccount.getName(),user.getUid()));
         createdRoomID = db.updateChallengeRoom(room, this);
         return true;
     }

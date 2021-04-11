@@ -10,16 +10,21 @@ import android.widget.GridView;
 import android.widget.TableLayout;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
+import fitnessapp_objects.Database;
+import fitnessapp_objects.OnRoomChangeListener;
+import fitnessapp_objects.Participant;
 import fitnessapp_objects.ParticipantModel;
 
-public class ChallengeLobbyActivity extends AppCompatActivity {
+public class ChallengeLobbyActivity extends AppCompatActivity implements OnRoomChangeListener {
 
 
     GridView participants_view;
     ArrayList<ParticipantModel> participantModelArrayList;
     ParticipantGVAdapter adapter;
     String roomID;
+    Database db;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,22 +33,59 @@ public class ChallengeLobbyActivity extends AppCompatActivity {
         participants_view = (GridView) findViewById(R.id.participant_grid);
 
         participantModelArrayList = new ArrayList<>();
-        participantModelArrayList.add(new ParticipantModel("Henry"));
-        participantModelArrayList.add(new ParticipantModel("Henry2"));
-        participantModelArrayList.add(new ParticipantModel("Henry3"));
 
         adapter = new ParticipantGVAdapter(this, participantModelArrayList);
         participants_view.setAdapter(adapter);
 
         roomID = getIntent().getStringExtra("roomID");
+        db = Database.getInstance();
+        db.startChallengeRoomChangeListener(roomID, this);
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        db.detachChallengeRoomListener();
+
+        super.onDestroy();
+    }
+
+    public void addParticipant(ArrayList<HashMap<String,String>> participants){
+
+        for(HashMap<String,String> p: participants){
+
+            boolean found = false;
+            for(ParticipantModel pm: participantModelArrayList){
+
+                if(pm.getId().equals(p.get("id"))){
+                    found = true;
+                    break;
+                }
+
+            }
+
+            if(!found){
+                participantModelArrayList.add(new ParticipantModel(p.get("name"),p.get("id")));
+            }
+
+        }
+
+        adapter.notifyDataSetChanged();
+
+
+    }
+
+    public void removeParticipant(ArrayList<HashMap<String,String>> participants){
+
+
 
     }
 
     public void start(View view){
 
-        participantModelArrayList.add(new ParticipantModel("Henry3"));
-
-        adapter.notifyDataSetChanged();
+//        participantModelArrayList.add(new ParticipantModel("Henry3"));
+//
+//        adapter.notifyDataSetChanged();
 
 
     }

@@ -18,6 +18,8 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.ListenerRegistration;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.WriteBatch;
 import com.google.firebase.firestore.auth.User;
 
@@ -31,6 +33,7 @@ public class Database {
     private final String TAG = "Database";
     private FirebaseAuth mAuth;
     private UserAccount userAccount;
+    private ListenerRegistration challengeRoomListener;
 
 
     private Database(){
@@ -117,8 +120,49 @@ public class Database {
 
     }
 
-    public void startChallengeRoomChangeListener(String challengeID){
+    public void startChallengeRoomChangeListener(String challengeID, OnRoomChangeListener listener){
+        FirebaseUser user = mAuth.getCurrentUser();
+        UserAccount account = UserAccount.getInstance();
 
+        challengeRoomListener = db.collection("challenges")
+                .whereArrayContains("participants", new ParticipantModel(account.getName(),user.getUid()))
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot snapshots, @Nullable FirebaseFirestoreException e) {
+                        if (e != null) {
+                            Log.w(TAG, "listen:error", e);
+                            return;
+                        }
+
+                        for (DocumentChange dc : snapshots.getDocumentChanges()) {
+
+                            if(dc.getDocument().getId().equals(challengeID)){
+                                Map<String,Object> dataMap = dc.getDocument().getData();
+                                ArrayList<HashMap<String,String>> participants = (ArrayList<HashMap<String,String>>) dataMap.get("participants");
+                                switch (dc.getType()) {
+                                    case ADDED:
+                                        Log.d(TAG, "New participant: " + dataMap);
+                                        listener.addParticipant(participants);
+                                        break;
+                                    case MODIFIED:
+                                        Log.d(TAG, "Modified participant: " + dataMap);
+                                        break;
+                                    case REMOVED:
+                                        Log.d(TAG, "Removed participant: " + dataMap);
+                                        break;
+                                }
+                            }
+
+                        }
+                    }
+                });
+
+    }
+
+    public void detachChallengeRoomListener(){
+
+        if(challengeRoomListener!=null)
+        challengeRoomListener.remove();
 
 
     }
