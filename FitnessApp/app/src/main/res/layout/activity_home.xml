@@ -4,18 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_color"
+    android:background="@drawable/background2"
     tools:context=".HomeActivity">
 
     <Button
         android:id="@+id/create_chall_homebtn"
         android:layout_width="160dp"
-        android:layout_height="80dp"
-        android:layout_marginTop="267dp"
-        android:layout_marginBottom="88dp"
-        android:backgroundTint="@color/btn_color"
+        android:layout_height="160dp"
+        android:layout_marginTop="70dp"
+        android:background="@drawable/createchal"
         android:onClick="createChallenge"
-        android:text="@string/createChallenge"
         app:layout_constraintBottom_toTopOf="@+id/join_chall_homebtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -24,27 +22,22 @@
     <Button
         android:id="@+id/join_chall_homebtn"
         android:layout_width="160dp"
-        android:layout_height="80dp"
-        android:layout_marginBottom="284dp"
-        android:backgroundTint="@color/btn_color"
+        android:layout_height="160dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/joinchal"
         android:onClick="joinChallenge"
-        android:text="@string/joinChallenge"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/create_chall_homebtn" />
 
     <Button
         android:id="@+id/your_chall_btn"
         android:layout_width="160dp"
-        android:layout_height="80dp"
-        android:layout_marginBottom="128dp"
-        android:backgroundTint="@color/btn_color"
+        android:layout_height="160dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/yourchal"
         android:onClick="myChallenges"
-        android:text="@string/myChallenges"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/join_chall_homebtn" />
 
@@ -57,4 +50,6 @@
         android:text="@string/sign_out"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
