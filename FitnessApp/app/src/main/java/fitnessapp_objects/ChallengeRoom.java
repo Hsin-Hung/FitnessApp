@@ -1,23 +1,25 @@
 package fitnessapp_objects;
 
-import java.sql.Timestamp;
+import com.google.firebase.Timestamp;
+
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 public class ChallengeRoom {
 
     private String name;
     private String description;
     private String password;
-    private Date endDate;
+    private Timestamp endDate;
     private boolean isBet;
     private int betAmount;
     private ChallengeType type;
     private ArrayList<Participant> participants;
 
-    public ChallengeRoom(String name, ChallengeType type, String description, String password, Date endDate, boolean isBet,
+    public ChallengeRoom(){
+
+    }
+
+    public ChallengeRoom(String name, ChallengeType type, String description, String password, Timestamp endDate, boolean isBet,
                          int betAmount) {
         this.name = name;
         this.type = type;
@@ -54,11 +56,11 @@ public class ChallengeRoom {
         this.password = password;
     }
 
-    public Date getEndDate() {
+    public Timestamp getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(Date endDate) {
+    public void setEndDate(Timestamp endDate) {
         this.endDate = endDate;
     }
 
@@ -97,24 +99,24 @@ public class ChallengeRoom {
         participants.add(participant);
     }
 
-
-    public Map<String, Object> getFirestoreChallengeRoomMap(){
-
-        Map<String, Object> challengeRoom = new HashMap<>();
-
-        challengeRoom.put("name", name);
-        challengeRoom.put("type", type.toString());
-        challengeRoom.put("description", description);
-        challengeRoom.put("password", password);
-        challengeRoom.put("endDate", new Timestamp(endDate.getTime()));
-        challengeRoom.put("isBet", isBet);
-        challengeRoom.put("betAmount", betAmount);
-        challengeRoom.put("participants", participants);
-
-
-        return challengeRoom;
-
-
-
-    }
+//
+//    public Map<String, Object> getFirestoreChallengeRoomMap(){
+//
+//        Map<String, Object> challengeRoom = new HashMap<>();
+//
+//        challengeRoom.put("name", name);
+//        challengeRoom.put("type", type.toString());
+//        challengeRoom.put("description", description);
+//        challengeRoom.put("password", password);
+//        challengeRoom.put("endDate", new Timestamp(endDate.getTime()));
+//        challengeRoom.put("isBet", isBet);
+//        challengeRoom.put("betAmount", betAmount);
+//        challengeRoom.put("participants", participants);
+//
+//
+//        return challengeRoom;
+//
+//
+//
+//    }
 }

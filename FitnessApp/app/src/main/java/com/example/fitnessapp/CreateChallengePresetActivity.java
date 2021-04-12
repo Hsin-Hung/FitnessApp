@@ -18,12 +18,10 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.TextView;
 
 import com.example.fitnessapp.DatePickerFragment.OnDatePickListener;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import org.w3c.dom.Text;
-
-import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -178,7 +176,7 @@ public class CreateChallengePresetActivity extends AppCompatActivity implements 
             betAmount = Integer.parseInt(betAmountET.getText().toString());
         }
 
-        ChallengeRoom room = new ChallengeRoom(name, challTypePicked, challDescrET.getText().toString(), passwordET.getText().toString(), endDate, isBet, betAmount);
+        ChallengeRoom room = new ChallengeRoom(name, challTypePicked, challDescrET.getText().toString(), passwordET.getText().toString(), new Timestamp(endDate), isBet, betAmount);
         FirebaseUser user = mAuth.getCurrentUser();
         UserAccount userAccount = UserAccount.getInstance();
         room.addParticipant(new Participant(userAccount.getName(),user.getUid()));

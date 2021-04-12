@@ -50,14 +50,14 @@ public class ChallengeLobbyActivity extends AppCompatActivity implements OnRoomC
         super.onDestroy();
     }
 
-    public void addParticipant(ArrayList<HashMap<String,String>> participants){
+    public void addParticipant(ArrayList<Participant> participants){
 
-        for(HashMap<String,String> p: participants){
+        for(Participant p: participants){
 
             boolean found = false;
             for(ParticipantModel pm: participantModelArrayList){
 
-                if(pm.getId().equals(p.get("id"))){
+                if(pm.getId().equals(p.getId())){
                     found = true;
                     break;
                 }
@@ -65,7 +65,7 @@ public class ChallengeLobbyActivity extends AppCompatActivity implements OnRoomC
             }
 
             if(!found){
-                participantModelArrayList.add(new ParticipantModel(p.get("name"),p.get("id")));
+                participantModelArrayList.add(new ParticipantModel(p.getName(),p.getId()));
             }
 
         }
@@ -75,7 +75,7 @@ public class ChallengeLobbyActivity extends AppCompatActivity implements OnRoomC
 
     }
 
-    public void removeParticipant(ArrayList<HashMap<String,String>> participants){
+    public void removeParticipant(ArrayList<Participant> participants){
 
 
 

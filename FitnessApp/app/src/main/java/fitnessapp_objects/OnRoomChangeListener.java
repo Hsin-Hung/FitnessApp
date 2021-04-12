@@ -5,6 +5,6 @@ import java.util.HashMap;
 
 public interface OnRoomChangeListener {
 
-    public void addParticipant(ArrayList<HashMap<String,String>> participants);
-    public void removeParticipant(ArrayList<HashMap<String,String>> participants);
+    public void addParticipant(ArrayList<Participant> participants);
+    public void removeParticipant(ArrayList<Participant> participants);
 }

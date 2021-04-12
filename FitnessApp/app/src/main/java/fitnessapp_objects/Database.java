@@ -100,7 +100,7 @@ public class Database {
         DocumentReference challengeRef = db.collection("challenges").document();
 
         // add the new challenge room data to firestore first
-        batch.set(challengeRef, room.getFirestoreChallengeRoomMap());
+        batch.set(challengeRef, room);
 
         DocumentReference userAccountRef = db.collection("users").document(user.getUid());
 
@@ -138,18 +138,18 @@ public class Database {
 
                             if(dc.getDocument().getId().equals(challengeID)){
                                 Map<String,Object> dataMap = dc.getDocument().getData();
-                                ArrayList<HashMap<String,String>> participants = (ArrayList<HashMap<String,String>>) dataMap.get("participants");
+                                ChallengeRoom challengeRoom = dc.getDocument().toObject(ChallengeRoom.class);
                                 switch (dc.getType()) {
                                     case ADDED:
                                         Log.d(TAG, "New participant: " + dataMap);
-                                        listener.addParticipant(participants);
+                                        listener.addParticipant(challengeRoom.getParticipants());
                                         break;
                                     case MODIFIED:
                                         Log.d(TAG, "Modified participant: " + dataMap);
                                         break;
                                     case REMOVED:
                                         Log.d(TAG, "Removed participant: " + dataMap);
-                                        listener.removeParticipant(participants);
+                                        listener.removeParticipant(challengeRoom.getParticipants());
                                         break;
                                 }
                             }
