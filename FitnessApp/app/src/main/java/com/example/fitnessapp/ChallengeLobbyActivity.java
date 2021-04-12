@@ -2,17 +2,21 @@ package com.example.fitnessapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.GridView;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import java.util.ArrayList;
+import java.util.Map;
 
 import fitnessapp_objects.Database;
 import fitnessapp_objects.Participant;
 import fitnessapp_objects.ParticipantModel;
 
-public class ChallengeLobbyActivity extends AppCompatActivity implements Database.OnRoomChangeListener {
+public class ChallengeLobbyActivity extends AppCompatActivity implements Database.OnRoomChangeListener, Database.UIUpdateCompletionHandler {
 
 
     GridView participants_view;
@@ -76,7 +80,7 @@ public class ChallengeLobbyActivity extends AppCompatActivity implements Databas
 
     }
 
-    public void start(View view){
+    public void ready(View view){
 
 //        participantModelArrayList.add(new ParticipantModel("Henry3"));
 //
@@ -85,7 +89,19 @@ public class ChallengeLobbyActivity extends AppCompatActivity implements Databas
 
     }
 
+    public void quit(View view){
+
+        db.quitChallenge(roomID, this);
+
+    }
 
 
+    @Override
+    public void updateUI(boolean isSuccess, Map<String, String> data) {
 
+        Intent intent = new Intent(this, HomeActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+
+    }
 }

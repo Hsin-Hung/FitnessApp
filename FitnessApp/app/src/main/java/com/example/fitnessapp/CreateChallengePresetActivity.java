@@ -161,13 +161,6 @@ public class CreateChallengePresetActivity extends AppCompatActivity implements 
 
     }
 
-    public void test(View view){
-
-        Intent intent = new Intent(this, ChallengeLobbyActivity.class);
-        startActivity(intent);
-
-    }
-
     public boolean updateDatabase(){
 
         String name = roomNameET.getText().toString();

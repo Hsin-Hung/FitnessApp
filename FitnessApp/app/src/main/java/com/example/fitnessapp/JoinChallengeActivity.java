@@ -17,7 +17,7 @@ import fitnessapp_objects.ChallengeRoom;
 import fitnessapp_objects.ChallengeRoomModel;
 import fitnessapp_objects.Database;
 
-public class JoinChallengeActivity extends AppCompatActivity implements Database.FirestoreCompletionHandler, AdapterView.OnItemClickListener,
+public class JoinChallengeActivity extends AppCompatActivity implements Database.OnRoomGetCompletionHandler, AdapterView.OnItemClickListener,
         PasswordDialogFragment.PasswordDialogListener, Database.UIUpdateCompletionHandler, SearchView.OnQueryTextListener {
 
     SearchView challengeSV;
@@ -108,7 +108,7 @@ public class JoinChallengeActivity extends AppCompatActivity implements Database
     @Override
     public boolean onQueryTextSubmit(String query) {
 
-        db.getChallengeRooms(query, this);
+        db.getChallengeRooms("name", query, this);
         return false;
     }
 

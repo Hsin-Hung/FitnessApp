@@ -50,7 +50,7 @@ public class Database {
 
     }
 
-    public interface FirestoreCompletionHandler {
+    public interface OnRoomGetCompletionHandler {
 
         public void challengeRoomsTransfer(Map<String,ChallengeRoom> rooms);
 
@@ -235,7 +235,7 @@ public class Database {
         return false;
     }
 
-    public boolean getPendingChallengeRooms(FirestoreCompletionHandler handler){
+    public boolean getPendingChallengeRooms(OnRoomGetCompletionHandler handler){
 
         db.collection("challenges")
                 .whereEqualTo("started", false)
@@ -274,34 +274,36 @@ public class Database {
         UserAccount account = UserAccount.getInstance();
         Participant participant = new Participant(account.getName(), user.getUid());
 
-        db.collection("challenges")
-                .document(roomID)
-                .update("participants", FieldValue.arrayUnion(participant))
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Map<String,String> data = new HashMap<>();
-                        data.put("roomID", roomID);
-                        handler.updateUI(true, data);
+        WriteBatch batch = db.batch();
 
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
+        DocumentReference challengeRef = db.collection("challenges").document(roomID);
 
-                        handler.updateUI(false, null);
-                    }
-                });
+        // add the new challenge room data to firestore first
+        batch.update(challengeRef, "participants", FieldValue.arrayUnion(participant));
+
+        DocumentReference userAccountRef = db.collection("users").document(user.getUid());
+
+        // update the current user to have this new challenge room
+        batch.update(userAccountRef, "challengesJoined", FieldValue.arrayUnion(challengeRef.getId()));
+
+        batch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                userAccount.addNewChallenge(roomID);
+                Map<String,String> data = new HashMap<>();
+                data.put("roomID", roomID);
+                handler.updateUI(true, data);
+            }
+        });
 
 
        return true;
     }
 
-    public boolean getChallengeRooms(String roomName, FirestoreCompletionHandler handler){
+    public boolean getChallengeRooms(String field, String targetValue, OnRoomGetCompletionHandler handler){
 
         db.collection("challenges")
-                .whereEqualTo("name", roomName)
+                .whereEqualTo(field, targetValue)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -325,6 +327,66 @@ public class Database {
                     }
                 });
 
+
+        return true;
+    }
+
+    public boolean getMyChallenges(OnRoomGetCompletionHandler handler){
+
+        FirebaseUser user = mAuth.getCurrentUser();
+        UserAccount account = UserAccount.getInstance();
+        db.collection("challenges")
+                .whereArrayContains("participants", new ParticipantModel(account.getName(),user.getUid()))
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+
+                            Map<String, ChallengeRoom> challengeRooms = new HashMap<>();
+
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Log.d(TAG, document.getId() + " => " + document.getData());
+
+                                ChallengeRoom c = document.toObject(ChallengeRoom.class);
+                                challengeRooms.put(document.getId(), c);
+
+                            }
+                            handler.challengeRoomsTransfer(challengeRooms);
+
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+
+        return true;
+    }
+
+    public boolean quitChallenge(String roomID, UIUpdateCompletionHandler handler){
+        FirebaseUser user = mAuth.getCurrentUser();
+        UserAccount account = UserAccount.getInstance();
+
+        WriteBatch batch = db.batch();
+
+
+        DocumentReference challengeRef = db.collection("challenges").document(roomID);
+
+        // add the new challenge room data to firestore first
+        batch.update(challengeRef, "participants", FieldValue.arrayRemove(new ParticipantModel(account.getName(),user.getUid())));
+
+        DocumentReference userAccountRef = db.collection("users").document(user.getUid());
+
+        // update the current user to have this new challenge room
+        batch.update(userAccountRef, "challengesJoined", FieldValue.arrayRemove(roomID));
+
+        batch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                userAccount.removeChallenge(roomID);
+                handler.updateUI(true, null);
+            }
+        });
 
         return true;
     }

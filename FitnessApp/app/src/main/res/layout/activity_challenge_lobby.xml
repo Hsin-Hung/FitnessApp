@@ -13,8 +13,8 @@
         android:layout_height="72dp"
         android:layout_marginBottom="40dp"
         android:backgroundTint="@color/btn_color"
-        android:onClick="start"
-        android:text="@string/start"
+        android:onClick="ready"
+        android:text="@string/ready"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.518"
@@ -30,6 +30,30 @@
         android:text="@string/ready"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/ready_btn2"
+        android:layout_width="143dp"
+        android:layout_height="72dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginBottom="40dp"
+        android:backgroundTint="@color/btn_color"
+        android:text="@string/ready"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/quit_chall_btn"
+        android:layout_width="168dp"
+        android:layout_height="49dp"
+        android:layout_marginBottom="26dp"
+        android:backgroundTint="@android:color/holo_red_dark"
+        android:onClick="quit"
+        android:text="@string/quitChallenge"
+        app:layout_constraintBottom_toTopOf="@+id/participant_grid"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 
     <GridView
         android:id="@+id/participant_grid"

@@ -101,6 +101,12 @@ public class UserAccount {
         challenges.add(challengeID);
     }
 
+    public void removeChallenge(String challengeID) {
+
+        challenges.remove(challengeID);
+
+    }
+
     /**
      *
      * this method will generate the Map needed for Database to update to firestore.

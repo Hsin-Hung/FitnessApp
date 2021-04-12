@@ -41,7 +41,8 @@ public class HomeActivity extends AppCompatActivity {
 
     public void myChallenges(View view){
 
-
+        Intent intent = new Intent(this, MyChallengesActivity.class);
+        startActivity(intent);
 
     }
 
