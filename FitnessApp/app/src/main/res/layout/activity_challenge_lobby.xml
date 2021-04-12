@@ -11,59 +11,36 @@
         android:id="@+id/start_btn"
         android:layout_width="143dp"
         android:layout_height="72dp"
-        android:layout_marginTop="44dp"
+        android:layout_marginBottom="40dp"
         android:backgroundTint="@color/btn_color"
+        android:onClick="start"
         android:text="@string/start"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.53"
-        app:layout_constraintStart_toEndOf="@+id/ready_btn"
-        app:layout_constraintTop_toBottomOf="@+id/participants_view" />
+        app:layout_constraintHorizontal_bias="0.518"
+        app:layout_constraintStart_toEndOf="@+id/ready_btn" />
 
     <Button
         android:id="@+id/ready_btn"
         android:layout_width="143dp"
         android:layout_height="72dp"
-        android:layout_marginStart="44dp"
-        android:layout_marginTop="44dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginBottom="40dp"
         android:backgroundTint="@color/btn_color"
         android:text="@string/ready"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/participants_view" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
-    <Button
-        android:id="@+id/invite_btn"
-        android:layout_width="129dp"
-        android:layout_height="70dp"
-        android:layout_marginTop="28dp"
-        android:layout_marginEnd="16dp"
-        android:backgroundTint="@color/btn_color"
-        android:text="@string/invite"
+    <GridView
+        android:id="@+id/participant_grid"
+        android:layout_width="match_parent"
+        android:layout_height="481dp"
+        android:horizontalSpacing="6dp"
+        android:numColumns="3"
+        android:verticalSpacing="6dp"
+        app:layout_constraintBottom_toTopOf="@+id/ready_btn"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TableLayout
-        android:id="@+id/participants_view"
-        android:layout_width="404dp"
-        android:layout_height="427dp"
-        android:layout_marginTop="24dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/invite_btn">
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-    </TableLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

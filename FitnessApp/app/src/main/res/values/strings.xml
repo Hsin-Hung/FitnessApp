@@ -22,4 +22,13 @@
     <string name="invite">INVITE</string>
     <string name="roomPassword">Room Password</string>
     <string name="hostName">Host</string>
+    <string name="pickDate">Pick Date</string>
+    <string name="yourChallenges">Your Challenges</string>
+    <string-array name="challenge_types">
+        <item>Steps</item>
+        <item>Distance</item>
+        <item>Weight Loss</item>
+    </string-array>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

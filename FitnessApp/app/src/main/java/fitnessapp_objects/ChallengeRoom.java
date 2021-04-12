@@ -1,18 +1,34 @@
 package fitnessapp_objects;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ChallengeRoom {
 
     private String name;
     private String description;
-    private int password;
-    private int ID;
+    private String password;
     private Date endDate;
     private boolean isBet;
     private int betAmount;
     private ChallengeType type;
-    private ArrayList<ChallengeParticipant> participants;
+    private ArrayList<Participant> participants;
+
+    public ChallengeRoom(String name, ChallengeType type, String description, String password, Date endDate, boolean isBet,
+                         int betAmount) {
+        this.name = name;
+        this.type = type;
+        this.description = description;
+        this.password = password;
+        this.endDate = endDate;
+        this.isBet = isBet;
+        this.betAmount = betAmount;
+        participants = new ArrayList<>();
+
+    }
 
     public String getName() {
         return name;
@@ -30,20 +46,12 @@ public class ChallengeRoom {
         this.description = description;
     }
 
-    public int getPassword() {
+    public String getPassword() {
         return password;
     }
 
-    public void setPassword(int password) {
+    public void setPassword(String password) {
         this.password = password;
-    }
-
-    public int getID() {
-        return ID;
-    }
-
-    public void setID(int ID) {
-        this.ID = ID;
     }
 
     public Date getEndDate() {
@@ -78,11 +86,35 @@ public class ChallengeRoom {
         this.type = type;
     }
 
-    public ArrayList<ChallengeParticipant> getParticipants() {
+    public ArrayList<Participant> getParticipants() {
         return participants;
     }
 
-    public void setParticipants(ArrayList<ChallengeParticipant> participants) {
+    public void setParticipants(ArrayList<Participant> participants) {
         this.participants = participants;
+    }
+    public void addParticipant(Participant participant){
+        participants.add(participant);
+    }
+
+
+    public Map<String, Object> getFirestoreChallengeRoomMap(){
+
+        Map<String, Object> challengeRoom = new HashMap<>();
+
+        challengeRoom.put("name", name);
+        challengeRoom.put("type", type.toString());
+        challengeRoom.put("description", description);
+        challengeRoom.put("password", password);
+        challengeRoom.put("endDate", new Timestamp(endDate.getTime()));
+        challengeRoom.put("isBet", isBet);
+        challengeRoom.put("betAmount", betAmount);
+        challengeRoom.put("participants", participants);
+
+
+        return challengeRoom;
+
+
+
     }
 }

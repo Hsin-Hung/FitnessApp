@@ -7,18 +7,21 @@ import java.util.*;
 //UserAccount is a singleton, call UserAccount.getInstance() to get the user account.
 public class UserAccount {
 
-    private String userID;
+    private String userID; // can get it from FirebaseAuth.getInstance().getCurrentUser().getUid()
     private String name;
     private String email;
     private PaymentInfo paymentInfo;
     private FitnessData fitnessData;
-    private ArrayList<String> friendList;
+    private ArrayList<String> friendList; //store friends as a list of uid
+    private ArrayList<String> challenges; // all the challenges this user currently joined, represent by challenge doc ID
     private ArrayList<Achievement> achievements;
     private ChallengeHistory challengeHistory;
 
     private static UserAccount userAccount_instance = null;
 
     private UserAccount() {
+
+        challenges = new ArrayList<>();
     }
 
     public static UserAccount getInstance(){
@@ -41,6 +44,10 @@ public class UserAccount {
     public void setName(String name) {
         this.name = name;
     }
+
+    public ArrayList<String> getChallenges() { return challenges; }
+
+    public void setChallenges(ArrayList<String> challenges) { this.challenges = challenges; }
 
     public String getEmail() {
         return email;
@@ -90,6 +97,10 @@ public class UserAccount {
         this.challengeHistory = challengeHistories;
     }
 
+    public void addNewChallenge(String challengeID){
+        challenges.add(challengeID);
+    }
+
     /**
      *
      * this method will generate the Map needed for Database to update to firestore.
@@ -103,6 +114,7 @@ public class UserAccount {
 
         user.put("name", name);
         user.put("email", email);
+        user.put("challengesJoined", challenges);
 
         // ...
 
