@@ -25,10 +25,9 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
 import fitnessapp_objects.Database;
-import fitnessapp_objects.UIUpdateCompletionHandler;
 import fitnessapp_objects.UserAccount;
 
-public class LaunchActivity extends AppCompatActivity implements View.OnClickListener, UIUpdateCompletionHandler {
+public class LaunchActivity extends AppCompatActivity implements View.OnClickListener, Database.UIUpdateCompletionHandler {
 
     private GoogleSignInClient mGoogleSignInClient;
     private SignInButton googleSignInBTN;

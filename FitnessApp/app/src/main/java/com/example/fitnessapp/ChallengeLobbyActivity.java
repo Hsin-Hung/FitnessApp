@@ -1,23 +1,18 @@
 package com.example.fitnessapp;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.GridView;
-import android.widget.TableLayout;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import fitnessapp_objects.Database;
-import fitnessapp_objects.OnRoomChangeListener;
 import fitnessapp_objects.Participant;
 import fitnessapp_objects.ParticipantModel;
 
-public class ChallengeLobbyActivity extends AppCompatActivity implements OnRoomChangeListener {
+public class ChallengeLobbyActivity extends AppCompatActivity implements Database.OnRoomChangeListener {
 
 
     GridView participants_view;

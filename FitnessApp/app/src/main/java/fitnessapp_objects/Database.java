@@ -50,6 +50,22 @@ public class Database {
 
     }
 
+    public interface FirestoreCompletionHandler {
+
+        public void challengeRoomsTransfer(Map<String,ChallengeRoom> rooms);
+
+    }
+    public interface OnRoomChangeListener {
+
+        public void addParticipant(ArrayList<Participant> participants);
+        public void removeParticipant(ArrayList<Participant> participants);
+    }
+    public interface UIUpdateCompletionHandler {
+
+        public void updateUI(boolean isSuccess);
+    }
+
+
     /**
      *
      * update the firestore with the local user account

@@ -18,10 +18,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import fitnessapp_objects.Database;
-import fitnessapp_objects.UIUpdateCompletionHandler;
 import fitnessapp_objects.UserAccount;
 
-public class SignUpActivity extends AppCompatActivity implements UIUpdateCompletionHandler {
+public class SignUpActivity extends AppCompatActivity implements Database.UIUpdateCompletionHandler {
 
     private final String TAG = "SignUpActivity";
     private FirebaseAuth mAuth;
