@@ -1,6 +1,5 @@
 package com.example.fitnessapp;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -40,7 +39,7 @@ public class HomeActivity extends AppCompatActivity {
 
     }
 
-    public void yourChallenges(View view){
+    public void myChallenges(View view){
 
 
 

@@ -19,16 +19,39 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_gravity="center"
+            android:layout_weight="1"
             android:src="@mipmap/ic_launcher" />
 
-        <TextView
-            android:id="@+id/room_name_tv"
-            android:layout_width="177dp"
+        <LinearLayout
+            android:layout_width="157dp"
             android:layout_height="match_parent"
-            android:text="@string/app_name"
-            android:textAlignment="center"
-            android:textColor="#000000"
-            android:textStyle="bold" />
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/room_name_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/app_name" />
+
+            <TextView
+                android:id="@+id/chall_type_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/app_name" />
+
+            <TextView
+                android:id="@+id/bet_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/app_name" />
+
+            <TextView
+                android:id="@+id/end_date_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/app_name" />
+        </LinearLayout>
 
         <Button
             android:id="@+id/button5"

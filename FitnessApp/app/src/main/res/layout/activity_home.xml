@@ -40,7 +40,7 @@
         android:layout_height="80dp"
         android:layout_marginBottom="128dp"
         android:backgroundTint="@color/btn_color"
-        android:onClick="yourChallenges"
+        android:onClick="myChallenges"
         android:text="@string/yourChallenges"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

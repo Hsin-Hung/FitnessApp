@@ -14,6 +14,7 @@ public class ChallengeRoom {
     private int betAmount;
     private ChallengeType type;
     private ArrayList<Participant> participants;
+    private boolean started;
 
     public ChallengeRoom(){
 
@@ -28,6 +29,7 @@ public class ChallengeRoom {
         this.endDate = endDate;
         this.isBet = isBet;
         this.betAmount = betAmount;
+        this.started = false;
         participants = new ArrayList<>();
 
     }
@@ -55,6 +57,10 @@ public class ChallengeRoom {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    public boolean isStarted() { return started; }
+
+    public void setStarted(boolean started) { this.started = started; }
 
     public Timestamp getEndDate() {
         return endDate;

@@ -30,7 +30,7 @@ public class ParticipantGVAdapter extends ArrayAdapter<ParticipantModel> {
             listitemView = LayoutInflater.from(getContext()).inflate(R.layout.participant_item, parent, false);
         }
         ParticipantModel participantModel = getItem(position);
-        TextView participantTV = listitemView.findViewById(R.id.room_name_tv);
+        TextView participantTV = listitemView.findViewById(R.id.participant_name_tv);
         participantTV.setText(participantModel.getName());
         return listitemView;
     }

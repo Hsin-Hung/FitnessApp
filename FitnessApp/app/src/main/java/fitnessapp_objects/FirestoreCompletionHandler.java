@@ -1,8 +1,9 @@
 package fitnessapp_objects;
 
-import com.google.firebase.auth.FirebaseUser;
+import java.util.ArrayList;
 
 public interface FirestoreCompletionHandler {
 
-    public void updateUI(boolean isSuccess);
+    public void challengeRoomsTransfer(ArrayList<ChallengeRoom> rooms);
+
 }

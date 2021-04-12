@@ -11,25 +11,17 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.auth.User;
-
-import java.util.ArrayList;
-import java.util.concurrent.Semaphore;
 
 import fitnessapp_objects.Database;
-import fitnessapp_objects.FirestoreCompletionHandler;
+import fitnessapp_objects.UIUpdateCompletionHandler;
 import fitnessapp_objects.UserAccount;
 
-public class SignUpActivity extends AppCompatActivity implements FirestoreCompletionHandler {
+public class SignUpActivity extends AppCompatActivity implements UIUpdateCompletionHandler {
 
     private final String TAG = "SignUpActivity";
     private FirebaseAuth mAuth;

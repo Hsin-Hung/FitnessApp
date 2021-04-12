@@ -26,11 +26,19 @@ public class ChallengeRoomLVAdapter extends ArrayAdapter<ChallengeRoomModel> {
         View listitemView = convertView;
         if (listitemView == null) {
             // Layout Inflater inflates each item to be displayed in GridView.
-            listitemView = LayoutInflater.from(getContext()).inflate(R.layout.participant_item, parent, false);
+            listitemView = LayoutInflater.from(getContext()).inflate(R.layout.challenge_item, parent, false);
         }
         ChallengeRoomModel challengeRoomModel = getItem(position);
-        TextView challengeRoomTV = listitemView.findViewById(R.id.room_name_tv);
+        TextView challengeRoomTV = listitemView.findViewById(R.id.room_name_tv),
+                challengeTypeTV = listitemView.findViewById(R.id.chall_type_tv),
+                betTV = listitemView.findViewById(R.id.bet_tv),
+                endDateTV = listitemView.findViewById(R.id.end_date_tv);
+
         challengeRoomTV.setText(challengeRoomModel.getName());
+        challengeTypeTV.setText(challengeRoomModel.getType().toString());
+        betTV.setText(String.valueOf(challengeRoomModel.getBetAmount()));
+        endDateTV.setText(challengeRoomModel.getEndDate().toDate().toString());
+
         return listitemView;
     }
     

@@ -19,9 +19,9 @@ import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.WriteBatch;
-import com.google.firebase.firestore.auth.User;
 
 import java.util.*;
 
@@ -31,6 +31,7 @@ public class Database {
     private static Database dataBase_instance = null;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final String TAG = "Database";
+    private final int NUM_RANDOM = 5;
     private FirebaseAuth mAuth;
     private UserAccount userAccount;
     private ListenerRegistration challengeRoomListener;
@@ -58,7 +59,7 @@ public class Database {
      *               just pass null.
      * @return
      */
-    public boolean updateUserAccount(FirestoreCompletionHandler handler){
+    public boolean updateUserAccount(UIUpdateCompletionHandler handler){
 
         FirebaseUser user = mAuth.getCurrentUser();
 
@@ -90,7 +91,7 @@ public class Database {
     }
 
 
-    public String updateChallengeRoom(ChallengeRoom room, FirestoreCompletionHandler handler){
+    public String updateChallengeRoom(ChallengeRoom room, UIUpdateCompletionHandler handler){
 
         FirebaseUser user = mAuth.getCurrentUser();
         UserAccount userAccount = UserAccount.getInstance();
@@ -120,6 +121,14 @@ public class Database {
 
     }
 
+    /**
+     *
+     * this attaches a listener to all challenge rooms that contain this current logged in user for real time changes,
+     * however, it only cares for the only with the given room ID.
+     *
+     * @param challengeID: the challenge room ID you want to fetch
+     * @param listener: the caller that is listening to the change on firetstore
+     */
     public void startChallengeRoomChangeListener(String challengeID, OnRoomChangeListener listener){
         FirebaseUser user = mAuth.getCurrentUser();
         UserAccount account = UserAccount.getInstance();
@@ -179,7 +188,7 @@ public class Database {
      *                 just pass null.
      * @return
      */
-    public boolean updateLocalUserAccount(String uid, FirestoreCompletionHandler handler){
+    public boolean updateLocalUserAccount(String uid, UIUpdateCompletionHandler handler){
 
         DocumentReference docRef = db.collection("users").document(uid);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -210,7 +219,33 @@ public class Database {
         return false;
     }
 
-    public boolean getRandomChallengeRoom(){
+    public boolean getPendingChallengeRooms(FirestoreCompletionHandler handler){
+
+        db.collection("challenges")
+                .whereEqualTo("started", false)
+                .limit(NUM_RANDOM)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+
+                            ArrayList<ChallengeRoom> challengeRooms = new ArrayList<>();
+
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Log.d(TAG, document.getId() + " => " + document.getData());
+
+                                ChallengeRoom c = document.toObject(ChallengeRoom.class);
+                               challengeRooms.add(c);
+
+                            }
+                            handler.challengeRoomsTransfer(challengeRooms);
+
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
 
 
 

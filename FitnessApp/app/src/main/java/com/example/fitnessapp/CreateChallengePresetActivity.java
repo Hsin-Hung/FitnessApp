@@ -28,11 +28,11 @@ import java.util.Date;
 import fitnessapp_objects.ChallengeRoom;
 import fitnessapp_objects.ChallengeType;
 import fitnessapp_objects.Database;
-import fitnessapp_objects.FirestoreCompletionHandler;
+import fitnessapp_objects.UIUpdateCompletionHandler;
 import fitnessapp_objects.Participant;
 import fitnessapp_objects.UserAccount;
 
-public class CreateChallengePresetActivity extends AppCompatActivity implements OnItemSelectedListener, OnDatePickListener, FirestoreCompletionHandler {
+public class CreateChallengePresetActivity extends AppCompatActivity implements OnItemSelectedListener, OnDatePickListener, UIUpdateCompletionHandler {
 
     EditText roomNameET, challDescrET, betAmountET, passwordET;
     Button pickDateBTN;
