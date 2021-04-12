@@ -10,7 +10,6 @@ import android.widget.SearchView;
 import java.util.ArrayList;
 
 import fitnessapp_objects.ChallengeRoomModel;
-import fitnessapp_objects.ParticipantModel;
 
 public class JoinChallengeActivity extends AppCompatActivity {
 
@@ -40,4 +39,5 @@ public class JoinChallengeActivity extends AppCompatActivity {
 
 
     }
+
 }
