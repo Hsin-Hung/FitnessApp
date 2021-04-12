@@ -24,6 +24,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
+import java.util.Map;
+
 import fitnessapp_objects.Database;
 import fitnessapp_objects.UserAccount;
 
@@ -114,7 +116,7 @@ public class LaunchActivity extends AppCompatActivity implements View.OnClickLis
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
             Log.w(TAG, "Google sign in failed", e);
-            updateUI(false);
+            updateUI(false, null);
         }
     }
 
@@ -141,14 +143,14 @@ public class LaunchActivity extends AppCompatActivity implements View.OnClickLis
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
-                            updateUI(false);
+                            updateUI(false, null);
                         }
                     }
                 });
     }
 
 
-    public void updateUI(boolean isSuccess){
+    public void updateUI(boolean isSuccess, Map<String,String> data){
 
         if(isSuccess){
             Intent intent = new Intent(this, HomeActivity.class);

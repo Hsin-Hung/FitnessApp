@@ -17,6 +17,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.Map;
+
 import fitnessapp_objects.Database;
 import fitnessapp_objects.UserAccount;
 
@@ -90,7 +92,7 @@ public class SignUpActivity extends AppCompatActivity implements Database.UIUpda
                             infoTV.setText(task.getException().toString());
                             Toast.makeText(SignUpActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
-                            updateUI(false);
+                            updateUI(false, null);
                         }
                     }
                 });
@@ -99,7 +101,7 @@ public class SignUpActivity extends AppCompatActivity implements Database.UIUpda
     }
 
 
-    public void updateUI(boolean isSuccess){
+    public void updateUI(boolean isSuccess, Map<String,String> data){
 
         if(isSuccess){
             Intent intent = new Intent(this, HomeActivity.class);

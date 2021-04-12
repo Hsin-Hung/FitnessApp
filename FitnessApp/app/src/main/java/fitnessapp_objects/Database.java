@@ -62,7 +62,7 @@ public class Database {
     }
     public interface UIUpdateCompletionHandler {
 
-        public void updateUI(boolean isSuccess);
+        public void updateUI(boolean isSuccess, Map<String, String> data);
     }
 
 
@@ -87,7 +87,7 @@ public class Database {
                     public void onSuccess(Void aVoid) {
                         Log.d(TAG, "DocumentSnapshot successfully written!");
                         if(handler!=null){
-                            handler.updateUI(true);
+                            handler.updateUI(true, null);
                         }
 
                     }
@@ -97,7 +97,7 @@ public class Database {
                     public void onFailure(@NonNull Exception e) {
                         Log.w(TAG, "Error writing document", e);
                         if(handler!=null){
-                            handler.updateUI(false);
+                            handler.updateUI(false, null);
                         }
 
                     }
@@ -128,7 +128,7 @@ public class Database {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 userAccount.addNewChallenge(challengeRef.getId());
-                handler.updateUI(true);
+                handler.updateUI(true, null);
             }
         });
 
@@ -219,15 +219,15 @@ public class Database {
                         userAccount.setEmail(document.get("email").toString());
 
                         Log.d(TAG, "DocumentSnapshot data: " + document.getData());
-                        handler.updateUI(true);
+                        handler.updateUI(true, null);
                     } else {
                         Log.d(TAG, "No such document");
-                        handler.updateUI(false);
+                        handler.updateUI(false, null);
                     }
 
                 } else {
                     Log.d(TAG, "get failed with ", task.getException());
-                    handler.updateUI(false);
+                    handler.updateUI(false, null);
                 }
             }
         });
@@ -268,6 +268,65 @@ public class Database {
         return false;
     }
 
+    public boolean joinChallengeRoom(String roomID, UIUpdateCompletionHandler handler){
 
+        FirebaseUser user = mAuth.getCurrentUser();
+        UserAccount account = UserAccount.getInstance();
+        Participant participant = new Participant(account.getName(), user.getUid());
+
+        db.collection("challenges")
+                .document(roomID)
+                .update("participants", FieldValue.arrayUnion(participant))
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Map<String,String> data = new HashMap<>();
+                        data.put("roomID", roomID);
+                        handler.updateUI(true, data);
+
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+
+                        handler.updateUI(false, null);
+                    }
+                });
+
+
+       return true;
+    }
+
+    public boolean getChallengeRooms(String roomName, FirestoreCompletionHandler handler){
+
+        db.collection("challenges")
+                .whereEqualTo("name", roomName)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+
+                            Map<String, ChallengeRoom> challengeRooms = new HashMap<>();
+
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Log.d(TAG, document.getId() + " => " + document.getData());
+
+                                ChallengeRoom c = document.toObject(ChallengeRoom.class);
+                                challengeRooms.put(document.getId(), c);
+
+                            }
+                            handler.challengeRoomsTransfer(challengeRooms);
+
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+
+
+        return true;
+    }
 
 }

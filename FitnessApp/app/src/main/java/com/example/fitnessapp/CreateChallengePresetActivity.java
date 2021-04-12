@@ -24,6 +24,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Map;
 
 import fitnessapp_objects.ChallengeRoom;
 import fitnessapp_objects.ChallengeType;
@@ -184,7 +185,7 @@ public class CreateChallengePresetActivity extends AppCompatActivity implements 
     }
 
     @Override
-    public void updateUI(boolean isSuccess) {
+    public void updateUI(boolean isSuccess, Map<String,String> data) {
 
         if(isSuccess){
             System.out.println("Successfully do all challenge room updates on firstore");

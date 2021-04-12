@@ -17,7 +17,8 @@ import fitnessapp_objects.ChallengeRoom;
 import fitnessapp_objects.ChallengeRoomModel;
 import fitnessapp_objects.Database;
 
-public class JoinChallengeActivity extends AppCompatActivity implements Database.FirestoreCompletionHandler, AdapterView.OnItemClickListener, PasswordDialogFragment.PasswordDialogListener {
+public class JoinChallengeActivity extends AppCompatActivity implements Database.FirestoreCompletionHandler, AdapterView.OnItemClickListener,
+        PasswordDialogFragment.PasswordDialogListener, Database.UIUpdateCompletionHandler, SearchView.OnQueryTextListener {
 
     SearchView challengeSV;
     ListView challengesLV;
@@ -42,6 +43,7 @@ public class JoinChallengeActivity extends AppCompatActivity implements Database
         db = Database.getInstance();
 
         challengesLV.setOnItemClickListener(this);
+        challengeSV.setOnQueryTextListener(this);
 
 
     }
@@ -84,14 +86,36 @@ public class JoinChallengeActivity extends AppCompatActivity implements Database
 
         if(success){
 
+            db.joinChallengeRoom(roomID, this);
 
-
-
-            Intent intent = new Intent(this, ChallengeLobbyActivity.class);
-            intent.putExtra("roomID",roomID);
-            startActivity(intent);
 
         }
 
+    }
+
+
+    @Override
+    public void updateUI(boolean isSuccess, Map<String,String> data) {
+        if(isSuccess){
+
+            Intent intent = new Intent(this, ChallengeLobbyActivity.class);
+            intent.putExtra("roomID", data.get("roomID"));
+            startActivity(intent);
+
+        }
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+
+        db.getChallengeRooms(query, this);
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+
+
+        return false;
     }
 }

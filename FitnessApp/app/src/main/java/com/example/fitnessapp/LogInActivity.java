@@ -16,6 +16,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.Map;
+
 import fitnessapp_objects.Database;
 
 public class LogInActivity extends AppCompatActivity implements Database.UIUpdateCompletionHandler {
@@ -37,7 +39,7 @@ public class LogInActivity extends AppCompatActivity implements Database.UIUpdat
         mAuth = FirebaseAuth.getInstance();
     }
 
-    public void updateUI(boolean isSuccess){
+    public void updateUI(boolean isSuccess, Map<String,String> data){
 
         if(isSuccess){
             Intent intent = new Intent(this, HomeActivity.class);
@@ -66,7 +68,7 @@ public class LogInActivity extends AppCompatActivity implements Database.UIUpdat
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
                             Toast.makeText(LogInActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
-                            updateUI(false);
+                            updateUI(false, null);
                         }
                     }
                 });
