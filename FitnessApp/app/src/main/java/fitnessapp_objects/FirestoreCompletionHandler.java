@@ -1,9 +1,9 @@
 package fitnessapp_objects;
 
-import java.util.ArrayList;
+import java.util.Map;
 
 public interface FirestoreCompletionHandler {
 
-    public void challengeRoomsTransfer(ArrayList<ChallengeRoom> rooms);
+    public void challengeRoomsTransfer(Map<String,ChallengeRoom> rooms);
 
 }

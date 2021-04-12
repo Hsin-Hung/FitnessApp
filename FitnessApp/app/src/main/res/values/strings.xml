@@ -25,6 +25,8 @@
     <string name="pickDate">Pick Date</string>
     <string name="yourChallenges">Your Challenges</string>
     <string name="randomChallenges">Random Challenges</string>
+    <string name="enterPassword">Enter Password</string>
+    <string name="cancel">CANCEL</string>
     <string-array name="challenge_types">
         <item>Steps</item>
         <item>Distance</item>

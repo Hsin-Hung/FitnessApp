@@ -230,13 +230,13 @@ public class Database {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
 
-                            ArrayList<ChallengeRoom> challengeRooms = new ArrayList<>();
+                            Map<String, ChallengeRoom> challengeRooms = new HashMap<>();
 
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Log.d(TAG, document.getId() + " => " + document.getData());
 
                                 ChallengeRoom c = document.toObject(ChallengeRoom.class);
-                               challengeRooms.add(c);
+                               challengeRooms.put(document.getId(), c);
 
                             }
                             handler.challengeRoomsTransfer(challengeRooms);
