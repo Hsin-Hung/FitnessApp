@@ -32,6 +32,7 @@ public class JoinChallengeActivity extends AppCompatActivity {
         adapter = new ChallengeRoomLVAdapter(this, challengeRoomModelArrayList);
         challengesLV.setAdapter(adapter);
 
+        
     }
 
     public void randomChallenges(View view){
