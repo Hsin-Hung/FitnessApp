@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_color"
+    android:background="@drawable/background"
     tools:context=".LaunchActivity">
 
-    <com.google.android.gms.common.SignInButton
+    <!-- <com.google.android.gms.common.SignInButton
         android:id="@+id/sign_in_button"
         android:layout_width="152dp"
         android:layout_height="69dp"
@@ -15,44 +15,53 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/launch_signup_btn" />
-
-    <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:layout_marginTop="112dp"
-        app:layout_constraintBottom_toTopOf="@+id/launch_logIn_btn"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.145"
-        app:srcCompat="@drawable/fitness_app_logo" />
+        app:layout_constraintTop_toBottomOf="@+id/launch_signup_btn" /> -->
 
     <Button
         android:id="@+id/launch_logIn_btn"
-        android:layout_width="139dp"
-        android:layout_height="58dp"
-        android:backgroundTint="#3F51B5"
+        android:layout_width="249dp"
+        android:layout_height="65dp"
+        android:layout_marginTop="25dp"
+        android:background="@drawable/login"
         android:onClick="signIn"
-        android:text="@string/log_in"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/applogo_img"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.563" />
+        app:layout_constraintVertical_bias="0.56" />
 
     <Button
         android:id="@+id/launch_signup_btn"
-        android:layout_width="139dp"
-        android:layout_height="58dp"
-        android:backgroundTint="#3F51B5"
+        android:layout_width="249dp"
+        android:layout_height="65dp"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/signup"
         android:onClick="signUp"
-        android:text="@string/sign_up"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.49"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/launch_logIn_btn"
-        app:layout_constraintVertical_bias="0.101" />
+        app:layout_constraintVertical_bias="0.0" />
+
+    <ImageView
+        android:id="@+id/applogo_img"
+        android:layout_width="253dp"
+        android:layout_height="265dp"
+        android:layout_marginTop="112dp"
+        app:layout_constraintBottom_toTopOf="@+id/launch_logIn_btn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.512"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@drawable/logo" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="20dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>
