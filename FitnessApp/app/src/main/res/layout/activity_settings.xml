@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SettingsActivity"
+    android:padding="10dp"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:layout_width="match_parent"
+        android:text="Change Color"
+        android:id="@+id/switchColor"
+        android:layout_height="50dp" />
+    <EditText
+        android:layout_width="match_parent"
+        android:id="@+id/edtHeight"
+        android:layout_height="50dp"
+        android:hint="Enter height"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:id="@+id/edtWeight"
+        android:layout_height="50dp"
+        android:hint="Enter weight"/>
+
+</LinearLayout>

@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -36,6 +37,7 @@ public class LaunchActivity extends AppCompatActivity implements View.OnClickLis
     private Database db;
     private final int RC_SIGN_IN = 1;
     private static final String TAG = "LaunchActivity";
+    Button settings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +59,16 @@ public class LaunchActivity extends AppCompatActivity implements View.OnClickLis
         mAuth = FirebaseAuth.getInstance();
         db = Database.getInstance();
         userAccount = UserAccount.getInstance();
+
+        settings = (Button) findViewById(R.id.btn_settings);
+
+        settings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     // go to the sign in page
