@@ -38,7 +38,6 @@ public class LaunchActivity extends AppCompatActivity implements View.OnClickLis
     private Database db;
     private final int RC_SIGN_IN = 1;
     private static final String TAG = "LaunchActivity";
-    Button settings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,15 +60,7 @@ public class LaunchActivity extends AppCompatActivity implements View.OnClickLis
         db = Database.getInstance();
         userAccount = UserAccount.getInstance();
 
-        settings = (Button) findViewById(R.id.btn_settings);
 
-        settings.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
-                startActivity(intent);
-            }
-        });
     }
 
     // go to the sign in page

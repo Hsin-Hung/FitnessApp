@@ -34,7 +34,7 @@
         android:layout_height="41dp"
         android:backgroundTint="@color/btn_color"
         android:onClick="randomChallenges"
-        android:text="@string/randomChallenges"
+        android:text="@string/refresh"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

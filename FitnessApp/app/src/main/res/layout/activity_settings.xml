@@ -11,17 +11,27 @@
     <androidx.appcompat.widget.SwitchCompat
         android:layout_width="match_parent"
         android:text="Change Color"
-        android:id="@+id/switchColor"
+        android:id="@+id/color_switch"
         android:layout_height="50dp" />
+
     <EditText
+        android:id="@+id/height_edt"
         android:layout_width="match_parent"
-        android:id="@+id/edtHeight"
         android:layout_height="50dp"
-        android:hint="Enter height"/>
+        android:hint="Height (cm)"
+        android:inputType="numberDecimal" />
+
     <EditText
+        android:id="@+id/weight_edt"
         android:layout_width="match_parent"
-        android:id="@+id/edtWeight"
         android:layout_height="50dp"
-        android:hint="Enter weight"/>
+        android:hint="Weight (kg)"
+        android:inputType="numberDecimal" />
+
+    <Button
+        android:id="@+id/save_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/save" />
 
 </LinearLayout>
