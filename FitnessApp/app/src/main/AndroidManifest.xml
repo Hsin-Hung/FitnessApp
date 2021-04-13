@@ -13,7 +13,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FitnessApp"
         android:usesCleartextTraffic="true">
-        <activity android:name=".MyChallengesActivity"></activity>
+        <activity android:name=".GoogleFitChallenges"></activity>
+        <activity android:name=".MyChallengesActivity" />
         <activity android:name=".SettingsActivity" />
         <activity android:name=".YourChallengesActivity" />
         <activity android:name=".ChallengeLobbyActivity" />
