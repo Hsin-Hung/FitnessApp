@@ -8,41 +8,6 @@
     tools:context=".ChallengeLobbyActivity">
 
     <Button
-        android:id="@+id/start_btn"
-        android:layout_width="143dp"
-        android:layout_height="72dp"
-        android:layout_marginBottom="40dp"
-        android:backgroundTint="@color/btn_color"
-        android:onClick="ready"
-        android:text="@string/ready"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.518"
-        app:layout_constraintStart_toEndOf="@+id/ready_btn" />
-
-    <Button
-        android:id="@+id/ready_btn"
-        android:layout_width="143dp"
-        android:layout_height="72dp"
-        android:layout_marginStart="40dp"
-        android:layout_marginBottom="40dp"
-        android:backgroundTint="@color/btn_color"
-        android:text="@string/ready"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/ready_btn2"
-        android:layout_width="143dp"
-        android:layout_height="72dp"
-        android:layout_marginStart="40dp"
-        android:layout_marginBottom="40dp"
-        android:backgroundTint="@color/btn_color"
-        android:text="@string/ready"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
         android:id="@+id/quit_chall_btn"
         android:layout_width="168dp"
         android:layout_height="49dp"
@@ -57,12 +22,12 @@
 
     <GridView
         android:id="@+id/participant_grid"
-        android:layout_width="match_parent"
-        android:layout_height="481dp"
+        android:layout_width="408dp"
+        android:layout_height="603dp"
         android:horizontalSpacing="6dp"
         android:numColumns="3"
         android:verticalSpacing="6dp"
-        app:layout_constraintBottom_toTopOf="@+id/ready_btn"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
