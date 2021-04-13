@@ -31,11 +31,11 @@ public class SettingsActivity extends AppCompatActivity {
         colorstate = preferences.getBoolean("color", false);
 
 //        SharedPreferences.Editor editor = getSharedPreferences("PREFS", MODE_PRIVATE).edit();
-//        height = (EditText) editor.putString("height", height.getText().toString());
+//        height = (AppCompatEditText) editor.putString("height", height.getText().toString());
 //        editor.commit();
 //
 //        SharedPreferences.Editor editor1 = getSharedPreferences("PREFS", MODE_PRIVATE).edit();
-//        weight = (EditText) editor1.putString("height", weight.getText().toString());
+//        weight = (AppCompatEditText) editor1.putString("height", weight.getText().toString());
 //        editor1.commit();
 
 
