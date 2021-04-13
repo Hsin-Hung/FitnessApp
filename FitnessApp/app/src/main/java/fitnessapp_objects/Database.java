@@ -57,8 +57,7 @@ public class Database {
     }
     public interface OnRoomChangeListener {
 
-        public void addParticipant(ArrayList<Participant> participants);
-        public void removeParticipant(ArrayList<Participant> participants);
+        public void modifyParticipant(ArrayList<Participant> participants);
     }
     public interface UIUpdateCompletionHandler {
 
@@ -167,14 +166,14 @@ public class Database {
                                 switch (dc.getType()) {
                                     case ADDED:
                                         Log.d(TAG, "New participant: " + dataMap);
-                                        listener.addParticipant(challengeRoom.getParticipants());
+                                        listener.modifyParticipant(challengeRoom.getParticipants());
                                         break;
                                     case MODIFIED:
                                         Log.d(TAG, "Modified participant: " + dataMap);
+                                        listener.modifyParticipant(challengeRoom.getParticipants());
                                         break;
                                     case REMOVED:
                                         Log.d(TAG, "Removed participant: " + dataMap);
-                                        listener.removeParticipant(challengeRoom.getParticipants());
                                         break;
                                 }
                             }

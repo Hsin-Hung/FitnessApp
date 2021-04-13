@@ -49,42 +49,17 @@ public class ChallengeLobbyActivity extends AppCompatActivity implements Databas
         super.onDestroy();
     }
 
-    public void addParticipant(ArrayList<Participant> participants){
+    public void modifyParticipant(ArrayList<Participant> participants){
+
+        participantModelArrayList.clear();
 
         for(Participant p: participants){
 
-            boolean found = false;
-            for(ParticipantModel pm: participantModelArrayList){
-
-                if(pm.getId().equals(p.getId())){
-                    found = true;
-                    break;
-                }
-
-            }
-
-            if(!found){
-                participantModelArrayList.add(new ParticipantModel(p.getName(),p.getId()));
-            }
+           participantModelArrayList.add(new ParticipantModel(p.getName(), p.getId()));
 
         }
 
         adapter.notifyDataSetChanged();
-
-
-    }
-
-    public void removeParticipant(ArrayList<Participant> participants){
-
-
-
-    }
-
-    public void ready(View view){
-
-//        participantModelArrayList.add(new ParticipantModel("Henry3"));
-//
-//        adapter.notifyDataSetChanged();
 
 
     }
@@ -103,5 +78,12 @@ public class ChallengeLobbyActivity extends AppCompatActivity implements Databas
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(this, HomeActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
     }
 }
