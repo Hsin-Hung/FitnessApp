@@ -31,6 +31,7 @@
     <string name="quitChallenge">Quit Challenge</string>
     <string name="back">BACK</string>
     <string name="save">Save</string>
+    <string name="refresh">Refresh</string>
     <string-array name="challenge_types">
         <item>Steps</item>
         <item>Distance</item>
