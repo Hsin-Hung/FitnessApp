@@ -22,6 +22,7 @@ import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.WriteBatch;
+import com.google.firebase.firestore.auth.User;
 
 import java.util.*;
 
@@ -34,7 +35,7 @@ public class Database {
     private final int NUM_RANDOM = 5;
     private FirebaseAuth mAuth;
     private UserAccount userAccount;
-    private ListenerRegistration challengeRoomListener;
+    private ListenerRegistration challengeRoomListener, coinChangeListener;
 
 
     private Database(){
@@ -216,6 +217,7 @@ public class Database {
                         userAccount.setUserID(uid);
                         userAccount.setName(document.get("name").toString());
                         userAccount.setEmail(document.get("email").toString());
+                        userAccount.setCoin(Integer.parseInt(document.get("coins").toString()));
 
                         Log.d(TAG, "DocumentSnapshot data: " + document.getData());
                         handler.updateUI(true, null);
@@ -388,6 +390,38 @@ public class Database {
         });
 
         return true;
+    }
+
+
+    public boolean startCoinChangeListener(UIUpdateCompletionHandler handler){
+
+        FirebaseUser user = mAuth.getCurrentUser();
+        UserAccount userAccount = UserAccount.getInstance();
+        coinChangeListener = db.collection("users").document(user.getUid())
+                .addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                            if(value.exists()){
+                                userAccount.setCoin(Integer.parseInt(value.getData().get("coins").toString()));
+                                handler.updateUI(true, null);
+
+                            }else{
+                                Log.d(TAG, "No such document");
+                                handler.updateUI(false, null);
+
+                            }
+                    }
+                });
+
+
+        return true;
+    }
+
+    public void removeCoinChangeListener(){
+
+        if(coinChangeListener!=null)
+        coinChangeListener.remove();
+
     }
 
 }

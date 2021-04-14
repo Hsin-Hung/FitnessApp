@@ -16,6 +16,14 @@
         tools:showIn="@layout/activity_purchase_coin">
 
 
+        <TextView
+            android:id="@+id/show_coin_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#FFC107"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -62,6 +70,14 @@
             android:backgroundTint="@android:color/holo_green_light"
             android:onClick="pay"
             android:text="@string/pay" />
+
+        <TextView
+            android:id="@+id/textView10"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="use stripe's test credit card: 4242 4242 4242 4242 with some future date and random cvs and postal code"
+            android:textColor="#FF0000"
+            android:textSize="24sp" />
 
         <!--  ...  -->
 

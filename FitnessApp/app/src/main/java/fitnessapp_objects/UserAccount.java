@@ -10,11 +10,10 @@ public class UserAccount {
     private String userID; // can get it from FirebaseAuth.getInstance().getCurrentUser().getUid()
     private String name;
     private String email;
-    private PaymentInfo paymentInfo;
+    private int coin;
     private FitnessData fitnessData;
     private ArrayList<String> friendList; //store friends as a list of uid
     private ArrayList<String> challenges; // all the challenges this user currently joined, represent by challenge doc ID
-    private ArrayList<Achievement> achievements;
     private ChallengeHistory challengeHistory;
 
     private static UserAccount userAccount_instance = null;
@@ -57,13 +56,9 @@ public class UserAccount {
         this.email = email;
     }
 
-    public PaymentInfo getPaymentInfo() {
-        return paymentInfo;
-    }
+    public int getCoin() { return coin; }
 
-    public void setPaymentInfo(PaymentInfo paymentInfo) {
-        this.paymentInfo = paymentInfo;
-    }
+    public void setCoin(int coin) { this.coin = coin; }
 
     public FitnessData getFitnessData() {
         return fitnessData;
@@ -79,14 +74,6 @@ public class UserAccount {
 
     public void setFriendList(ArrayList<String> friendList) {
         this.friendList = friendList;
-    }
-
-    public ArrayList<Achievement> getAchievements() {
-        return achievements;
-    }
-
-    public void setAchievements(ArrayList<Achievement> achievements) {
-        this.achievements = achievements;
     }
 
     public ChallengeHistory getChallengeHistories() {
@@ -121,7 +108,7 @@ public class UserAccount {
         user.put("name", name);
         user.put("email", email);
         user.put("challengesJoined", challenges);
-
+        user.put("coins",coin);
         // ...
 
         return user;

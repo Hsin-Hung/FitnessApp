@@ -2,23 +2,20 @@ package com.example.fitnessapp;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.stripe.android.ApiResultCallback;
-import com.stripe.android.PaymentConfiguration;
 import com.stripe.android.PaymentIntentResult;
 import com.stripe.android.Stripe;
 import com.stripe.android.model.ConfirmPaymentIntentParams;
@@ -26,12 +23,16 @@ import com.stripe.android.model.PaymentIntent;
 import com.stripe.android.model.PaymentMethodCreateParams;
 import com.stripe.android.view.CardInputWidget;
 
+import org.w3c.dom.Text;
+
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Type;
 import java.util.Map;
 import java.util.Objects;
 
+import fitnessapp_objects.Database;
+import fitnessapp_objects.UserAccount;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.MediaType;
@@ -40,15 +41,20 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class PurchaseCoinActivity extends AppCompatActivity {
+public class PurchaseCoinActivity extends AppCompatActivity implements Database.UIUpdateCompletionHandler {
 
-    private static final String BACKEND_URL = "http://10.0.2.2:5000/";
+    private static final String BACKEND_URL = "https://fitnessapp501.herokuapp.com/";
 
     private OkHttpClient httpClient = new OkHttpClient();
     private String paymentIntentClientSecret;
     private Stripe stripe;
     private int amount;
     private EditText numCoinET;
+    private FirebaseAuth mAuth;
+    private Database db;
+    private UserAccount userAccount;
+    private TextView showCoinTV;
+    private Button payBTN;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,18 +62,35 @@ public class PurchaseCoinActivity extends AppCompatActivity {
         setContentView(R.layout.activity_purchase_coin);
 
         numCoinET = (EditText) findViewById(R.id.num_coin_et);
-       // startCheckout();
+        showCoinTV = (TextView) findViewById(R.id.show_coin_tv);
+        payBTN = (Button) findViewById(R.id.payButton);
+
+        db = Database.getInstance();
+        userAccount = UserAccount.getInstance();
+        String displayCoin = "My Coins: "+ userAccount.getCoin();
+        showCoinTV.setText(displayCoin);
+        db.startCoinChangeListener(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        db.removeCoinChangeListener();
+        super.onDestroy();
     }
 
     private void startCheckout() {
+
+        mAuth = FirebaseAuth.getInstance();
+
         // Request a PaymentIntent from your server and store its client secret in paymentIntentClientSecret
         // Create a PaymentIntent by calling the sample server's /create-payment-intent endpoint.
         MediaType mediaType = MediaType.get("application/json; charset=utf-8");
         String json = "{"
                 + "\"currency\":\"usd\","
-                + "\"amount\":"
-                + amount
+                + "\"amount\":" + amount + ","
+                + "\"userID\":" + "\"" + mAuth.getUid() + "\""
                 + "}";
+        System.out.println(json);
         RequestBody body = RequestBody.create(json, mediaType);
         Request request = new Request.Builder()
                 .url(BACKEND_URL + "create-payment-intent")
@@ -83,17 +106,19 @@ public class PurchaseCoinActivity extends AppCompatActivity {
 
         String numCoin = numCoinET.getText().toString();
 
+        // check if the user enters a valid number of coins to purchase. (at least 1 coin)
         if(numCoin.isEmpty() || Integer.parseInt(numCoin)<=0){
             return;
         }
 
         amount = Integer.parseInt(numCoin);
+        payBTN.setEnabled(false);
         startCheckout();
 
 
     }
 
-    private void proceedPay(){
+    private void proceedPayCallback(){
 
         CardInputWidget cardInputWidget = findViewById(R.id.cardInputWidget);
         PaymentMethodCreateParams params = cardInputWidget.getPaymentMethodCreateParams();
@@ -133,8 +158,24 @@ public class PurchaseCoinActivity extends AppCompatActivity {
                 getApplicationContext(),
                 Objects.requireNonNull(stripePublishableKey)
         );
-        proceedPay();
+        proceedPayCallback();
     }
+
+    @Override
+    public void updateUI(boolean isSuccess, Map<String, String> data) {
+
+        if(isSuccess){
+
+            String displayCoin = "My Coins: " + userAccount.getCoin();
+            showCoinTV.setText(displayCoin);
+
+        }
+
+    }
+
+    /**
+     * PayCallback for the request to our backend server
+     */
     private static final class PayCallback implements Callback {
         @NonNull private final WeakReference<PurchaseCoinActivity> activityRef;
 
@@ -148,7 +189,8 @@ public class PurchaseCoinActivity extends AppCompatActivity {
             if (activity == null) {
                 return;
             }
-
+            Button payBTN = (Button) activity.findViewById(R.id.payButton);
+            payBTN.setEnabled(true);
             activity.runOnUiThread(() ->
                     Toast.makeText(
                             activity, "Error: " + e.toString(), Toast.LENGTH_LONG
@@ -175,6 +217,10 @@ public class PurchaseCoinActivity extends AppCompatActivity {
             }
         }
     }
+
+    /**
+     * stripe payment callback
+     */
     private static final class PaymentResultCallback
             implements ApiResultCallback<PaymentIntentResult> {
         @NonNull private final WeakReference<PurchaseCoinActivity> activityRef;
@@ -189,7 +235,8 @@ public class PurchaseCoinActivity extends AppCompatActivity {
             if (activity == null) {
                 return;
             }
-
+            Button payBTN = (Button) activity.findViewById(R.id.payButton);
+            payBTN.setEnabled(true);
             PaymentIntent paymentIntent = result.getIntent();
             PaymentIntent.Status status = paymentIntent.getStatus();
             if (status == PaymentIntent.Status.Succeeded) {
@@ -212,7 +259,8 @@ public class PurchaseCoinActivity extends AppCompatActivity {
             if (activity == null) {
                 return;
             }
-
+            Button payBTN = (Button) activity.findViewById(R.id.payButton);
+            payBTN.setEnabled(true);
             // Payment request failed – allow retrying using the same payment method
             Toast.makeText(
                     activity, "Payment request failed", Toast.LENGTH_LONG
