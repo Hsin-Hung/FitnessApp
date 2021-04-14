@@ -63,5 +63,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <Button
+        android:id="@+id/button4"
+        android:layout_width="134dp"
+        android:layout_height="45dp"
+        android:backgroundTint="#FFC107"
+        android:onClick="buyCoin"
+        android:text="@string/buyCoin"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -32,6 +32,10 @@
     <string name="back">BACK</string>
     <string name="save">Save</string>
     <string name="refresh">Refresh</string>
+    <string name="pay">PAY</string>
+    <string name="buyCoin">Buy Coin</string>
+    <string name="coin2usd">1 COIN = 0.10 USD</string>
+    <string name="enterCoin">enter number of coins to purchase</string>
     <string-array name="challenge_types">
         <item>Steps</item>
         <item>Distance</item>

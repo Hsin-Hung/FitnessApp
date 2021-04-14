@@ -69,6 +69,13 @@ public class HomeActivity extends AppCompatActivity {
 
     }
 
+    public void buyCoin(View view){
+
+        Intent intent = new Intent(this, PurchaseCoinActivity.class);
+        startActivity(intent);
+
+    }
+
     @Override
     public void onBackPressed() {
         //do nothing
