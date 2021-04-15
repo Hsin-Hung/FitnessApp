@@ -43,14 +43,13 @@ public class SignUpActivity extends AppCompatActivity implements Database.UIUpda
         passwordET = (EditText) findViewById(R.id.pass_et);
         confirmPasswordET = (EditText) findViewById(R.id.confirm_pass_et);
         infoTV = (TextView) findViewById(R.id.error_tv);
-
         userAccount = UserAccount.getInstance();
         db = Database.getInstance();
-
         infoTV.setText("");
 
 
     }
+
 
 
 

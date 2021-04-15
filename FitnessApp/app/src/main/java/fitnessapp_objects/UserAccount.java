@@ -30,6 +30,10 @@ public class UserAccount {
 
     }
 
+    public void eraseAccount(){
+        userAccount_instance = new UserAccount();
+    }
+
     public String getUserID() {
         return userID;
     }

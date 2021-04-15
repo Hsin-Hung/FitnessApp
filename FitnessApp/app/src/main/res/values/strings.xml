@@ -38,6 +38,10 @@
     <string name="enterCoin">enter number of coins to purchase</string>
     <string name="viewStats">View Stats</string>
     <string name="challengeInfo">Challenge Info</string>
+    <string name="challengeTypeInfo">Challenge Type</string>
+    <string name="challengeDescriptionInfo">Description</string>
+    <string name="challengeEndDateInfo">End Date</string>
+    <string name="betAmountInfo">Bet Amount</string>
     <string-array name="challenge_types">
         <item>Distance</item>
         <item>Weight Loss</item>

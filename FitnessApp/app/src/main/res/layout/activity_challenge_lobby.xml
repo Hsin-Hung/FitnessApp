@@ -9,21 +9,18 @@
 
     <Button
         android:id="@+id/quit_chall_btn"
-        android:layout_width="168dp"
-        android:layout_height="49dp"
-        android:layout_marginBottom="26dp"
+        android:layout_width="174dp"
+        android:layout_height="47dp"
         android:backgroundTint="@android:color/holo_red_dark"
         android:onClick="quit"
         android:text="@string/quitChallenge"
         app:layout_constraintBottom_toTopOf="@+id/participant_grid"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <GridView
         android:id="@+id/participant_grid"
-        android:layout_width="408dp"
-        android:layout_height="603dp"
+        android:layout_width="405dp"
+        android:layout_height="499dp"
         android:horizontalSpacing="6dp"
         android:numColumns="3"
         android:verticalSpacing="6dp"
@@ -50,6 +47,18 @@
         android:backgroundTint="@color/btn_color"
         android:onClick="challengeInfo"
         android:text="@string/challengeInfo"
+        app:layout_constraintBottom_toTopOf="@+id/participant_grid"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/room_name_info_tv"
+        android:layout_width="259dp"
+        android:layout_height="49dp"
+        android:gravity="center"
+        android:textColor="#F30B0B"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

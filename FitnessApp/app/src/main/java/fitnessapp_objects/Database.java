@@ -33,15 +33,10 @@ public class Database {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final String TAG = "Database";
     private final int NUM_RANDOM = 5;
-    private FirebaseAuth mAuth;
-    private UserAccount userAccount;
     private ListenerRegistration challengeRoomListener, coinChangeListener;
-
 
     private Database(){
 
-        mAuth = FirebaseAuth.getInstance();
-        userAccount = UserAccount.getInstance();
     }
 
     public static Database getInstance(){
@@ -82,6 +77,8 @@ public class Database {
      */
     public boolean updateUserAccount(UIUpdateCompletionHandler handler){
 
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        UserAccount userAccount = UserAccount.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
 
         db.collection("users").
@@ -114,6 +111,7 @@ public class Database {
 
     public String updateChallengeRoom(ChallengeRoom room, UIUpdateCompletionHandler handler){
 
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
         UserAccount userAccount = UserAccount.getInstance();
         // Get a new write batch
@@ -154,6 +152,8 @@ public class Database {
      * @param listener: the caller that is listening to the change on firetstore
      */
     public void startChallengeRoomChangeListener(String challengeID, OnRoomChangeListener listener){
+
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
         UserAccount account = UserAccount.getInstance();
 
@@ -213,6 +213,8 @@ public class Database {
      * @return
      */
     public boolean updateLocalUserAccount(String uid, UIUpdateCompletionHandler handler){
+
+        UserAccount userAccount = UserAccount.getInstance();
 
         DocumentReference docRef = db.collection("users").document(uid);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -279,6 +281,7 @@ public class Database {
 
     public boolean joinChallengeRoom(String roomID, UIUpdateCompletionHandler handler){
 
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
         UserAccount account = UserAccount.getInstance();
         Participant participant = new Participant(account.getName(), user.getUid());
@@ -298,7 +301,7 @@ public class Database {
         batch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                userAccount.addNewChallenge(roomID);
+                account.addNewChallenge(roomID);
                 handler.updateUI(true, null);
             }
         });
@@ -320,7 +323,7 @@ public class Database {
                             Map<String, ChallengeRoom> challengeRooms = new HashMap<>();
 
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d(TAG, document.getId() + " => " + document.getData());
+                                Log.d(TAG, document.getId() + " yay => " + document.getData());
 
                                 ChallengeRoom c = document.toObject(ChallengeRoom.class);
                                 challengeRooms.put(document.getId(), c);
@@ -340,6 +343,7 @@ public class Database {
 
     public boolean getMyChallenges(OnRoomGetCompletionHandler handler){
 
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
         UserAccount account = UserAccount.getInstance();
         db.collection("challenges")
@@ -379,6 +383,8 @@ public class Database {
     }
 
     public boolean quitChallenge(String roomID, UIUpdateCompletionHandler handler){
+
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
         UserAccount account = UserAccount.getInstance();
 
@@ -398,7 +404,7 @@ public class Database {
         batch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                userAccount.removeChallenge(roomID);
+                account.removeChallenge(roomID);
                 handler.updateUI(true, null);
             }
         });
@@ -409,6 +415,7 @@ public class Database {
 
     public boolean startCoinChangeListener(UIUpdateCompletionHandler handler){
 
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
         UserAccount userAccount = UserAccount.getInstance();
         coinChangeListener = db.collection("users").document(user.getUid())

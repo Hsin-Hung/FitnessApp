@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.GridView;
+import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -22,18 +23,19 @@ import fitnessapp_objects.ParticipantModel;
 
 public class ChallengeLobbyActivity extends AppCompatActivity implements Database.OnRoomChangeListener, Database.UIUpdateCompletionHandler{
 
-
+    TextView roomNameTV;
     GridView participants_view;
     ArrayList<ParticipantModel> participantModelArrayList;
     ParticipantGVAdapter adapter;
     String roomID;
-    Map<String,String> challengeInfo;
+    HashMap<String,String> challengeInfo;
     Database db;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_challenge_lobby);
 
+        roomNameTV = (TextView) findViewById(R.id.room_name_info_tv);
         participants_view = (GridView) findViewById(R.id.participant_grid);
 
         participantModelArrayList = new ArrayList<>();
@@ -42,12 +44,7 @@ public class ChallengeLobbyActivity extends AppCompatActivity implements Databas
         participants_view.setAdapter(adapter);
         challengeInfo = (HashMap<String,String>) getIntent().getSerializableExtra("challengeInfo");
 
-        for(Map.Entry<String,String> entry : challengeInfo.entrySet()){
-
-            System.out.println("key: "+entry.getKey() + " values: "+entry.getValue());
-
-        }
-
+        roomNameTV.setText(challengeInfo.get("name"));
 
         roomID = challengeInfo.get("roomID");
         db = Database.getInstance();
@@ -86,7 +83,9 @@ public class ChallengeLobbyActivity extends AppCompatActivity implements Databas
 
     public void challengeInfo(View view){
 
-
+        Intent intent = new Intent(this, ChallengeInfoActivity.class);
+        intent.putExtra("challengeInfo", challengeInfo);
+        startActivity(intent);
 
     }
 

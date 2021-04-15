@@ -1,10 +1,21 @@
 package com.example.fitnessapp;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SyncAdapterType;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -16,8 +27,17 @@ import android.widget.Switch;
 
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.fitnessapp.DatePickerFragment.OnDatePickListener;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptionsExtension;
+import com.google.android.gms.fitness.Fitness;
+import com.google.android.gms.fitness.FitnessActivities;
+import com.google.android.gms.fitness.FitnessOptions;
+import com.google.android.gms.fitness.data.DataType;
+import com.google.android.gms.fitness.data.Session;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -25,6 +45,7 @@ import com.google.firebase.auth.FirebaseUser;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import fitnessapp_objects.ChallengeRoom;
 import fitnessapp_objects.ChallengeType;
@@ -49,6 +70,7 @@ public class CreateChallengePresetActivity extends AppCompatActivity implements 
     ChallengeRoom room;
     Database db;
     private FirebaseAuth mAuth;
+    GoogleSignInOptionsExtension fitnessOptions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +88,7 @@ public class CreateChallengePresetActivity extends AppCompatActivity implements 
         errorTV = (TextView) findViewById(R.id.create_chall_error_tv);
 
         isBet = false;
-        challTypePicked = ChallengeType.STEPS;
+        challTypePicked = ChallengeType.DISTANCE;
         betAmountET.setEnabled(false);
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
@@ -113,7 +135,7 @@ public class CreateChallengePresetActivity extends AppCompatActivity implements 
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
-        challTypePicked = ChallengeType.STEPS;
+        challTypePicked = ChallengeType.DISTANCE;
     }
 
     public void showDatePickerDialog(View v) {
@@ -177,6 +199,7 @@ public class CreateChallengePresetActivity extends AppCompatActivity implements 
         return true;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void updateUI(boolean isSuccess, Map<String,String> data) {
 
@@ -189,5 +212,6 @@ public class CreateChallengePresetActivity extends AppCompatActivity implements 
         }
 
     }
+
 
 }

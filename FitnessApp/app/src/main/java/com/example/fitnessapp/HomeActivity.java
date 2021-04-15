@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.auth.User;
 
 import fitnessapp_objects.UserAccount;
 
@@ -63,6 +64,7 @@ public class HomeActivity extends AppCompatActivity {
     public void signOut(View view){
 
         FirebaseAuth.getInstance().signOut();
+        UserAccount.getInstance().eraseAccount();
         Intent intent = new Intent(this, LaunchActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
