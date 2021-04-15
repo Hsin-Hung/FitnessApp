@@ -53,7 +53,7 @@ public class MyChallengesActivity extends AppCompatActivity implements Database.
 
             ChallengeRoom room = entry.getValue();
 
-            ChallengeRoomModel model = new ChallengeRoomModel(entry.getKey(), room.getName(),room.getType(),room.isBet(), room.getBetAmount(),room.getEndDate(), room.getPassword());
+            ChallengeRoomModel model = new ChallengeRoomModel(entry.getKey(), room.getDescription(), room.getName(),room.getType(),room.isBet(), room.getBetAmount(),room.getEndDate(), room.getPassword());
             challengeRoomModelArrayList.add(model);
 
         }
@@ -67,7 +67,7 @@ public class MyChallengesActivity extends AppCompatActivity implements Database.
         ChallengeRoomModel challengeRoomModel = challengeRoomModelArrayList.get(position);
 
         Intent intent = new Intent(this, ChallengeLobbyActivity.class);
-        intent.putExtra("roomID", challengeRoomModel.getId());
+        intent.putExtra("challengeInfo", challengeRoomModel.getChallengeInfoMap());
         startActivity(intent);
 
     }

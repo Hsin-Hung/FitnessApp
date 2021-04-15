@@ -53,18 +53,23 @@ public class Database {
 
     public interface OnRoomGetCompletionHandler {
 
-        public void challengeRoomsTransfer(Map<String,ChallengeRoom> rooms);
+        void challengeRoomsTransfer(Map<String,ChallengeRoom> rooms);
 
     }
     public interface OnRoomChangeListener {
 
-        public void modifyParticipant(ArrayList<Participant> participants);
+        void modifyParticipant(ArrayList<Participant> participants);
     }
     public interface UIUpdateCompletionHandler {
 
-        public void updateUI(boolean isSuccess, Map<String, String> data);
+        void updateUI(boolean isSuccess, Map<String, String> data);
     }
 
+    public interface OnRoomStatsCompletionHandler{
+
+        void showChallengeStats(ChallengeRoom room);
+
+    }
 
     /**
      *
@@ -117,6 +122,7 @@ public class Database {
         DocumentReference challengeRef = db.collection("challenges").document();
 
         // add the new challenge room data to firestore first
+        room.setId(challengeRef.getId());
         batch.set(challengeRef, room);
 
         DocumentReference userAccountRef = db.collection("users").document(user.getUid());
@@ -127,8 +133,10 @@ public class Database {
         batch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
+                Map<String, String> roomID = new HashMap<>();
+                roomID.put("roomID", challengeRef.getId());
                 userAccount.addNewChallenge(challengeRef.getId());
-                handler.updateUI(true, null);
+                handler.updateUI(true, roomID);
             }
         });
 
@@ -291,9 +299,7 @@ public class Database {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 userAccount.addNewChallenge(roomID);
-                Map<String,String> data = new HashMap<>();
-                data.put("roomID", roomID);
-                handler.updateUI(true, data);
+                handler.updateUI(true, null);
             }
         });
 
@@ -362,6 +368,14 @@ public class Database {
                 });
 
         return true;
+    }
+
+    public boolean showChallengeStats(String roomID, OnRoomStatsCompletionHandler handler){
+
+
+
+        return true;
+
     }
 
     public boolean quitChallenge(String roomID, UIUpdateCompletionHandler handler){

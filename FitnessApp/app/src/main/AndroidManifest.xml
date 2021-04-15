@@ -13,11 +13,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FitnessApp"
         android:usesCleartextTraffic="true">
-        <activity android:name=".PurchaseCoinActivity"></activity>
+        <activity android:name=".ChallengeInfoActivity"></activity>
+        <activity android:name=".WeightLossChallengeInitActivity" />
+        <activity android:name=".PurchaseCoinActivity" />
         <activity android:name=".GoogleFitChallenges" />
         <activity android:name=".MyChallengesActivity" />
         <activity android:name=".SettingsActivity" />
-        <activity android:name=".YourChallengesActivity" />
         <activity android:name=".ChallengeLobbyActivity" />
         <activity android:name=".JoinChallengeActivity" />
         <activity android:name=".CreateChallengePresetActivity" />

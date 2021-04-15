@@ -25,6 +25,7 @@ public class JoinChallengeActivity extends AppCompatActivity implements Database
     ArrayList<ChallengeRoomModel> challengeRoomModelArrayList;
     ChallengeRoomLVAdapter adapter;
     Database db;
+    ChallengeRoomModel pickedChallengeRoom;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +64,8 @@ public class JoinChallengeActivity extends AppCompatActivity implements Database
 
             ChallengeRoom room = entry.getValue();
 
-            ChallengeRoomModel model = new ChallengeRoomModel(entry.getKey(), room.getName(),room.getType(),room.isBet(), room.getBetAmount(),room.getEndDate(), room.getPassword());
+            ChallengeRoomModel model = new ChallengeRoomModel(entry.getKey(), room.getDescription(), room.getName(),room.getType(),
+                    room.isBet(), room.getBetAmount(),room.getEndDate(), room.getPassword());
             challengeRoomModelArrayList.add(model);
 
         }
@@ -75,18 +77,18 @@ public class JoinChallengeActivity extends AppCompatActivity implements Database
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-        ChallengeRoomModel challengeRoomModel = challengeRoomModelArrayList.get(position);
-        DialogFragment dialog = new PasswordDialogFragment(challengeRoomModel.getId(), challengeRoomModel.getPassword());
+        pickedChallengeRoom = challengeRoomModelArrayList.get(position);
+        DialogFragment dialog = new PasswordDialogFragment(pickedChallengeRoom.getId(), pickedChallengeRoom.getPassword(), pickedChallengeRoom.getChallengeInfoMap());
         dialog.show(getSupportFragmentManager(), "PasswordDialogFragment");
 
     }
 
     @Override
-    public void onDialogPositiveClick(String roomID, boolean success) {
+    public void onDialogPositiveClick(Map<String,String> roomInfo, boolean success) {
 
         if(success){
 
-            db.joinChallengeRoom(roomID, this);
+            db.joinChallengeRoom(roomInfo.get("roomID"), this);
 
 
         }
@@ -99,7 +101,7 @@ public class JoinChallengeActivity extends AppCompatActivity implements Database
         if(isSuccess){
 
             Intent intent = new Intent(this, ChallengeLobbyActivity.class);
-            intent.putExtra("roomID", data.get("roomID"));
+            intent.putExtra("challengeInfo", pickedChallengeRoom.getChallengeInfoMap());
             startActivity(intent);
 
         }

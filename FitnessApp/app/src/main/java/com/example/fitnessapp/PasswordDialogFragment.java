@@ -15,23 +15,26 @@ import androidx.fragment.app.DialogFragment;
 
 import com.stripe.android.model.Card;
 
+import java.util.Map;
+
 public class PasswordDialogFragment extends DialogFragment {
 
     String roomID, password;
+    Map<String, String> roomInfo;
 
     public interface PasswordDialogListener{
 
-        public void onDialogPositiveClick(String roomID, boolean success);
+        public void onDialogPositiveClick(Map<String,String> roomInfo, boolean success);
 
     }
 
     PasswordDialogListener listener;
 
-    public PasswordDialogFragment(String roomID, String password) {
+    public PasswordDialogFragment(String roomID, String password, Map<String,String> roomInfo) {
 
         this.roomID = roomID;
         this.password = password;
-
+        this.roomInfo = roomInfo;
     }
 
     @Override
@@ -63,7 +66,7 @@ public class PasswordDialogFragment extends DialogFragment {
                 // User clicked OK button
                 EditText passwordET = (EditText) getDialog().findViewById(R.id.pass_card_et);
 
-                listener.onDialogPositiveClick(roomID, passwordET.getText().toString().equals(password));
+                listener.onDialogPositiveClick(roomInfo, passwordET.getText().toString().equals(password));
 
             }
         });

@@ -36,7 +36,7 @@ public class ChallengeRoomLVAdapter extends ArrayAdapter<ChallengeRoomModel> {
 
         challengeRoomTV.setText(challengeRoomModel.getName());
         challengeTypeTV.setText(challengeRoomModel.getType().toString());
-        betTV.setText("bet amount: " + String.valueOf(challengeRoomModel.getBetAmount()));
+        betTV.setText("bet amount: " + challengeRoomModel.getBetAmount());
         endDateTV.setText("end date: "+ challengeRoomModel.getEndDate().toDate().toString());
 
         return listitemView;

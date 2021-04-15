@@ -46,7 +46,7 @@ public class CreateChallengePresetActivity extends AppCompatActivity implements 
     boolean isBet;
     final int PASSWORD_MIN_LEN = 6;
     String createdRoomID;
-
+    ChallengeRoom room;
     Database db;
     private FirebaseAuth mAuth;
 
@@ -169,7 +169,7 @@ public class CreateChallengePresetActivity extends AppCompatActivity implements 
             betAmount = Integer.parseInt(betAmountET.getText().toString());
         }
 
-        ChallengeRoom room = new ChallengeRoom(name, challTypePicked, challDescrET.getText().toString(), passwordET.getText().toString(), new Timestamp(endDate), isBet, betAmount);
+        room = new ChallengeRoom(name, challTypePicked, challDescrET.getText().toString(), passwordET.getText().toString(), new Timestamp(endDate), isBet, betAmount);
         FirebaseUser user = mAuth.getCurrentUser();
         UserAccount userAccount = UserAccount.getInstance();
         room.addParticipant(new Participant(userAccount.getName(),user.getUid()));
@@ -183,7 +183,8 @@ public class CreateChallengePresetActivity extends AppCompatActivity implements 
         if(isSuccess){
             System.out.println("Successfully do all challenge room updates on firstore");
             Intent intent = new Intent(this, ChallengeLobbyActivity.class);
-            intent.putExtra("roomID", createdRoomID);
+            room.setId(data.get("roomID"));
+            intent.putExtra("challengeInfo", room.getFirestoreChallengeRoomMap());
             startActivity(intent);
         }
 

@@ -10,19 +10,24 @@ import android.widget.GridView;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
+import fitnessapp_objects.ChallengeRoom;
+import fitnessapp_objects.ChallengeType;
 import fitnessapp_objects.Database;
+import fitnessapp_objects.GoogleFitAPI;
 import fitnessapp_objects.Participant;
 import fitnessapp_objects.ParticipantModel;
 
-public class ChallengeLobbyActivity extends AppCompatActivity implements Database.OnRoomChangeListener, Database.UIUpdateCompletionHandler {
+public class ChallengeLobbyActivity extends AppCompatActivity implements Database.OnRoomChangeListener, Database.UIUpdateCompletionHandler{
 
 
     GridView participants_view;
     ArrayList<ParticipantModel> participantModelArrayList;
     ParticipantGVAdapter adapter;
     String roomID;
+    Map<String,String> challengeInfo;
     Database db;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,8 +40,16 @@ public class ChallengeLobbyActivity extends AppCompatActivity implements Databas
 
         adapter = new ParticipantGVAdapter(this, participantModelArrayList);
         participants_view.setAdapter(adapter);
+        challengeInfo = (HashMap<String,String>) getIntent().getSerializableExtra("challengeInfo");
 
-        roomID = getIntent().getStringExtra("roomID");
+        for(Map.Entry<String,String> entry : challengeInfo.entrySet()){
+
+            System.out.println("key: "+entry.getKey() + " values: "+entry.getValue());
+
+        }
+
+
+        roomID = challengeInfo.get("roomID");
         db = Database.getInstance();
         db.startChallengeRoomChangeListener(roomID, this);
 
@@ -64,6 +77,21 @@ public class ChallengeLobbyActivity extends AppCompatActivity implements Databas
 
     }
 
+    public void viewStats(View view){
+
+        Intent intent = new Intent(this, GoogleFitChallenges.class);
+        startActivity(intent);
+
+    }
+
+    public void challengeInfo(View view){
+
+
+
+    }
+
+
+
     public void quit(View view){
 
         db.quitChallenge(roomID, this);
@@ -86,4 +114,6 @@ public class ChallengeLobbyActivity extends AppCompatActivity implements Databas
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }
+
+
 }

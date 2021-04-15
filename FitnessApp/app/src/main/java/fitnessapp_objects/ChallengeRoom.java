@@ -1,11 +1,15 @@
 package fitnessapp_objects;
 
 import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.Exclude;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ChallengeRoom {
 
+    private String id;
     private String name;
     private String description;
     private String password;
@@ -101,28 +105,38 @@ public class ChallengeRoom {
     public void setParticipants(ArrayList<Participant> participants) {
         this.participants = participants;
     }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public void addParticipant(Participant participant){
         participants.add(participant);
     }
 
-//
-//    public Map<String, Object> getFirestoreChallengeRoomMap(){
-//
-//        Map<String, Object> challengeRoom = new HashMap<>();
-//
-//        challengeRoom.put("name", name);
-//        challengeRoom.put("type", type.toString());
-//        challengeRoom.put("description", description);
-//        challengeRoom.put("password", password);
-//        challengeRoom.put("endDate", new Timestamp(endDate.getTime()));
-//        challengeRoom.put("isBet", isBet);
-//        challengeRoom.put("betAmount", betAmount);
-//        challengeRoom.put("participants", participants);
-//
-//
-//        return challengeRoom;
-//
-//
-//
-//    }
+
+    @Exclude
+    /**
+     *
+     * @return the map of all the needed challenge info to display to participants
+     */
+    public HashMap<String, String> getFirestoreChallengeRoomMap(){
+
+        HashMap<String, String> challengeRoom = new HashMap<>();
+
+        challengeRoom.put("roomID", id);
+        challengeRoom.put("name", name);
+        challengeRoom.put("type", type.toString());
+        challengeRoom.put("description", description);
+        challengeRoom.put("endDate", endDate.toDate().toString());
+        challengeRoom.put("betAmount", String.valueOf(betAmount));
+
+        return challengeRoom;
+
+
+    }
 }
