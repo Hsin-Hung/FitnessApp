@@ -73,5 +73,23 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
+    <Button
+        android:id="@+id/button10"
+        android:layout_width="172dp"
+        android:layout_height="64dp"
+        android:onClick="revoke"
+        android:text="revoke(for testing)"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/button11"
+        android:layout_width="224dp"
+        android:layout_height="40dp"
+        android:onClick="checkPermission"
+        android:text="check Permission"
+        app:layout_constraintBottom_toTopOf="@+id/button10"
+        app:layout_constraintStart_toStartOf="parent" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

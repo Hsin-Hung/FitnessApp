@@ -1,13 +1,29 @@
 package com.example.fitnessapp;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.GridView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptionsExtension;
+import com.google.android.gms.fitness.FitnessOptions;
+import com.google.android.gms.fitness.data.DataType;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
@@ -23,6 +39,7 @@ import fitnessapp_objects.ParticipantModel;
 
 public class ChallengeLobbyActivity extends AppCompatActivity implements Database.OnRoomChangeListener, Database.UIUpdateCompletionHandler{
 
+    final int MY_PERMISSIONS_REQUEST_ACTIVITY = 2;
     TextView roomNameTV;
     GridView participants_view;
     ArrayList<ParticipantModel> participantModelArrayList;
@@ -30,6 +47,7 @@ public class ChallengeLobbyActivity extends AppCompatActivity implements Databas
     String roomID;
     HashMap<String,String> challengeInfo;
     Database db;
+    @RequiresApi(api = Build.VERSION_CODES.Q)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +67,7 @@ public class ChallengeLobbyActivity extends AppCompatActivity implements Databas
         roomID = challengeInfo.get("roomID");
         db = Database.getInstance();
         db.startChallengeRoomChangeListener(roomID, this);
+        checkSensitiveDataAccessPermission();
 
     }
 
@@ -112,6 +131,60 @@ public class ChallengeLobbyActivity extends AppCompatActivity implements Databas
         Intent intent = new Intent(this, HomeActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
+    }
+
+
+    @RequiresApi(api = Build.VERSION_CODES.Q)
+    public void checkSensitiveDataAccessPermission(){
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACTIVITY_RECOGNITION)
+                != PackageManager.PERMISSION_GRANTED) {
+            // Permission is not granted
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACTIVITY_RECOGNITION, Manifest.permission.ACCESS_FINE_LOCATION},
+                    MY_PERMISSIONS_REQUEST_ACTIVITY);
+        }else{
+            Toast.makeText(ChallengeLobbyActivity.this, " Successfully granted permissions for ACTIVITY_RECOGNITION and ACCESS_FINE_LOCATION!",
+                    Toast.LENGTH_SHORT).show();
+
+        }
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_ACTIVITY:
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 &&
+                        grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // Permission is granted. Continue the action or workflow
+                    // in your app.
+                    Toast.makeText(ChallengeLobbyActivity.this, " Successfully granted permissions for ACTIVITY_RECOGNITION and ACCESS_FINE_LOCATION!",
+                            Toast.LENGTH_SHORT).show();
+
+                } else {
+                    // Explain to the user that the feature is unavailable because
+                    // the features requires a permission that the user has denied.
+                    // At the same time, respect the user's decision. Don't link to
+                    // system settings in an effort to convince the user to change
+                    // their decision.
+                    AlertDialog.Builder a = new AlertDialog.Builder(this);
+                    a.setMessage("You won't be able to do Challenges without given permission!");
+//                    a.setPositiveButton("Yes, please.", (dialog, which) -> {
+//                        startActivityForResult(new Intent(Settings.ACTION_PRIVACY_SETTINGS), 0);
+//                    });
+                    a.setNegativeButton("Okay!", (dialog, which) -> {
+                        onBackPressed();
+                    });
+                    a.show();
+
+                }
+                return;
+        }
+
     }
 
 

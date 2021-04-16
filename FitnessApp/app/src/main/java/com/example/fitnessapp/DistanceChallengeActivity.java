@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 
@@ -74,9 +75,6 @@ public class DistanceChallengeActivity extends AppCompatActivity {
                 }
                 return;
         }
-
-
-
 
     }
 }
