@@ -15,7 +15,7 @@
     <string name="challengeType">Challenge Type (*)</string>
     <string name="challengeDescription">Challenge description</string>
     <string name="bet">bet</string>
-    <string name="betAmountHint">enter bet amount</string>
+    <string name="betAmountHint">enter amount </string>
     <string name="endDate">End Date (*)</string>
     <string name="start">START</string>
     <string name="ready">READY</string>
@@ -32,6 +32,7 @@
     <string name="back">BACK</string>
     <string name="save">Save</string>
     <string name="refresh">Refresh</string>
+    <string name="createYourChallenge">Create Your Challenge</string>
     <string name="pay">PAY</string>
     <string name="buyCoin">Buy Coin</string>
     <string name="coin2usd">1 COIN = 0.50 USD</string>

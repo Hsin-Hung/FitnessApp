@@ -8,11 +8,18 @@
     android:padding="10dp"
     android:orientation="vertical">
 
-    <androidx.appcompat.widget.SwitchCompat
+    <EditText
+        android:id="@+id/email_edt"
         android:layout_width="match_parent"
-        android:text="Change Color"
-        android:id="@+id/color_switch"
-        android:layout_height="50dp" />
+        android:layout_height="50dp"
+        android:hint="Email"
+        android:inputType="textEmailAddress" />
+    <EditText
+        android:id="@+id/name_edt"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:hint="Name"
+        android:inputType="textPersonName" />
 
     <EditText
         android:id="@+id/height_edt"
@@ -27,6 +34,12 @@
         android:layout_height="50dp"
         android:hint="Weight (kg)"
         android:inputType="numberDecimal" />
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:layout_width="match_parent"
+        android:text="Change Color"
+        android:id="@+id/color_switch"
+        android:layout_height="50dp" />
 
     <Button
         android:id="@+id/save_btn"
