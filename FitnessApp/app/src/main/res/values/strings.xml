@@ -42,6 +42,7 @@
     <string name="challengeDescriptionInfo">Description</string>
     <string name="challengeEndDateInfo">End Date</string>
     <string name="betAmountInfo">Bet Amount</string>
+    <string name="beginChallenge">Begin Challenge</string>
     <string-array name="challenge_types">
         <item>Distance</item>
         <item>Weight Loss</item>

@@ -13,7 +13,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FitnessApp"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ChallengeInfoActivity"></activity>
+        <activity android:name=".DistanceChallengeActivity"></activity>
+        <activity android:name=".ChallengeInfoActivity" />
         <activity android:name=".WeightLossChallengeInitActivity" />
         <activity android:name=".PurchaseCoinActivity" />
         <activity android:name=".GoogleFitChallenges" />

@@ -8,6 +8,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -221,6 +222,13 @@ public class GoogleFitChallenges extends AppCompatActivity {
                 .addOnFailureListener(e -> {
                    System.out.println("there is an error reading total distance");
                 });
+
+    }
+
+    public void distance(View view){
+
+        Intent intent = new Intent(this, DistanceChallengeActivity.class);
+        startActivity(intent);
 
     }
 }

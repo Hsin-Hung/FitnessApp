@@ -31,14 +31,16 @@
 
     <Button
         android:id="@+id/button6"
-        android:layout_width="163dp"
-        android:layout_height="47dp"
-        android:backgroundTint="@color/btn_color"
+        android:layout_width="206dp"
+        android:layout_height="49dp"
+        android:backgroundTint="@color/teal_200"
         android:onClick="viewStats"
-        android:text="@string/viewStats"
+        android:text="@string/beginChallenge"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/participant_grid" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/participant_grid"
+        app:layout_constraintVertical_bias="0.507" />
 
     <Button
         android:id="@+id/chall_info_btn"
