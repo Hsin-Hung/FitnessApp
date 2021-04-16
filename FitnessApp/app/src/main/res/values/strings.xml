@@ -15,7 +15,7 @@
     <string name="challengeType">Challenge Type (*)</string>
     <string name="challengeDescription">Challenge description</string>
     <string name="bet">bet</string>
-    <string name="betAmountHint">enter bet amount</string>
+    <string name="betAmountHint">enter amount </string>
     <string name="endDate">End Date (*)</string>
     <string name="start">START</string>
     <string name="ready">READY</string>
