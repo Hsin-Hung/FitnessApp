@@ -59,9 +59,12 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     public void showMenu(View v) {
-
+        // This method implements OnMenuItemClickListener
+        // To add more items in the menu
+        // 1. modify res/menu/main_menu.xml for views in the menu
+        // 2. add the case in onMenuItemClick method (right after this method)
         PopupMenu popup = new PopupMenu(this, v);
-        // This activity implements OnMenuItemClickListener
+
         popup.setOnMenuItemClickListener(this::onMenuItemClick);
         popup.inflate(R.menu.main_menu);
         popup.show();
@@ -71,14 +74,14 @@ public class HomeActivity extends AppCompatActivity {
     public boolean onMenuItemClick(MenuItem item) {
 
         switch (item.getItemId()) {
-            case R.id.settings:
+            case R.id.settings: // open the setting page
                 Intent goToSettings_intent = new Intent(getApplicationContext(), SettingsActivity.class);
                 startActivity(goToSettings_intent);
                 return true;
-            case R.id.sign_out:
+            case R.id.sign_out: // sign out
                 signOut();
                 return true;
-            case R.id.buy_coin:
+            case R.id.buy_coin: // open the purchase page
                 Intent goToPurchase_intent = new Intent(this, PurchaseCoinActivity.class);
                 startActivity(goToPurchase_intent);
                 return true;
