@@ -23,12 +23,15 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptionsExtension;
+import com.google.android.gms.common.Scopes;
+import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.fitness.FitnessOptions;
 import com.google.android.gms.fitness.data.DataType;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.auth.User;
 
+import fitnessapp_objects.AuthPermission;
 import fitnessapp_objects.UserAccount;
 
 public class HomeActivity extends AppCompatActivity {
@@ -61,6 +64,8 @@ public class HomeActivity extends AppCompatActivity {
         });
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestScopes(new Scope(Scopes.FITNESS_LOCATION_READ_WRITE))
+                .requestScopes(new Scope(Scopes.FITNESS_ACTIVITY_READ_WRITE))
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
@@ -127,11 +132,7 @@ public class HomeActivity extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.Q)
     public void fitnessAPIAuth(){
 
-        fitnessOptions =
-                FitnessOptions.builder()
-                        .addDataType(DataType.TYPE_DISTANCE_DELTA, FitnessOptions.ACCESS_READ)
-                        .addDataType(DataType.AGGREGATE_DISTANCE_DELTA, FitnessOptions.ACCESS_READ)
-                        .build();
+        fitnessOptions = AuthPermission.getInstance().getFitnessOption();
 
         GoogleSignInAccount account = GoogleSignIn.getAccountForExtension(this, fitnessOptions);
 
@@ -179,13 +180,6 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     public void checkPermission(View view){
-
-
-        fitnessOptions =
-                FitnessOptions.builder()
-                        .addDataType(DataType.TYPE_DISTANCE_DELTA, FitnessOptions.ACCESS_READ)
-                        .addDataType(DataType.AGGREGATE_DISTANCE_DELTA, FitnessOptions.ACCESS_READ)
-                        .build();
 
         GoogleSignInAccount account = GoogleSignIn.getAccountForExtension(this, fitnessOptions);
 

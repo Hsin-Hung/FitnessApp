@@ -17,7 +17,6 @@
         <activity android:name=".ChallengeInfoActivity" />
         <activity android:name=".WeightLossChallengeInitActivity" />
         <activity android:name=".PurchaseCoinActivity" />
-        <activity android:name=".GoogleFitChallenges" />
         <activity android:name=".MyChallengesActivity" />
         <activity android:name=".SettingsActivity" />
         <activity android:name=".ChallengeLobbyActivity" />

@@ -1,79 +1,135 @@
 package com.example.fitnessapp;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptionsExtension;
+import com.google.android.gms.common.Scopes;
+import com.google.android.gms.common.api.GoogleApi;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.Scope;
+import com.google.android.gms.fitness.Fitness;
+import com.google.android.gms.fitness.FitnessActivities;
 import com.google.android.gms.fitness.FitnessOptions;
+import com.google.android.gms.fitness.RecordingClient;
 import com.google.android.gms.fitness.data.DataType;
+import com.google.android.gms.fitness.data.Session;
+
+import java.util.HashMap;
+import java.util.concurrent.TimeUnit;
+
+import fitnessapp_objects.AuthPermission;
 
 
 public class DistanceChallengeActivity extends AppCompatActivity {
 
+    final String TAG = "DistanceChallActivity";
     final int GOOGLE_FIT_PERMISSIONS_REQUEST_CODE = 1;
     GoogleSignInOptionsExtension fitnessOptions;
+    GoogleSignInAccount googleSigninAccount;
+    RecordingClient recordingClient;
+    HashMap<String,String> challengeInfo;
+
+
+    @SuppressLint("LongLogTag")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_distance_challenge);
 
 
-        fitnessOptions =
-                FitnessOptions.builder()
-                        .addDataType(DataType.TYPE_DISTANCE_DELTA, FitnessOptions.ACCESS_READ)
-                        .addDataType(DataType.AGGREGATE_DISTANCE_DELTA, FitnessOptions.ACCESS_READ)
-                        .build();
+        challengeInfo = (HashMap<String,String>) getIntent().getSerializableExtra("challengeInfo");
 
-        GoogleSignInAccount account = GoogleSignIn.getAccountForExtension(this, fitnessOptions);
+        fitnessOptions = AuthPermission.getInstance().getFitnessOption();
 
-        if (!GoogleSignIn.hasPermissions(account, fitnessOptions)) {
+        googleSigninAccount = GoogleSignIn.getAccountForExtension(this, fitnessOptions);
+
+        if (!GoogleSignIn.hasPermissions(googleSigninAccount, fitnessOptions)) {
             GoogleSignIn.requestPermissions(
                     this, // your activity
                     GOOGLE_FIT_PERMISSIONS_REQUEST_CODE, // e.g. 1
-                    account,
+                    googleSigninAccount,
                     fitnessOptions);
         } else {
-           // accessGoogleFit()
+            //permission granted
+            recordingClient = Fitness.getRecordingClient(this, googleSigninAccount);
+
+            recordingClient
+                    .subscribe(DataType.TYPE_DISTANCE_DELTA)
+                    .addOnSuccessListener(unused ->
+                            Log.i(TAG, "TYPE_DISTANCE_DELTA Successfully subscribed!"))
+                    .addOnFailureListener( e ->
+                            Log.w(TAG, "There was a problem subscribing to TYPE_DISTANCE_DELTA.", e));
+
+            recordingClient.subscribe(DataType.AGGREGATE_DISTANCE_DELTA)
+                    .addOnSuccessListener(unused ->
+                            Log.i(TAG, "AGGREGATE_DISTANCE_DELTA Successfully subscribed!"))
+                    .addOnFailureListener( e ->
+                            Log.w(TAG, "There was a problem subscribing to AGGREGATE_DISTANCE_DELTA.", e));
+            createChallengeSession();
         }
     }
 
+    public void createChallengeSession(){
 
+// 1. Subscribe to fitness data
+// 2. Create a session object
+// (provide a name, identifier, description, activity and start time)
+        Session session = new Session.Builder()
+                .setName(challengeInfo.get("name"))
+                .setIdentifier(challengeInfo.get("roomID"))
+                .setDescription(challengeInfo.get("description"))
+                .setActivity(challengeInfo.get("type"))
+                .setStartTime(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
+                .build();
+
+// 3. Use the Sessions client to start a session:
+        Fitness.getSessionsClient(this, googleSigninAccount)
+                .startSession(session)
+                .addOnSuccessListener(unused ->
+                        Log.i(TAG, "Session started successfully!"))
+                .addOnFailureListener(e ->
+                        Log.w(TAG, "There was an error starting the session", e));
+
+
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.Q)
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        System.out.println("request code: " + requestCode + "result code: " + resultCode);
 
-        switch (requestCode) {
-            case GOOGLE_FIT_PERMISSIONS_REQUEST_CODE:
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0 &&
-                        grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // Permission is granted. Continue the action or workflow
-                    // in your app.
+        if(requestCode== Activity.RESULT_OK){
 
-                } else {
-                    // Explain to the user that the feature is unavailable because
-                    // the features requires a permission that the user has denied.
-                    // At the same time, respect the user's decision. Don't link to
-                    // system settings in an effort to convince the user to change
-                    // their decision.
-                    AlertDialog.Builder a = new AlertDialog.Builder(this);
-                    a.setMessage("You have already registered!");
-//                    a.setPositiveButton("Yes, please.", (dialog, which) -> {
-//                        startActivityForResult(new Intent(Settings.ACTION_PRIVACY_SETTINGS), 0);
-//                    });
-                    a.setNegativeButton("Okay!", (dialog, which) -> {
+            switch (requestCode){
 
-                    });
-                    a.show();
-                }
-                return;
+                case GOOGLE_FIT_PERMISSIONS_REQUEST_CODE:
+                    System.out.println(" Successfully granted permissions !");
+//                    Toast.makeText(HomeActivity.this, " Successfully granted permissions !",
+//                            Toast.LENGTH_SHORT).show();
+                    createChallengeSession();
+                    break;
+                default:
+                    Toast.makeText(DistanceChallengeActivity.this, " idk where this from!",
+                            Toast.LENGTH_SHORT).show();
+            }
+
         }
 
     }

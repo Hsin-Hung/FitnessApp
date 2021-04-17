@@ -24,8 +24,10 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptionsExtension;
 import com.google.android.gms.fitness.FitnessOptions;
 import com.google.android.gms.fitness.data.DataType;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -45,6 +47,7 @@ public class ChallengeLobbyActivity extends AppCompatActivity implements Databas
     ArrayList<ParticipantModel> participantModelArrayList;
     ParticipantGVAdapter adapter;
     String roomID;
+    Timestamp endDate;
     HashMap<String,String> challengeInfo;
     Database db;
     @RequiresApi(api = Build.VERSION_CODES.Q)
@@ -95,7 +98,8 @@ public class ChallengeLobbyActivity extends AppCompatActivity implements Databas
 
     public void viewStats(View view){
 
-        Intent intent = new Intent(this, GoogleFitChallenges.class);
+        Intent intent = new Intent(this, DistanceChallengeActivity.class);
+        intent.putExtra("challengeInfo", challengeInfo);
         startActivity(intent);
 
     }
