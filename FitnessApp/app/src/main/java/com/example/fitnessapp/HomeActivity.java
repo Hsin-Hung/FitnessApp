@@ -1,21 +1,17 @@
 package com.example.fitnessapp;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
-import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.PopupMenu;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -29,7 +25,6 @@ import com.google.android.gms.fitness.FitnessOptions;
 import com.google.android.gms.fitness.data.DataType;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.auth.User;
 
 import fitnessapp_objects.AuthPermission;
 import fitnessapp_objects.UserAccount;
@@ -40,8 +35,7 @@ public class HomeActivity extends AppCompatActivity {
     private final int GOOGLE_FIT_PERMISSIONS_REQUEST_CODE = 1;
     GoogleSignInOptionsExtension fitnessOptions;
     private FirebaseAuth mAuth;
-    Button settings;
-
+    
     @RequiresApi(api = Build.VERSION_CODES.Q)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,16 +46,6 @@ public class HomeActivity extends AppCompatActivity {
 
         System.out.println(UserAccount.getInstance().getEmail());
         System.out.println(UserAccount.getInstance().getName());
-
-        settings = (Button) findViewById(R.id.btn_settings);
-
-        settings.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
-                startActivity(intent);
-            }
-        });
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestScopes(new Scope(Scopes.FITNESS_LOCATION_READ_WRITE))
@@ -77,6 +61,38 @@ public class HomeActivity extends AppCompatActivity {
 
         System.out.println("HOME ACTIVITY CREATED");
 
+    }
+
+    public void showMenu(View v) {
+        // This method implements OnMenuItemClickListener
+        // To add more items in the menu
+        // 1. modify res/menu/main_menu.xml for views in the menu
+        // 2. add the case in onMenuItemClick method (right after this method)
+        PopupMenu popup = new PopupMenu(this, v);
+
+        popup.setOnMenuItemClickListener(this::onMenuItemClick);
+        popup.inflate(R.menu.main_menu);
+        popup.show();
+    }
+
+    @SuppressLint("NonConstantResourceId")
+    public boolean onMenuItemClick(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.settings: // open the setting page
+                Intent goToSettings_intent = new Intent(getApplicationContext(), SettingsActivity.class);
+                startActivity(goToSettings_intent);
+                return true;
+            case R.id.sign_out: // sign out
+                signOut();
+                return true;
+            case R.id.buy_coin: // open the purchase page
+                Intent goToPurchase_intent = new Intent(this, PurchaseCoinActivity.class);
+                startActivity(goToPurchase_intent);
+                return true;
+            default:
+                return false;
+        }
     }
 
     public void createChallenge(View view){
@@ -102,7 +118,7 @@ public class HomeActivity extends AppCompatActivity {
 
 
 
-    public void signOut(View view){
+    public void signOut(){
 
         FirebaseAuth.getInstance().signOut();
         mGoogleSignInClient.signOut().addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -116,12 +132,6 @@ public class HomeActivity extends AppCompatActivity {
         });
     }
 
-    public void buyCoin(View view){
-
-        Intent intent = new Intent(this, PurchaseCoinActivity.class);
-        startActivity(intent);
-
-    }
 
     @Override
     public void onBackPressed() {
@@ -180,6 +190,12 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     public void checkPermission(View view){
+
+        fitnessOptions =
+                FitnessOptions.builder()
+                        .addDataType(DataType.TYPE_DISTANCE_DELTA, FitnessOptions.ACCESS_READ)
+                        .addDataType(DataType.AGGREGATE_DISTANCE_DELTA, FitnessOptions.ACCESS_READ)
+                        .build();
 
         GoogleSignInAccount account = GoogleSignIn.getAccountForExtension(this, fitnessOptions);
 
