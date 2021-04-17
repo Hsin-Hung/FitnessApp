@@ -1,0 +1,53 @@
+<resources>
+    <string name="app_name">健身达人</string>
+    <string name="sign_up">注册</string>
+    <string name="sign_out">登出</string>
+    <string name="log_in">登录</string>
+    <string name="usernameHint">用户名</string>
+    <string name="emailHint">电子邮箱</string>
+    <string name="passHint">密码</string>
+    <string name="confirmPassHint">确认密码</string>
+    <string name="createChallenge">创建挑战</string>
+    <string name="joinChallenge">加入挑战</string>
+    <string name="create">创建</string>
+    <string name="join">加入</string>
+    <string name="challengeRoomName">房间名 (*)</string>
+    <string name="challengeType">挑战类型 (*)</string>
+    <string name="challengeDescription">挑战描述</string>
+    <string name="bet">下注</string>
+    <string name="betAmountHint">下注数量 </string>
+    <string name="endDate">结束日期 (*)</string>
+    <string name="start">开始</string>
+    <string name="ready">准备</string>
+    <string name="invite">邀请</string>
+    <string name="roomPassword">房间密码</string>
+    <string name="hostName">房主</string>
+    <string name="pickDate">选择日期</string>
+    <string name="myChallenges">我的挑战</string>
+    <string name="randomChallenges">随机挑战</string>
+    <string name="enterPassword">输入密码</string>
+    <string name="cancel">取消</string>
+    <string name="reload">刷新</string>
+    <string name="quitChallenge">退出挑战</string>
+    <string name="back">返回</string>
+    <string name="save">保存</string>
+    <string name="refresh">刷新</string>
+    <string name="createYourChallenge">创建你的挑战</string>
+    <string name="pay">支付</string>
+    <string name="buyCoin">购买硬币</string>
+    <string name="coin2usd">1 硬币 = 0.50 美元</string>
+    <string name="enterCoin">输入要购买的硬币数量</string>
+    <string name="viewStats">View Stats</string>
+    <string name="challengeInfo">挑战信息</string>
+    <string name="challengeTypeInfo">挑战类型</string>
+    <string name="challengeDescriptionInfo">描述</string>
+    <string name="challengeEndDateInfo">结束日期</string>
+    <string name="betAmountInfo">下注金额</string>
+    <string name="beginChallenge">开始挑战</string>
+    <string-array name="challenge_types">
+        <item>距离</item>
+        <item>减重</item>
+    </string-array>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
