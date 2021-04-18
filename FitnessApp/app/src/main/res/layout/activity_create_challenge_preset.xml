@@ -34,6 +34,7 @@
         <TableLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             android:layout_marginBottom="10dp"
             android:weightSum="3"
             android:gravity="center" >
@@ -172,8 +173,7 @@
                     android:textAlignment="center"
                     android:textAllCaps="false"
                     android:textColor="#000000"
-                    android:textStyle="bold"
-                    android:visibility="invisible" />
+                    android:textStyle="bold"/>
             </TableRow>
 
             <TableRow
@@ -197,7 +197,7 @@
                     android:layout_height="50dp"
                     android:layout_weight="2"
                     android:layout_marginTop="16dp"
-                    android:backgroundTint="#74BADA"
+                    android:background="@drawable/descbtn2"
                     android:onClick="showDatePickerDialog"
                     android:text="@string/pickDate" />
 
@@ -208,14 +208,16 @@
             android:id="@+id/create_chall_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/startchal"
-            android:onClick="createChallenge"
-            android:layout_marginTop="15dp" />
+            android:layout_marginTop="15dp"
+            android:background="@drawable/signup"
+            android:text="@string/createChallenge"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold" />
         <TextView
             android:id="@+id/create_chall_error_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="20dp"
             android:layout_marginBottom="10dp"
             android:gravity="center"
             android:textColor="#FFFFFF"

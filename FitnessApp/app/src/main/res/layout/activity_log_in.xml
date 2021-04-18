@@ -25,6 +25,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
+            android:hint="@string/emailHint"
             android:background="@drawable/username"
             android:ems="10"
             android:inputType="textEmailAddress" />
@@ -34,6 +35,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="25dp"
+            android:hint="@string/passHint"
             android:background="@drawable/password"
             android:ems="10"
             android:inputType="textPassword" />
