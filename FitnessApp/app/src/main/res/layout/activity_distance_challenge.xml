@@ -9,28 +9,26 @@
 
     <Button
         android:id="@+id/button4"
-        android:layout_width="130dp"
-        android:layout_height="67dp"
-        android:layout_marginBottom="5dp"
+        android:layout_width="100dp"
+        android:layout_height="61dp"
         android:onClick="startPeriodicDistanceUpdateTask"
         android:text="periodic"
-        app:layout_constraintBottom_toTopOf="@+id/button7"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/button5" />
 
     <Button
         android:id="@+id/button5"
-        android:layout_width="130dp"
-        android:layout_height="67dp"
-        android:layout_marginBottom="5dp"
+        android:layout_width="93dp"
+        android:layout_height="61dp"
         android:onClick="startEndDateNotifyTask"
         android:text="end date"
-        app:layout_constraintBottom_toTopOf="@+id/button9"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/button7" />
 
     <Button
         android:id="@+id/button7"
-        android:layout_width="130dp"
-        android:layout_height="67dp"
+        android:layout_width="98dp"
+        android:layout_height="61dp"
         android:onClick="cancelAllTask"
         android:text="cancel All"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -38,8 +36,8 @@
 
     <Button
         android:id="@+id/button9"
-        android:layout_width="130dp"
-        android:layout_height="67dp"
+        android:layout_width="92dp"
+        android:layout_height="62dp"
         android:onClick="viewAllWork"
         android:text="view works"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -49,12 +47,13 @@
         android:id="@+id/leaderboard_lv"
         android:layout_width="match_parent"
         android:layout_height="368dp"
+        android:dividerHeight="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.498" />
+        app:layout_constraintVertical_bias="0.754" />
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -62,18 +61,17 @@
         android:layout_height="135dp"
         android:orientation="horizontal"
         android:weightSum="2"
-        app:layout_constraintBottom_toTopOf="@+id/leaderboard_lv"
+        app:layout_constraintBottom_toTopOf="@+id/textView18"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/textView18"
+            android:id="@+id/chall_type_title_tv"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="@string/distance"
             android:textColor="#FF0000"
             android:textSize="30sp"
             android:textStyle="bold" />
@@ -88,5 +86,30 @@
             android:textSize="30sp"
             android:textStyle="bold" />
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/textView18"
+        android:layout_width="214dp"
+        android:layout_height="62dp"
+        android:gravity="center"
+        android:text="@string/leaderBoard"
+        android:textColor="#FFFFFF"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/leaderboard_lv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/button12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/btn_color"
+        android:onClick="refresh"
+        android:text="@string/refresh"
+        android:textColor="#FFFFFF"
+        app:layout_constraintBottom_toTopOf="@+id/leaderboard_lv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textView18" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

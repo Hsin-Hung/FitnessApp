@@ -35,7 +35,7 @@ public class Database {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final String TAG = "Database";
     private final int NUM_RANDOM = 5;
-    private ListenerRegistration challengeRoomListener, coinChangeListener;
+    private ListenerRegistration challengeRoomListener, coinChangeListener, statsChangeListener;
 
     private Database(){
 
@@ -61,12 +61,10 @@ public class Database {
 
         void updateUI(boolean isSuccess, Map<String, String> data);
     }
-
-    public interface OnRoomStatsCompletionHandler{
-
-        void showChallengeStats(ChallengeRoom room);
-
+    public interface  OnLeaderBoardStatsGetCompletionHandler{
+        void statsTransfer(ArrayList<ChallengeStats> stats);
     }
+
 
     /**
      *
@@ -127,7 +125,7 @@ public class Database {
 
         DocumentReference dataRef = db.collection("challenges").document(challengeRef.getId()).collection("stats").document(user.getUid());
 
-        batch.set(dataRef, new ChallengeStats());
+        batch.set(dataRef, new ChallengeStats(user.getUid(), userAccount.getName()));
 
         DocumentReference userAccountRef = db.collection("users").document(user.getUid());
 
@@ -137,10 +135,13 @@ public class Database {
         batch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                Map<String, String> roomID = new HashMap<>();
-                roomID.put("roomID", challengeRef.getId());
-                userAccount.addNewChallenge(challengeRef.getId());
-                handler.updateUI(true, roomID);
+                if(task.isSuccessful()){
+                    Map<String, String> roomID = new HashMap<>();
+                    roomID.put("roomID", challengeRef.getId());
+                    userAccount.addNewChallenge(challengeRef.getId());
+                    handler.updateUI(true, roomID);
+                }
+
             }
         });
 
@@ -301,7 +302,7 @@ public class Database {
 
         DocumentReference userRef = db.collection("challenges").document(roomID).collection("stats").document(user.getUid());
 
-        batch.set(userRef, new ChallengeStats());
+        batch.set(userRef, new ChallengeStats(user.getUid(), account.getName()));
 
         DocumentReference userAccountRef = db.collection("users").document(user.getUid());
 
@@ -311,8 +312,10 @@ public class Database {
         batch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                account.addNewChallenge(roomID);
-                handler.updateUI(true, null);
+                if(task.isSuccessful()){
+                    account.addNewChallenge(roomID);
+                    handler.updateUI(true, null);
+                }
             }
         });
 
@@ -353,11 +356,15 @@ public class Database {
 
     public boolean getMyChallenges(OnRoomGetCompletionHandler handler){
 
+
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
         UserAccount account = UserAccount.getInstance();
+
+        System.out.println(account.getName());
+        System.out.println(user.getUid());
         db.collection("challenges")
-                .whereArrayContains("participants", new ParticipantModel(account.getName(),user.getUid()))
+                .whereArrayContains("participants", new Participant(account.getName(),user.getUid()))
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -384,14 +391,6 @@ public class Database {
         return true;
     }
 
-    public boolean showChallengeStats(String roomID, OnRoomStatsCompletionHandler handler){
-
-
-
-        return true;
-
-    }
-
     public boolean quitChallenge(String roomID, UIUpdateCompletionHandler handler){
 
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
@@ -403,7 +402,7 @@ public class Database {
         DocumentReference challengeRef = db.collection("challenges").document(roomID);
 
         // add the new challenge room data to firestore first
-        batch.update(challengeRef, "participants", FieldValue.arrayRemove(new ParticipantModel(account.getName(),user.getUid())));
+        batch.update(challengeRef, "participants", FieldValue.arrayRemove(new Participant(account.getName(),user.getUid())));
 
         DocumentReference dataRef = db.collection("challenges").document(roomID).collection("stats").document(user.getUid());
 
@@ -417,8 +416,10 @@ public class Database {
         batch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                account.removeChallenge(roomID);
-                handler.updateUI(true, null);
+                if(task.isSuccessful()){
+                    account.removeChallenge(roomID);
+                    handler.updateUI(true, null);
+                }
             }
         });
 
@@ -500,9 +501,6 @@ public class Database {
 
     public boolean endChallenge(String roomID, Context context){
 
-        FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        FirebaseUser user = mAuth.getCurrentUser();
-
         db.collection("challenges").document(roomID).update("started", false)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
@@ -513,6 +511,77 @@ public class Database {
         });
 
         return true;
+    }
+
+    public boolean getLeaderBoardStats(String roomID, OnLeaderBoardStatsGetCompletionHandler handler){
+
+        db.collection("challenges").document(roomID).collection("stats").get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+
+                        if (task.isSuccessful()) {
+                            ArrayList<ChallengeStats> challengeStatsArrayList = new ArrayList<>();
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Log.d(TAG, document.getId() + " => " + document.getData());
+                               ChallengeStats challengeStats = document.toObject(ChallengeStats.class);
+                                challengeStatsArrayList.add(challengeStats);
+                            }
+                            handler.statsTransfer(challengeStatsArrayList);
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                    });
+
+
+        return true;
+    }
+
+    public boolean startStatsChangeListener(String roomID, ChallengeType type, UIUpdateCompletionHandler handler){
+
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
+
+        statsChangeListener = db.collection("challenges").document(roomID).collection("stats").document(user.getUid())
+                .addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                        if(value.exists()){
+                            Map<String,String> data = new HashMap<>();
+                            switch (type){
+
+                                case DISTANCE:
+                                    data.put("distance", value.get("distance").toString());
+                                    break;
+                                case WEIGHTLOSS:
+                                    data.put("weight", value.get("weight").toString());
+                                    break;
+                                default:
+                                    System.out.println("No such challenge type !");
+                                    return;
+                            }
+                            handler.updateUI(true, data);
+
+                        }else{
+                            Log.d(TAG, "No such document");
+                            handler.updateUI(false, null);
+
+                        }
+                    }
+
+                });
+
+
+
+      return true;
+    }
+
+    public void removeStatsChangeListener(){
+
+        if(statsChangeListener!=null)
+        statsChangeListener.remove();
+
     }
 
 }

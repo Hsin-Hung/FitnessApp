@@ -48,6 +48,7 @@
     <string name="searchChallenges">搜索挑战</string>
     <string name="menu">菜单</string>
     <string name="distance">我的距離:</string>
+    <string name="leaderBoard">排名</string>
     <string-array name="challenge_types">
         <item>距离</item>
         <item>减重</item>

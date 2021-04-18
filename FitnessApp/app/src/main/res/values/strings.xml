@@ -48,6 +48,7 @@
     <string name="searchChallenges">Search Challenges to join</string>
     <string name="menu">Menu</string>
     <string name="distance">My Distance:</string>
+    <string name="leaderBoard">LeaderBoard</string>
     <string-array name="challenge_types">
         <item>Distance</item>
         <item>Weight Loss</item>

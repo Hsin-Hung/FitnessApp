@@ -10,7 +10,7 @@
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/textView18"
+        android:id="@+id/chall_type_title_tv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"

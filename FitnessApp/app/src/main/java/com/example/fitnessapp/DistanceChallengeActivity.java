@@ -41,18 +41,29 @@ import com.google.android.gms.fitness.request.SensorRequest;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.firebase.Timestamp;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 import fitnessapp_objects.AuthPermission;
 import fitnessapp_objects.ChallengeEndDateWork;
 import fitnessapp_objects.ChallengePeriodicWork;
+import fitnessapp_objects.ChallengeRoomModel;
+import fitnessapp_objects.ChallengeStats;
+import fitnessapp_objects.ChallengeType;
+import fitnessapp_objects.Database;
+import fitnessapp_objects.ParticipantModel;
 
 
-public class DistanceChallengeActivity extends AppCompatActivity {
+public class DistanceChallengeActivity extends AppCompatActivity implements Database.OnLeaderBoardStatsGetCompletionHandler, Database.UIUpdateCompletionHandler {
 
     final String TAG = "DistanceChallActivity";
     final int GOOGLE_FIT_PERMISSIONS_REQUEST_CODE = 1;
@@ -61,10 +72,12 @@ public class DistanceChallengeActivity extends AppCompatActivity {
     RecordingClient recordingClient;
     HashMap<String,String> challengeInfo;
     long endDate;
-    TextView myDistanceTV;
+    TextView myDistanceTV, challTypeTV;
     ListView leaderBoardLV;
+    ArrayList<ParticipantModel> participantModels;
+    LeaderBoardParticipantLVAdapter adapter;
     OnDataPointListener listener;
-
+    Database db;
     @SuppressLint("LongLogTag")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +86,12 @@ public class DistanceChallengeActivity extends AppCompatActivity {
 
         myDistanceTV = (TextView) findViewById(R.id.my_distance_tv);
         leaderBoardLV = (ListView) findViewById(R.id.leaderboard_lv);
+        challTypeTV = (TextView) findViewById(R.id.chall_type_title_tv);
+        challTypeTV.setText(getString(R.string.distance));
+
+        participantModels = new ArrayList<>();
+        adapter = new LeaderBoardParticipantLVAdapter(this, participantModels);
+        leaderBoardLV.setAdapter(adapter);
 
         myDistanceTV.setText("0");
 
@@ -83,6 +102,8 @@ public class DistanceChallengeActivity extends AppCompatActivity {
 
         googleSigninAccount = GoogleSignIn.getAccountForExtension(this, fitnessOptions);
 
+        db = Database.getInstance();
+
         if (!GoogleSignIn.hasPermissions(googleSigninAccount, fitnessOptions)) {
             GoogleSignIn.requestPermissions(
                     this, // your activity
@@ -92,13 +113,14 @@ public class DistanceChallengeActivity extends AppCompatActivity {
         } else {
             //permission granted
             recordingClientSub();
-            startSensorClientListener();
+            startDistanceChangeListener();
+            db.getLeaderBoardStats(challengeInfo.get("roomID"), this);
         }
     }
 
     @Override
     protected void onDestroy() {
-        removeSensorClientListener();
+        db.removeStatsChangeListener();
         super.onDestroy();
     }
 
@@ -121,51 +143,60 @@ public class DistanceChallengeActivity extends AppCompatActivity {
 
     }
 
-    public void startSensorClientListener(){
-
-        listener = dataPoint -> {
-
-            float totalDistance = 0;
-            for (Field field : dataPoint.getDataType().getFields()) {
-                Value value = dataPoint.getValue(field);
-                Log.i(TAG, "Detected DataPoint field: " + field.getName());
-                Log.i(TAG, "Detected DataPoint value: " + value);
-
-                totalDistance += value.asFloat();
-            }
-            myDistanceTV.setText(String.valueOf(totalDistance));
-
-        };
-        Fitness.getSensorsClient(this, GoogleSignIn.getAccountForExtension(this, fitnessOptions))
-                .add(
-                        new SensorRequest.Builder()
-                                // for custom data sets.
-                                .setDataType(DataType.AGGREGATE_DISTANCE_DELTA) // Can't be omitted.
-                                .setSamplingRate(10, TimeUnit.SECONDS)
-                                .build(),
-                        listener
-                )
-                .addOnSuccessListener(unused ->
-                        Log.i(TAG, "Listener registered!"))
-                .addOnFailureListener(task ->
-                        Log.e(TAG, "Listener not registered.", task.getCause()));
+    public void startDistanceChangeListener(){
+        db.startStatsChangeListener(challengeInfo.get("roomID"), ChallengeType.DISTANCE, this);
     }
+//
+//    public void startSensorClientListener(){
+//
+//        listener = dataPoint -> {
+//
+//            float totalDistance = 0;
+//            for (Field field : dataPoint.getDataType().getFields()) {
+//                Value value = dataPoint.getValue(field);
+//                Log.i(TAG, "Detected DataPoint field: " + field.getName());
+//                Log.i(TAG, "Detected DataPoint value: " + value);
+//
+//                totalDistance += value.asFloat();
+//            }
+//            myDistanceTV.setText(String.valueOf(totalDistance));
+//
+//        };
+//        Fitness.getSensorsClient(this, GoogleSignIn.getAccountForExtension(this, fitnessOptions))
+//                .add(
+//                        new SensorRequest.Builder()
+//                                // for custom data sets.
+//                                .setDataType(DataType.AGGREGATE_DISTANCE_DELTA) // Can't be omitted.
+//                                .setSamplingRate(10, TimeUnit.SECONDS)
+//                                .build(),
+//                        listener
+//                )
+//                .addOnSuccessListener(unused ->
+//                        Log.i(TAG, "Listener registered!"))
+//                .addOnFailureListener(task ->
+//                        Log.e(TAG, "Listener not registered.", task.getCause()));
+//    }
 
 
 
-    public void removeSensorClientListener(){
+//    public void removeSensorClientListener(){
+//
+//        if(listener==null)return;
+//        Fitness.getSensorsClient(this, GoogleSignIn.getAccountForExtension(this, fitnessOptions))
+//                .remove(listener)
+//                .addOnSuccessListener(unused ->
+//                        Log.i(TAG, "Listener was removed!"))
+//                .addOnFailureListener(e ->
+//                        Log.i(TAG, "Listener was not removed."));
+//
+//    }
 
-        if(listener==null)return;
-        Fitness.getSensorsClient(this, GoogleSignIn.getAccountForExtension(this, fitnessOptions))
-                .remove(listener)
-                .addOnSuccessListener(unused ->
-                        Log.i(TAG, "Listener was removed!"))
-                .addOnFailureListener(e ->
-                        Log.i(TAG, "Listener was not removed."));
+    public void refresh(View view){
+
+        db.getLeaderBoardStats(challengeInfo.get("roomID"), this);
+
 
     }
-
-
 
     @RequiresApi(api = Build.VERSION_CODES.Q)
     @Override
@@ -180,7 +211,8 @@ public class DistanceChallengeActivity extends AppCompatActivity {
                 case GOOGLE_FIT_PERMISSIONS_REQUEST_CODE:
                     System.out.println(" Successfully granted permissions !");
                     recordingClientSub();
-                    startSensorClientListener();
+                    startDistanceChangeListener();
+                    db.getLeaderBoardStats(challengeInfo.get("roomID"), this);
 //                    Toast.makeText(HomeActivity.this, " Successfully granted permissions !",
 //                            Toast.LENGTH_SHORT).show();
                     break;
@@ -282,4 +314,29 @@ public class DistanceChallengeActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void statsTransfer(ArrayList<ChallengeStats> stats) {
+        participantModels.clear();
+
+        for(ChallengeStats challengeStats: stats){
+
+            participantModels.add(new ParticipantModel(challengeStats.getName(), challengeStats.getId(), challengeStats.getDistance(), ChallengeType.DISTANCE));
+
+        }
+
+        Collections.sort(participantModels, new Comparator<ParticipantModel>() {
+            @Override
+            public int compare(ParticipantModel o1, ParticipantModel o2) {
+                if(o1.getDistance() > o2.getDistance())return -1;
+                return 1;
+            }
+        });
+
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void updateUI(boolean isSuccess, Map<String, String> data) {
+        if(isSuccess)myDistanceTV.setText(data.get("distance"));
+    }
 }
