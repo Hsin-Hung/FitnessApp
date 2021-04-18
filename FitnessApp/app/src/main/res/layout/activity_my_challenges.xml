@@ -11,18 +11,24 @@
         android:id="@+id/my_chall_lv"
         android:layout_width="401dp"
         android:layout_height="646dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button3" />
+        app:layout_constraintTop_toBottomOf="@+id/button3"
+        app:layout_constraintVertical_bias="0.428" />
 
     <Button
         android:id="@+id/button3"
         android:layout_width="106dp"
         android:layout_height="41dp"
-        android:backgroundTint="@color/btn_color"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="32dp"
+        android:backgroundTint="@color/white"
         android:onClick="reload"
         android:text="@string/reload"
+        app:layout_constraintBottom_toTopOf="@+id/my_chall_lv"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

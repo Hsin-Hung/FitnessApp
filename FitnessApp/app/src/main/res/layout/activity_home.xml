@@ -8,40 +8,6 @@
     tools:context=".HomeActivity">
 
     <Button
-        android:id="@+id/create_chall_homebtn"
-        android:layout_width="160dp"
-        android:layout_height="160dp"
-        android:layout_marginTop="70dp"
-        android:background="@drawable/createchal"
-        android:onClick="createChallenge"
-        app:layout_constraintBottom_toTopOf="@+id/join_chall_homebtn"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/join_chall_homebtn"
-        android:layout_width="160dp"
-        android:layout_height="160dp"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/joinchal"
-        android:onClick="joinChallenge"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/create_chall_homebtn" />
-
-    <Button
-        android:id="@+id/your_chall_btn"
-        android:layout_width="160dp"
-        android:layout_height="160dp"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/yourchal"
-        android:onClick="myChallenges"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/join_chall_homebtn" />
-
-    <Button
         android:id="@+id/button"
         android:layout_width="89dp"
         android:layout_height="43dp"
@@ -52,23 +18,69 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/button10"
-        android:layout_width="172dp"
-        android:layout_height="64dp"
-        android:onClick="revoke"
-        android:text="revoke(for testing)"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical">
 
-    <Button
-        android:id="@+id/button11"
-        android:layout_width="224dp"
-        android:layout_height="40dp"
-        android:onClick="checkPermission"
-        android:text="check Permission"
-        app:layout_constraintBottom_toTopOf="@+id/button10"
-        app:layout_constraintStart_toStartOf="parent" />
+        <Button
+            android:id="@+id/create_chall_homebtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/chalbtn2"
+            android:onClick="createChallenge"
+            android:text="@string/createYourChallenge"
+            android:textAlignment="center"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/join_chall_homebtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/chalbtn2"
+            android:onClick="joinChallenge"
+            android:text="@string/joinChallenge"
+            android:textAlignment="center"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/your_chall_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/chalbtn2"
+            android:onClick="myChallenges"
+            android:text="@string/myChallenges"
+            android:textAlignment="center"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/button10"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="revoke"
+                android:text="revoke(for testing)" />
+
+            <Button
+                android:id="@+id/button11"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="checkPermission"
+                android:text="check Permission" />
+        </LinearLayout>
+    </LinearLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

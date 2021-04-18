@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".SettingsActivity"
+    android:background="@drawable/loginbackground"
     android:padding="10dp"
     android:orientation="vertical">
 
@@ -35,16 +36,17 @@
         android:hint="Weight (kg)"
         android:inputType="numberDecimal" />
 
-    <androidx.appcompat.widget.SwitchCompat
+    <!-- <androidx.appcompat.widget.SwitchCompat
         android:layout_width="match_parent"
         android:text="Change Color"
         android:id="@+id/color_switch"
-        android:layout_height="50dp" />
+        android:layout_height="50dp" /> -->
 
     <Button
         android:id="@+id/save_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/descbtn2"
         android:text="@string/save" />
 
 </LinearLayout>

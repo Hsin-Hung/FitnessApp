@@ -20,7 +20,7 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
-        color_switch = (SwitchCompat) findViewById(R.id.color_switch);
+       // color_switch = (SwitchCompat) findViewById(R.id.color_switch);
         save_btn = (Button)findViewById(R.id.save_btn);
         height_edt = (EditText) findViewById(R.id.height_edt);
         weight_edt = (EditText) findViewById(R.id.weight_edt);
@@ -31,8 +31,8 @@ public class SettingsActivity extends AppCompatActivity {
         SharedPreferences preferences = getSharedPreferences("PREFS", MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
 
-        colorState = preferences.getBoolean("color", false);
-        color_switch.setChecked(colorState);
+        //colorState = preferences.getBoolean("color", false);
+        //color_switch.setChecked(colorState);
 
         height_edt.setText(preferences.getString("height",null));
         weight_edt.setText(preferences.getString("weight",null));
@@ -41,12 +41,12 @@ public class SettingsActivity extends AppCompatActivity {
 
 
 
-        color_switch.setOnClickListener(v -> {
-            colorState = !colorState;
-            color_switch.setChecked(colorState);
-            editor.putBoolean("color", colorState);
-            editor.apply();
-        });
+        //color_switch.setOnClickListener(v -> {
+        //    colorState = !colorState;
+        //    color_switch.setChecked(colorState);
+        //    editor.putBoolean("color", colorState);
+        //    editor.apply();
+        //});
 
         save_btn.setOnClickListener(v -> {
             editor.putString("height", height_edt.getText().toString());
