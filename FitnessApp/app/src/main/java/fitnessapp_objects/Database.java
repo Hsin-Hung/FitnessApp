@@ -1,9 +1,11 @@
 package fitnessapp_objects;
 
+import android.content.Context;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.work.WorkManager;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -21,8 +23,8 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.Transaction;
 import com.google.firebase.firestore.WriteBatch;
-import com.google.firebase.firestore.auth.User;
 
 import java.util.*;
 
@@ -122,6 +124,10 @@ public class Database {
         // add the new challenge room data to firestore first
         room.setId(challengeRef.getId());
         batch.set(challengeRef, room);
+
+        DocumentReference dataRef = db.collection("challenges").document(challengeRef.getId()).collection("stats").document(user.getUid());
+
+        batch.set(dataRef, new ChallengeStats());
 
         DocumentReference userAccountRef = db.collection("users").document(user.getUid());
 
@@ -249,7 +255,7 @@ public class Database {
     public boolean getPendingChallengeRooms(OnRoomGetCompletionHandler handler){
 
         db.collection("challenges")
-                .whereEqualTo("started", false)
+                .whereEqualTo("started", true)
                 .limit(NUM_RANDOM)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -292,6 +298,10 @@ public class Database {
 
         // add the new challenge room data to firestore first
         batch.update(challengeRef, "participants", FieldValue.arrayUnion(participant));
+
+        DocumentReference userRef = db.collection("challenges").document(roomID).collection("stats").document(user.getUid());
+
+        batch.set(userRef, new ChallengeStats());
 
         DocumentReference userAccountRef = db.collection("users").document(user.getUid());
 
@@ -390,11 +400,14 @@ public class Database {
 
         WriteBatch batch = db.batch();
 
-
         DocumentReference challengeRef = db.collection("challenges").document(roomID);
 
         // add the new challenge room data to firestore first
         batch.update(challengeRef, "participants", FieldValue.arrayRemove(new ParticipantModel(account.getName(),user.getUid())));
+
+        DocumentReference dataRef = db.collection("challenges").document(roomID).collection("stats").document(user.getUid());
+
+        batch.delete(dataRef);
 
         DocumentReference userAccountRef = db.collection("users").document(user.getUid());
 
@@ -443,6 +456,63 @@ public class Database {
         if(coinChangeListener!=null)
         coinChangeListener.remove();
 
+    }
+
+    public boolean updateChallengeStats(String roomID, float newStats){
+
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
+
+        final DocumentReference challengeRef = db.collection("challenges").document(roomID);
+        final DocumentReference challengeStatsRef = db.collection("challenges").document(roomID).collection("stats").document(user.getUid());
+
+        db.runTransaction(new Transaction.Function<Void>() {
+            @Override
+            public Void apply(Transaction transaction) throws FirebaseFirestoreException {
+                DocumentSnapshot snapshot = transaction.get(challengeRef);
+
+                // Note: this could be done without a transaction
+                //       by updating the population using FieldValue.increment()
+                boolean started = snapshot.getBoolean("started");
+
+                if(started){
+                    transaction.update(challengeStatsRef, "distance", newStats);
+                }
+
+                // Success
+                return null;
+            }
+        }).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Log.d(TAG, "Transaction success!");
+            }
+        })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Transaction failure.", e);
+                    }
+                });
+
+        return true;
+    }
+
+    public boolean endChallenge(String roomID, Context context){
+
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
+
+        db.collection("challenges").document(roomID).update("started", false)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Log.w(TAG, "Transaction success! End transaction !");
+                WorkManager.getInstance(context).cancelAllWorkByTag(roomID);
+            }
+        });
+
+        return true;
     }
 
 }

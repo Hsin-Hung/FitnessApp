@@ -33,7 +33,7 @@ public class ChallengeRoom {
         this.endDate = endDate;
         this.isBet = isBet;
         this.betAmount = betAmount;
-        this.started = false;
+        this.started = true;
         participants = new ArrayList<>();
 
     }
@@ -116,8 +116,8 @@ public class ChallengeRoom {
 
     public void addParticipant(Participant participant){
         participants.add(participant);
-    }
 
+    }
 
     @Exclude
     /**

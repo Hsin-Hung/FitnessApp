@@ -47,7 +47,7 @@ public class ChallengeLobbyActivity extends AppCompatActivity implements Databas
     ArrayList<ParticipantModel> participantModelArrayList;
     ParticipantGVAdapter adapter;
     String roomID;
-    Timestamp endDate;
+    long endDate;
     HashMap<String,String> challengeInfo;
     Database db;
     @RequiresApi(api = Build.VERSION_CODES.Q)
@@ -64,6 +64,7 @@ public class ChallengeLobbyActivity extends AppCompatActivity implements Databas
         adapter = new ParticipantGVAdapter(this, participantModelArrayList);
         participants_view.setAdapter(adapter);
         challengeInfo = (HashMap<String,String>) getIntent().getSerializableExtra("challengeInfo");
+        endDate = getIntent().getLongExtra("endDate", 0);
 
         roomNameTV.setText(challengeInfo.get("name"));
 
@@ -100,6 +101,7 @@ public class ChallengeLobbyActivity extends AppCompatActivity implements Databas
 
         Intent intent = new Intent(this, DistanceChallengeActivity.class);
         intent.putExtra("challengeInfo", challengeInfo);
+        intent.putExtra("endDate",endDate);
         startActivity(intent);
 
     }

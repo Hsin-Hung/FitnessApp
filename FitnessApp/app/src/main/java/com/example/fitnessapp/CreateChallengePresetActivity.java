@@ -207,6 +207,7 @@ public class CreateChallengePresetActivity extends AppCompatActivity implements 
             System.out.println("Successfully do all challenge room updates on firstore");
             Intent intent = new Intent(this, ChallengeLobbyActivity.class);
             room.setId(data.get("roomID"));
+            intent.putExtra("endDate", room.getEndDate().toDate().getTime());
             intent.putExtra("challengeInfo", room.getFirestoreChallengeRoomMap());
             startActivity(intent);
         }

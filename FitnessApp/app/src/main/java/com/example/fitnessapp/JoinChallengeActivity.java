@@ -101,6 +101,7 @@ public class JoinChallengeActivity extends AppCompatActivity implements Database
         if(isSuccess){
 
             Intent intent = new Intent(this, ChallengeLobbyActivity.class);
+            intent.putExtra("endDate",pickedChallengeRoom.getEndDate().toDate().getTime());
             intent.putExtra("challengeInfo", pickedChallengeRoom.getChallengeInfoMap());
             startActivity(intent);
 

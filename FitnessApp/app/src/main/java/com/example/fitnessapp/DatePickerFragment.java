@@ -12,6 +12,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
 
+import com.google.android.gms.common.util.DataUtils;
+
 import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 
@@ -44,6 +46,8 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
         // Create a new instance of DatePickerDialog and return it
         DatePickerDialog dialog = new DatePickerDialog(getActivity(), this, year, month, day);
         dialog.getDatePicker().setMinDate(c.getTimeInMillis());
+        c.add(Calendar.YEAR,1);
+        dialog.getDatePicker().setMaxDate(c.getTimeInMillis());
         return dialog;
     }
 
