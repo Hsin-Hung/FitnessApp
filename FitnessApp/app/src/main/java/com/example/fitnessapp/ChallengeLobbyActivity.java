@@ -97,9 +97,22 @@ public class ChallengeLobbyActivity extends AppCompatActivity implements Databas
 
     }
 
-    public void viewStats(View view){
+    public void beginChallenge(View view){
+        Intent intent;
+        System.out.println(challengeInfo.get("type"));
+        switch(challengeInfo.get("type")){
 
-        Intent intent = new Intent(this, DistanceChallengeActivity.class);
+            case "DISTANCE":
+                intent = new Intent(this, DistanceChallengeActivity.class);
+                break;
+            case "WEIGHTLOSS":
+                intent = new Intent(this, WeightLossChallengeInitActivity.class);
+                break;
+            default:
+                System.out.println("No such challenge !");
+                return;
+
+        }
         intent.putExtra("challengeInfo", challengeInfo);
         intent.putExtra("endDate",endDate);
         startActivity(intent);

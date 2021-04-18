@@ -165,7 +165,7 @@ public class Database {
         UserAccount account = UserAccount.getInstance();
 
         challengeRoomListener = db.collection("challenges")
-                .whereArrayContains("participants", new ParticipantModel(account.getName(),user.getUid()))
+                .whereArrayContains("participants", new Participant(account.getName(),user.getUid()))
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot snapshots, @Nullable FirebaseFirestoreException e) {

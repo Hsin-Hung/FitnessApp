@@ -21,7 +21,7 @@ public class ParticipantModel{
 
     }
 
-    public ParticipantModel(String name, String id, float distance, float weight , ChallengeType type){
+    public ParticipantModel(String name, String id, ChallengeType type, float weight ){
         this(name, id);
         this.weight = weight;
         this.type = type;

@@ -4,6 +4,81 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background_color"
     tools:context=".WeightLossChallengeInitActivity">
+
+    <ImageView
+        android:id="@+id/weight_img"
+        android:layout_width="320dp"
+        android:layout_height="344dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.494"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <Button
+        android:id="@+id/button13"
+        android:layout_width="191dp"
+        android:layout_height="50dp"
+        android:backgroundTint="@color/btn_color"
+        android:onClick="takePhoto"
+        android:text="@string/takePhoto"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/weight_img" />
+
+    <TextView
+        android:id="@+id/textView19"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/weightPresetInstr1"
+        android:textColor="#FF0000"
+        app:layout_constraintBottom_toTopOf="@+id/textView20"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView20"
+        android:layout_width="350dp"
+        android:layout_height="41dp"
+        android:text="@string/weightPresetInstr2"
+        android:textColor="#FF0000"
+        app:layout_constraintBottom_toTopOf="@+id/weight_img"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:layout_width="366dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="3"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button13">
+
+        <EditText
+            android:id="@+id/enter_weight_et"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:ems="10"
+            android:hint="@string/enterWeightHint"
+            android:inputType="numberDecimal" />
+
+        <Button
+            android:id="@+id/submit_weight_btn"
+            android:layout_width="111dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:backgroundTint="@color/btn_color"
+            android:onClick="submit"
+            android:text="@string/submit" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
