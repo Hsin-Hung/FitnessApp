@@ -45,6 +45,7 @@
     <string name="betAmountInfo">下注金额</string>
     <string name="beginChallenge">开始挑战</string>
     <string name="settings">设置</string>
+    <string name="searchChallenges">搜索挑战</string>
     <string name="menu">菜单</string>
     <string name="distance">我的距離:</string>
     <string-array name="challenge_types">

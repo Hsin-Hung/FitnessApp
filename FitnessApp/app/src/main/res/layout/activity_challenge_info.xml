@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_color"
+    android:background="@drawable/background2"
     tools:context=".ChallengeInfoActivity">
 
     <LinearLayout
@@ -19,23 +19,48 @@
         app:layout_constraintVertical_bias="0.0">
 
         <TextView
+            android:id="@+id/textView17"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="30dp"
+            android:gravity="center"
+            android:text="@string/challengeInfo"
+            android:textColor="#FFFFFF"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/imageView7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_marginTop="15dp"
+            app:srcCompat="@drawable/line2" />
+
+        <TextView
             android:id="@+id/textView8"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center"
+            android:background="@drawable/descbtn1"
             android:text="@string/challengeTypeInfo"
-            android:textColor="#000000"
-            android:textSize="24sp"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:layout_marginTop="25dp"
             android:textStyle="bold" />
 
         <TextView
             android:id="@+id/chall_type_info_tv"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center"
-            android:textColor="#EA0909"
+            android:background="@drawable/descbtn2"
+            android:textColor="#000000"
+            android:layout_marginTop="5dp"
             android:textSize="18sp" />
 
         <TextView
@@ -43,19 +68,23 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:background="@drawable/descbtn1"
             android:gravity="center"
             android:text="@string/challengeDescriptionInfo"
-            android:textColor="#000000"
-            android:textSize="24sp"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:layout_marginTop="16dp"
             android:textStyle="bold" />
 
         <TextView
             android:id="@+id/chall_descrp_info_tv"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@drawable/descbtn2"
             android:layout_gravity="center"
             android:gravity="center"
-            android:textColor="#EA0909"
+            android:textColor="#000000"
+            android:layout_marginTop="5dp"
             android:textSize="18sp" />
 
         <TextView
@@ -65,17 +94,21 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:text="@string/challengeEndDateInfo"
-            android:textColor="#000000"
-            android:textSize="24sp"
+            android:background="@drawable/descbtn1"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:layout_marginTop="16dp"
             android:textStyle="bold" />
 
         <TextView
             android:id="@+id/end_date_info_tv"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center"
-            android:textColor="#EA0909"
+            android:textColor="#000000"
+            android:background="@drawable/descbtn2"
+            android:layout_marginTop="5dp"
             android:textSize="18sp" />
 
         <TextView
@@ -85,25 +118,30 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:text="@string/betAmountInfo"
-            android:textColor="#000000"
-            android:textSize="24sp"
+            android:background="@drawable/descbtn1"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:layout_marginTop="16dp"
             android:textStyle="bold" />
 
         <TextView
             android:id="@+id/bet_amount_info_tv"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:background="@drawable/descbtn2"
             android:gravity="center"
-            android:textColor="#EA0909"
+            android:textColor="#000000"
+            android:layout_marginTop="5dp"
             android:textSize="18sp" />
 
         <Button
             android:id="@+id/button8"
-            android:layout_width="239dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:backgroundTint="@color/btn_color"
+            android:background= "@drawable/button1"
+            android:layout_marginTop="20dp"
             android:onClick="back"
             android:text="@string/back" />
     </LinearLayout>
