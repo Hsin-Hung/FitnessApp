@@ -76,7 +76,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:backgroundTint="@color/background_color"
+            android:background="@drawable/descbtn2"
             android:onClick="pay"
             android:text="@string/pay" />
 
@@ -84,9 +84,10 @@
             android:id="@+id/textView10"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:text="use stripe's test credit card: 4242 4242 4242 4242 with some future date and random cvs and postal code"
             android:textColor="#FF0000"
-            android:textSize="24sp" />
+            android:textSize="16sp" />
 
         <!--  ...  -->
 

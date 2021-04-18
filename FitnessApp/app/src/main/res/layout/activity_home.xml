@@ -26,9 +26,9 @@
 
         <Button
             android:id="@+id/create_chall_homebtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
+            android:layout_width="141dp"
+            android:layout_height="135dp"
+            android:layout_marginTop="40dp"
             android:background="@drawable/chalbtn2"
             android:onClick="createChallenge"
             android:text="@string/createYourChallenge"
@@ -38,8 +38,8 @@
 
         <Button
             android:id="@+id/join_chall_homebtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="141dp"
+            android:layout_height="135dp"
             android:layout_marginTop="10dp"
             android:background="@drawable/chalbtn2"
             android:onClick="joinChallenge"
@@ -50,8 +50,8 @@
 
         <Button
             android:id="@+id/your_chall_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="141dp"
+            android:layout_height="135dp"
             android:layout_marginTop="10dp"
             android:background="@drawable/chalbtn2"
             android:onClick="myChallenges"

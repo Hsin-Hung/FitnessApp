@@ -46,9 +46,10 @@
             android:layout_width="wrap_content"
             android:layout_marginTop="20dp"
             android:layout_height="wrap_content"
-            android:horizontalSpacing="6dp"
             android:numColumns="3"
-            android:verticalSpacing="6dp" >
+            android:columnWidth="50dp"
+            android:verticalSpacing="1dp"
+            android:horizontalSpacing="1dp">
 
         </GridView>
 

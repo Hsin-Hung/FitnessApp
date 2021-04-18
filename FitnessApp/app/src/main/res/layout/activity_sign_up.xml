@@ -7,102 +7,74 @@
     android:background="@drawable/loginbackground"
     tools:context=".SignUpActivity">
 
-    <EditText
-        android:id="@+id/email_et"
-        android:layout_width="300dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/email"
-        android:inputType="textEmailAddress"
-        android:ems="10"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/username_et" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical">
 
-    <EditText
-        android:id="@+id/username_et"
-        android:layout_width="300dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="204dp"
-        android:inputType="textEmailAddress"
-        android:background="@drawable/name"
-        android:ems="10"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <ImageView
+            android:id="@+id/clock_logo_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            app:srcCompat="@drawable/clock" />
 
-    <EditText
-        android:id="@+id/pass_et"
-        android:layout_width="300dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/password1"
-        android:inputType="textPassword"
-        android:ems="10"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/email_et" />
+        <EditText
+            android:id="@+id/username_et"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/name"
+            android:layout_marginTop="10dp"
+            android:ems="10"
+            android:inputType="textEmailAddress" />
 
-    <EditText
-        android:id="@+id/confirm_pass_et"
-        android:layout_width="300dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="10dp"
-        android:inputType="textPassword"
-        android:background="@drawable/password2"
-        android:ems="10"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/pass_et" />
+        <EditText
+            android:id="@+id/email_et"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/email"
+            android:ems="10"
+            android:inputType="textEmailAddress" />
 
-    <Button
-        android:id="@+id/signup_btn"
-        android:layout_width="250dp"
-        android:layout_height="45dp"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/signup1"
-        android:onClick="signUp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/confirm_pass_et" />
+        <EditText
+            android:id="@+id/pass_et"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/password1"
+            android:ems="10"
+            android:inputType="textPassword" />
 
-    <TextView
-        android:id="@+id/error_tv"
-        android:layout_width="344dp"
-        android:layout_height="21dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="70dp"
-        android:textColor="#D11717"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        <EditText
+            android:id="@+id/confirm_pass_et"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/password2"
+            android:ems="10"
+            android:inputType="textPassword" />
 
-    <ImageView
-        android:id="@+id/clock_logo_img"
-        android:layout_width="90dp"
-        android:layout_height="90dp"
-        android:layout_marginTop="90dp"
-        android:layout_marginBottom="30dp"
-        app:layout_constraintBottom_toTopOf="@+id/username_et"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@drawable/clock" />
+        <Button
+            android:id="@+id/signup_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/login"
+            android:onClick="signUp"
+            android:text="@string/sign_up" />
 
-    <ImageView
-        android:id="@+id/gconnect_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/signup_btn"
-        app:srcCompat="@drawable/gconnect" />
+        <TextView
+            android:id="@+id/error_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:textColor="#D11717" />
+    </LinearLayout>
 
-     <!-- <com.google.android.gms.common.SignInButton
+
+    <!-- <com.google.android.gms.common.SignInButton
         android:id="@+id/sign_in_button"
         android:layout_width="250dp"
         android:layout_height="45dp"
