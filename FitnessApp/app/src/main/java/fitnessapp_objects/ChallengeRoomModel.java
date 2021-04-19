@@ -16,9 +16,10 @@ public class ChallengeRoomModel {
     int betAmount;
     Timestamp endDate;
     String password;
+    boolean started;
 
 
-    public ChallengeRoomModel(String id, String description, String name, ChallengeType type, boolean isBet, int betAmount, Timestamp endDate, String password) {
+    public ChallengeRoomModel(String id, String description, String name, ChallengeType type, boolean isBet, int betAmount, Timestamp endDate, String password, boolean started) {
         this.id = id;
         this.description = description;
         this.name = name;
@@ -27,6 +28,7 @@ public class ChallengeRoomModel {
         this.betAmount = betAmount;
         this.endDate = endDate;
         this.password = password;
+        this.started = started;
     }
 
     public String getId() {
@@ -93,6 +95,14 @@ public class ChallengeRoomModel {
         this.password = password;
     }
 
+    public boolean isStarted() {
+        return started;
+    }
+
+    public void setStarted(boolean started) {
+        this.started = started;
+    }
+
     public HashMap<String, String> getChallengeInfoMap(){
 
         HashMap<String, String> map = new HashMap<>();
@@ -103,6 +113,7 @@ public class ChallengeRoomModel {
         map.put("type", type.toString());
         map.put("betAmount", String.valueOf(betAmount));
         map.put("endDate", endDate.toDate().toString());
+        map.put("started", Boolean.toString(started));
 
         return map;
     }

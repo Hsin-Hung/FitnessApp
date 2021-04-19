@@ -1,7 +1,6 @@
 package fitnessapp_objects;
 
 import android.content.Context;
-import android.net.Uri;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -67,6 +66,17 @@ public class Database {
     }
     public interface  OnLeaderBoardStatsGetCompletionHandler{
         void statsTransfer(ArrayList<ChallengeStats> stats);
+    }
+
+    public interface OnBooleanPromptHandler {
+
+        void passBoolean(boolean check);
+
+    }
+
+    public interface OnPlaceBetHandler{
+
+        void placeBet(boolean place);
     }
 
 
@@ -274,6 +284,7 @@ public class Database {
                                 Log.d(TAG, document.getId() + " => " + document.getData());
 
                                 ChallengeRoom c = document.toObject(ChallengeRoom.class);
+
                                challengeRooms.put(document.getId(), c);
 
                             }
@@ -331,6 +342,7 @@ public class Database {
 
         db.collection("challenges")
                 .whereEqualTo(field, targetValue)
+                .whereEqualTo("started", true)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -691,6 +703,53 @@ public class Database {
         db.collection("challenges").document(roomID).collection("stats").document(user.getUid())
                 .update("weightPrompt", true);
 
+        return true;
+    }
+
+    public boolean checkWeightPrompt(String roomID, OnBooleanPromptHandler handler){
+
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
+
+        db.collection("challenges").document(roomID).collection("stats").document(user.getUid())
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+
+                            Boolean weightPrompt = task.getResult().getBoolean("weightPrompt");
+                            handler.passBoolean(weightPrompt);
+
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+
+        return true;
+    }
+
+    public boolean checkHasBet(String roomID, OnPlaceBetHandler handler){
+
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
+
+        db.collection("challenges").document(roomID).collection("stats").document(user.getUid())
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+
+                            Boolean hasBet = task.getResult().getBoolean("hasBet");
+                            handler.placeBet(hasBet);
+
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
         return true;
     }
 

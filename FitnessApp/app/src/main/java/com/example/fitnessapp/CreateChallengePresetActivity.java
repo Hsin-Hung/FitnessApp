@@ -37,22 +37,24 @@ import fitnessapp_objects.UserAccount;
 
 public class CreateChallengePresetActivity extends AppCompatActivity implements OnItemSelectedListener, OnDatePickListener, Database.UIUpdateCompletionHandler {
 
-    EditText roomNameET, challDescrET, betAmountET, passwordET;
-    Button pickDateBTN;
-    Spinner challTypeSpinner;
-    Switch betSwitch;
-    DialogFragment dialogFragment;
-    TextView errorTV;
+    private final int PASSWORD_MIN_LEN = 6;
 
-    Date endDate;
-    ChallengeType challTypePicked;
-    boolean isBet;
-    final int PASSWORD_MIN_LEN = 6;
-    String createdRoomID;
-    ChallengeRoom room;
-    Database db;
+    private EditText roomNameET, challDescrET, betAmountET, passwordET;
+    private Button pickDateBTN;
+    private Spinner challTypeSpinner;
+    private Switch betSwitch;
+    private TextView errorTV;
+
+    private DialogFragment dialogFragment;
+
+    private Date endDate;
+    private ChallengeType challTypePicked;
+    private boolean isBet;
+    private String createdRoomID;
+    private ChallengeRoom room;
+
+    private Database db;
     private FirebaseAuth mAuth;
-    GoogleSignInOptionsExtension fitnessOptions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +71,7 @@ public class CreateChallengePresetActivity extends AppCompatActivity implements 
         pickDateBTN = (Button) findViewById(R.id.pick_date_btn);
         errorTV = (TextView) findViewById(R.id.create_chall_error_tv);
 
+        // initialize some default values
         isBet = false;
         challTypePicked = ChallengeType.DISTANCE;
         betAmountET.setEnabled(false);
@@ -158,13 +161,7 @@ public class CreateChallengePresetActivity extends AppCompatActivity implements 
     }
 
     public void createChallenge(View view){
-
-        if(checkAllFieldValid()){
-
-            updateDatabase();
-
-        }
-
+        if(checkAllFieldValid()) updateDatabase();
     }
 
     public boolean updateDatabase(){
@@ -188,7 +185,7 @@ public class CreateChallengePresetActivity extends AppCompatActivity implements 
     public void updateUI(boolean isSuccess, Map<String,String> data) {
 
         if(isSuccess){
-            System.out.println("Successfully do all challenge room updates on firstore");
+            System.out.println("Successfully do all challenge room updates on firestore");
             Intent intent = new Intent(this, ChallengeLobbyActivity.class);
             room.setId(data.get("roomID"));
             intent.putExtra("endDate", room.getEndDate().toDate().getTime());

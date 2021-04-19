@@ -18,42 +18,46 @@ import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptionsExtension;
-import com.google.android.gms.fitness.FitnessOptions;
-import com.google.android.gms.fitness.data.DataType;
-import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
-import java.sql.Time;
+import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import fitnessapp_objects.ChallengeRoom;
-import fitnessapp_objects.ChallengeType;
 import fitnessapp_objects.Database;
-import fitnessapp_objects.GoogleFitAPI;
 import fitnessapp_objects.Participant;
 import fitnessapp_objects.ParticipantModel;
 import fitnessapp_objects.WorkManagerAPI;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
-public class ChallengeLobbyActivity extends AppCompatActivity implements Database.OnRoomChangeListener, Database.UIUpdateCompletionHandler{
+public class ChallengeLobbyActivity extends AppCompatActivity implements Database.OnRoomChangeListener, Database.UIUpdateCompletionHandler, Database.OnBooleanPromptHandler, Database.OnPlaceBetHandler {
 
+
+    private static final String BACKEND_URL = "http://10.0.2.2:5000/";
+    private OkHttpClient httpClient = new OkHttpClient();
     final int MY_PERMISSIONS_REQUEST_ACTIVITY = 2;
     TextView roomNameTV;
     GridView participants_view;
     ArrayList<ParticipantModel> participantModelArrayList;
     ParticipantGVAdapter adapter;
     String roomID;
+    String type;
+    boolean weightPrompt = true;
     long endDate;
-    boolean weightPrompt;
     HashMap<String,String> challengeInfo;
     Database db;
     WorkManagerAPI workManagerAPI;
+    int betAmount = 0;
+
     @RequiresApi(api = Build.VERSION_CODES.Q)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,8 +72,11 @@ public class ChallengeLobbyActivity extends AppCompatActivity implements Databas
         adapter = new ParticipantGVAdapter(this, participantModelArrayList);
         participants_view.setAdapter(adapter);
         challengeInfo = (HashMap<String,String>) getIntent().getSerializableExtra("challengeInfo");
+
+        betAmount = Integer.parseInt(challengeInfo.getOrDefault("betAmount","0"));
+        type = challengeInfo.get("type");
+
         endDate = getIntent().getLongExtra("endDate", 0);
-        weightPrompt = getIntent().getBooleanExtra("weightPrompt", true);
         roomNameTV.setText(challengeInfo.get("name"));
 
         roomID = challengeInfo.get("roomID");
@@ -107,11 +114,15 @@ public class ChallengeLobbyActivity extends AppCompatActivity implements Databas
         switch(challengeInfo.get("type")){
 
             case "DISTANCE":
+                if(betAmount>0){
+                  db.checkHasBet(roomID, this);
+                  return;
+                }
                 intent = new Intent(this, DistanceChallengeActivity.class);
                 break;
             case "WEIGHTLOSS":
-                intent = new Intent(this, WeightLossChallengeInitActivity.class);
-                break;
+                db.checkWeightPrompt(roomID, this);
+                return;
             default:
                 System.out.println("No such challenge !");
                 return;
@@ -123,18 +134,6 @@ public class ChallengeLobbyActivity extends AppCompatActivity implements Databas
 
     }
 
-    public void goToWeightPrompt(){
-
-
-
-    }
-
-    public void goToWeightMain(){
-
-
-
-    }
-
     public void challengeInfo(View view){
 
         Intent intent = new Intent(this, ChallengeInfoActivity.class);
@@ -142,7 +141,6 @@ public class ChallengeLobbyActivity extends AppCompatActivity implements Databas
         startActivity(intent);
 
     }
-
 
 
     public void quit(View view){
@@ -225,4 +223,118 @@ public class ChallengeLobbyActivity extends AppCompatActivity implements Databas
     }
 
 
+    public void goToWeightScreen() {
+        Intent intent;
+        if(weightPrompt){
+            intent = new Intent(this, WeightLossChallengeInitActivity.class);
+        }else{
+            intent = new Intent(this, WeightChallengeActivity.class);
+        }
+        intent.putExtra("challengeInfo", challengeInfo);
+        intent.putExtra("endDate",endDate);
+        startActivity(intent);
+
+    }
+
+    public void placeBet(boolean place){
+
+        if(place){
+            if(type.equals("DISTANCE")){
+                goToDistance();
+            }else{
+                goToWeightScreen();
+            }
+
+            return;
+        }
+
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
+
+        MediaType mediaType = MediaType.get("application/json; charset=utf-8");
+        String json = "{"
+                + "\"betAmount\":" + betAmount + ","
+                + "\"userID\":" + "\"" + user.getUid() + "\","
+                + "\"roomID\":" + "\"" + roomID + "\""
+                + "}";
+        System.out.println(json);
+        RequestBody body = RequestBody.create(json, mediaType);
+        Request request = new Request.Builder()
+                .url(BACKEND_URL + "place-bet")
+                .post(body)
+                .build();
+        httpClient.newCall(request)
+                .enqueue(new ChallengeLobbyActivity.PayCallback(this));
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    @Override
+    public void passBoolean(boolean weightPrompt) {
+
+
+                this.weightPrompt = weightPrompt;
+                if(betAmount>0){
+                    db.checkHasBet(roomID, this);
+                }else{
+                    goToWeightScreen();
+                }
+
+
+    }
+
+    /**
+     * PayCallback for the request to our backend server
+     */
+    private static final class PayCallback implements Callback {
+        @NonNull private final WeakReference<ChallengeLobbyActivity> activityRef;
+
+        PayCallback(@NonNull ChallengeLobbyActivity activity) {
+            activityRef = new WeakReference<>(activity);
+        }
+
+        @Override
+        public void onFailure(@NonNull Call call, @NonNull IOException e) {
+            final ChallengeLobbyActivity activity = activityRef.get();
+            if (activity == null) {
+                return;
+            }
+            activity.runOnUiThread(() ->
+                    Toast.makeText(
+                            activity, "Error: " + e.toString(), Toast.LENGTH_LONG
+                    ).show()
+            );
+        }
+
+        @Override
+        public void onResponse(@NonNull Call call, @NonNull final Response response)
+                throws IOException {
+            final ChallengeLobbyActivity activity = activityRef.get();
+            if (activity == null) {
+                return;
+            }
+
+            if (!response.isSuccessful()) {
+                activity.runOnUiThread(() ->
+                        Toast.makeText(
+                                activity, "Error: " + response.toString(), Toast.LENGTH_LONG
+                        ).show()
+                );
+            } else {
+                if(activity.type.equals("DISTANCE")){
+                    activity.goToDistance();
+                }else{
+                    activity.goToWeightScreen();
+                }
+
+            }
+        }
+    }
+
+    public void goToDistance(){
+
+        Intent intent = new Intent(this, DistanceChallengeActivity.class);
+        intent.putExtra("challengeInfo", challengeInfo);
+        intent.putExtra("endDate",endDate);
+        startActivity(intent);
+    }
 }

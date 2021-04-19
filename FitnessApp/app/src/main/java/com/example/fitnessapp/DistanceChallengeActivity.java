@@ -313,6 +313,9 @@ public class DistanceChallengeActivity extends AppCompatActivity implements Data
 
     @Override
     public void updateUI(boolean isSuccess, Map<String, String> data) {
-        if(isSuccess)myDistanceTV.setText(data.get("distance"));
+        if(isSuccess){
+            myDistanceTV.setText(data.get("distance"));
+            db.getLeaderBoardStats(challengeInfo.get("roomID"), DistanceChallengeActivity.this);
+        }
     }
 }

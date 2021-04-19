@@ -17,10 +17,10 @@ import fitnessapp_objects.Database;
 
 public class MyChallengesActivity extends AppCompatActivity implements Database.OnRoomGetCompletionHandler, AdapterView.OnItemClickListener {
 
-    ListView myChallengesLV;
-    ArrayList<ChallengeRoomModel> challengeRoomModelArrayList;
-    ChallengeRoomLVAdapter adapter;
-    Database db;
+    private ListView myChallengesLV;
+    private ArrayList<ChallengeRoomModel> challengeRoomModelArrayList;
+    private ChallengeRoomLVAdapter adapter;
+    private Database db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +53,7 @@ public class MyChallengesActivity extends AppCompatActivity implements Database.
 
             ChallengeRoom room = entry.getValue();
 
-            ChallengeRoomModel model = new ChallengeRoomModel(entry.getKey(), room.getDescription(), room.getName(),room.getType(),room.isBet(), room.getBetAmount(),room.getEndDate(), room.getPassword());
+            ChallengeRoomModel model = new ChallengeRoomModel(entry.getKey(), room.getDescription(), room.getName(),room.getType(),room.isBet(), room.getBetAmount(),room.getEndDate(), room.getPassword(), room.isStarted());
             challengeRoomModelArrayList.add(model);
 
         }

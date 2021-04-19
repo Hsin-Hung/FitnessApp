@@ -20,12 +20,12 @@ import fitnessapp_objects.Database;
 public class JoinChallengeActivity extends AppCompatActivity implements Database.OnRoomGetCompletionHandler, AdapterView.OnItemClickListener,
         PasswordDialogFragment.PasswordDialogListener, Database.UIUpdateCompletionHandler, SearchView.OnQueryTextListener {
 
-    SearchView challengeSV;
-    ListView challengesLV;
-    ArrayList<ChallengeRoomModel> challengeRoomModelArrayList;
-    ChallengeRoomLVAdapter adapter;
-    Database db;
-    ChallengeRoomModel pickedChallengeRoom;
+    private SearchView challengeSV;
+    private ListView challengesLV;
+    private ArrayList<ChallengeRoomModel> challengeRoomModelArrayList;
+    private ChallengeRoomLVAdapter adapter;
+    private Database db;
+    private ChallengeRoomModel pickedChallengeRoom;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +65,7 @@ public class JoinChallengeActivity extends AppCompatActivity implements Database
             ChallengeRoom room = entry.getValue();
 
             ChallengeRoomModel model = new ChallengeRoomModel(entry.getKey(), room.getDescription(), room.getName(),room.getType(),
-                    room.isBet(), room.getBetAmount(),room.getEndDate(), room.getPassword());
+                    room.isBet(), room.getBetAmount(),room.getEndDate(), room.getPassword(), room.isStarted());
             challengeRoomModelArrayList.add(model);
 
         }

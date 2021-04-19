@@ -106,8 +106,7 @@ public class WeightChallengeActivity extends AppCompatActivity implements Databa
                     fitnessOptions);
         } else {
             //permission granted
-            recordingClientSub();
-            startWeightChangeListener();
+            initTask();
             db.getLeaderBoardStats(challengeInfo.get("roomID"), this);
         }
     }
@@ -145,9 +144,7 @@ public class WeightChallengeActivity extends AppCompatActivity implements Databa
 
                 case GOOGLE_FIT_PERMISSIONS_REQUEST_CODE:
                     System.out.println(" Successfully granted permissions !");
-                    recordingClientSub();
-                    startWeightChangeListener();
-                    db.getLeaderBoardStats(challengeInfo.get("roomID"), this);
+                    initTask();
 //                    Toast.makeText(HomeActivity.this, " Successfully granted permissions !",
 //                            Toast.LENGTH_SHORT).show();
                     break;

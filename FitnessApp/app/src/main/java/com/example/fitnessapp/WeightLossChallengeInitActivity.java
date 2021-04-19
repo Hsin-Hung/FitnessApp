@@ -172,9 +172,6 @@ public class WeightLossChallengeInitActivity extends AppCompatActivity implement
             FirebaseUser user = mAuth.getCurrentUser();
             String imgPath = data.get("imgPath"), weight = data.get("weight");
 
-
-// Request a PaymentIntent from your server and store its client secret in paymentIntentClientSecret
-            // Create a PaymentIntent by calling the sample server's /create-payment-intent endpoint.
             MediaType mediaType = MediaType.get("application/json; charset=utf-8");
 
             String json = "{"

@@ -48,7 +48,7 @@ public class BackendAPI {
 
     }
 
-    public boolean placeBet(int amount){
+    public boolean placeBet(String roomID, int amount){
 
 //        FirebaseAuth mAuth = FirebaseAuth.getInstance();
 //        FirebaseUser user = mAuth.getCurrentUser();
@@ -57,6 +57,7 @@ public class BackendAPI {
 //        String json = "{"
 //                + "\"betAmount\":" + amount + ","
 //                + "\"userID\":" + "\"" + user.getUid() + "\""
+//                + "\"roomID\":" + "\"" + roomID + "\""
 //                + "}";
 //        System.out.println(json);
 //        RequestBody body = RequestBody.create(json, mediaType);
