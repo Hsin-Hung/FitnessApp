@@ -65,6 +65,7 @@ public class WeightChallengeActivity extends AppCompatActivity implements Databa
     LeaderBoardParticipantLVAdapter adapter;
     Button refreshBTN;
     Database db;
+    Button periodBTN, endBTN;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,6 +110,29 @@ public class WeightChallengeActivity extends AppCompatActivity implements Databa
             initTask();
             db.getLeaderBoardStats(challengeInfo.get("roomID"), this);
         }
+
+
+
+
+
+
+
+        periodBTN = (Button) findViewById(R.id.period_btn);
+        endBTN = (Button) findViewById(R.id.end_btn);
+
+        periodBTN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startPeriodicDistanceUpdateTask();
+            }
+        });
+
+        endBTN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startPeriodicDistanceUpdateTask();
+            }
+        });
     }
 
     @Override
@@ -122,8 +146,8 @@ public class WeightChallengeActivity extends AppCompatActivity implements Databa
         recordingClientSub();
         startWeightChangeListener();
         db.getLeaderBoardStats(challengeInfo.get("roomID"), this);
-        startPeriodicDistanceUpdateTask();
-        startEndDateNotifyTask();
+//        startPeriodicDistanceUpdateTask();
+//        startEndDateNotifyTask();
         WorkManagerAPI.getInstance().viewAllWork(WorkManager.getInstance(this), challengeInfo.get("roomID"));
     }
 
@@ -205,8 +229,25 @@ public class WeightChallengeActivity extends AppCompatActivity implements Databa
                 .build();
 
 
-        PeriodicWorkRequest challPeriodicWorkRequest =
-                new PeriodicWorkRequest.Builder(WeightChallengePeriodicWork.class,7, TimeUnit.DAYS)
+//        PeriodicWorkRequest challPeriodicWorkRequest =
+//                new PeriodicWorkRequest.Builder(WeightChallengePeriodicWork.class,7, TimeUnit.DAYS)
+//                        .addTag(challengeInfo.get("roomID"))
+//                        .setConstraints(constraints)
+//                        .setBackoffCriteria(BackoffPolicy.LINEAR,
+//                                OneTimeWorkRequest.MIN_BACKOFF_MILLIS,
+//                                TimeUnit.MILLISECONDS)
+//                        .setInputData(new Data.Builder()
+//                                .putString("roomID", challengeInfo.get("roomID"))
+//                                .build())
+//                        .build();
+//
+//
+//        WorkManager
+//                .getInstance(this)
+//                .enqueueUniquePeriodicWork(challengeInfo.get("roomID")+"-periodic", ExistingPeriodicWorkPolicy.KEEP,challPeriodicWorkRequest);
+
+                OneTimeWorkRequest challPeriodicWorkRequest =
+                new OneTimeWorkRequest.Builder(WeightChallengePeriodicWork.class)
                         .addTag(challengeInfo.get("roomID"))
                         .setConstraints(constraints)
                         .setBackoffCriteria(BackoffPolicy.LINEAR,
@@ -220,7 +261,8 @@ public class WeightChallengeActivity extends AppCompatActivity implements Databa
 
         WorkManager
                 .getInstance(this)
-                .enqueueUniquePeriodicWork(challengeInfo.get("roomID")+"-periodic", ExistingPeriodicWorkPolicy.KEEP,challPeriodicWorkRequest);
+                .enqueueUniqueWork(challengeInfo.get("roomID")+"-periodic", ExistingWorkPolicy.KEEP,challPeriodicWorkRequest);
+
 
 
     }

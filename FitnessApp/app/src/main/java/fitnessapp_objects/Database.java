@@ -753,4 +753,27 @@ public class Database {
         return true;
     }
 
+    public boolean checkChallengeResult(String roomID, OnBooleanPromptHandler handler){
+
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
+
+        db.collection("challenges").document(roomID).get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+
+                            String winner = task.getResult().getString("winner");
+                            handler.passBoolean(winner.equals(user.getUid()));
+
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+
+        return true;
+    }
+
 }

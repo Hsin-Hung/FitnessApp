@@ -52,7 +52,7 @@ import okhttp3.Response;
 
 public class WeightLossChallengeInitActivity extends AppCompatActivity implements Database.UIUpdateCompletionHandler {
 
-    private static final String BACKEND_URL = "http://10.0.2.2:5000/";
+    private static final String BACKEND_URL = "https://fitnessapp501.herokuapp.com/";
     private OkHttpClient httpClient = new OkHttpClient();
     static final int REQUEST_IMAGE_CAPTURE = 1;
     ImageView weightImg, gestureImg;

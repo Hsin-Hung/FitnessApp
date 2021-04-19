@@ -9,6 +9,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 import fitnessapp_objects.ChallengeRoom;
@@ -65,10 +66,13 @@ public class MyChallengesActivity extends AppCompatActivity implements Database.
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
         ChallengeRoomModel challengeRoomModel = challengeRoomModelArrayList.get(position);
-
-        Intent intent = new Intent(this, ChallengeLobbyActivity.class);
+        Intent intent;
+        if(!challengeRoomModel.isStarted()){
+            intent = new Intent(this, ChallengeEndActivity.class);
+        }else{
+            intent = new Intent(this, ChallengeLobbyActivity.class);
+        }
         intent.putExtra("challengeInfo", challengeRoomModel.getChallengeInfoMap());
         startActivity(intent);
-
     }
 }

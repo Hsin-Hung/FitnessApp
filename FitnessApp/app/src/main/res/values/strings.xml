@@ -60,6 +60,8 @@
     <string name="submit">Submit</string>
     <string name="generate">Generate</string>
     <string name="exit">EXIT</string>
+    <string name="youWin">YOU WIN !</string>
+    <string name="youLose">YOU LOSE !</string>
     <string-array name="challenge_types">
         <item>Distance</item>
         <item>Weight Loss</item>

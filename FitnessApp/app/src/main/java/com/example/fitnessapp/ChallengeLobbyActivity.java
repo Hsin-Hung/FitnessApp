@@ -42,7 +42,7 @@ import okhttp3.Response;
 public class ChallengeLobbyActivity extends AppCompatActivity implements Database.OnRoomChangeListener, Database.UIUpdateCompletionHandler, Database.OnBooleanPromptHandler, Database.OnPlaceBetHandler {
 
 
-    private static final String BACKEND_URL = "http://10.0.2.2:5000/";
+    private static final String BACKEND_URL = "https://fitnessapp501.herokuapp.com/";
     private OkHttpClient httpClient = new OkHttpClient();
     final int MY_PERMISSIONS_REQUEST_ACTIVITY = 2;
     TextView roomNameTV;

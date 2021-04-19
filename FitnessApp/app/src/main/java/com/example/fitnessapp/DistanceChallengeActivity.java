@@ -71,6 +71,7 @@ public class DistanceChallengeActivity extends AppCompatActivity implements Data
     LeaderBoardParticipantLVAdapter adapter;
     OnDataPointListener listener;
     Database db;
+    Button periodBTN, endBTN;
 
     Button refreshBTN;
     @SuppressLint("LongLogTag")
@@ -120,6 +121,25 @@ public class DistanceChallengeActivity extends AppCompatActivity implements Data
 
 
 
+        ////////////////
+
+        periodBTN = (Button) findViewById(R.id.period_btn);
+        endBTN = (Button) findViewById(R.id.end_btn);
+
+        periodBTN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startPeriodicDistanceUpdateTask();
+            }
+        });
+
+        endBTN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startEndDateNotifyTask();
+            }
+        });
+
     }
 
     @Override
@@ -133,8 +153,8 @@ public class DistanceChallengeActivity extends AppCompatActivity implements Data
         recordingClientSub();
         startDistanceChangeListener();
         db.getLeaderBoardStats(challengeInfo.get("roomID"), this);
-        startPeriodicDistanceUpdateTask();
-        startEndDateNotifyTask();
+//        startPeriodicDistanceUpdateTask();
+//        startEndDateNotifyTask();
         WorkManagerAPI.getInstance().viewAllWork(WorkManager.getInstance(this), challengeInfo.get("roomID"));
     }
 
@@ -241,9 +261,27 @@ public class DistanceChallengeActivity extends AppCompatActivity implements Data
                 .setRequiredNetworkType(NetworkType.CONNECTED)
                 .build();
 
+//
+//        PeriodicWorkRequest challPeriodicWorkRequest =
+//                new PeriodicWorkRequest.Builder(DistanceChallengePeriodicWork.class,PeriodicWorkRequest.MIN_PERIODIC_INTERVAL_MILLIS, TimeUnit.MILLISECONDS)
+//                        .addTag(challengeInfo.get("roomID"))
+//                        .setConstraints(constraints)
+//                        .setBackoffCriteria(BackoffPolicy.LINEAR,
+//                                OneTimeWorkRequest.MIN_BACKOFF_MILLIS,
+//                                TimeUnit.MILLISECONDS)
+//                        .setInputData(new Data.Builder()
+//                                .putString("roomID", challengeInfo.get("roomID"))
+//                                .putLong("startDate", currentTime)
+//                                .build())
+//                        .build();
+//
+//
+//        WorkManager
+//                .getInstance(this)
+//                .enqueueUniquePeriodicWork(challengeInfo.get("roomID")+"-periodic", ExistingPeriodicWorkPolicy.KEEP,challPeriodicWorkRequest);
 
-        PeriodicWorkRequest challPeriodicWorkRequest =
-                new PeriodicWorkRequest.Builder(DistanceChallengePeriodicWork.class,PeriodicWorkRequest.MIN_PERIODIC_INTERVAL_MILLIS, TimeUnit.MILLISECONDS)
+        OneTimeWorkRequest challPeriodicWorkRequest =
+                new  OneTimeWorkRequest.Builder(DistanceChallengePeriodicWork.class)
                         .addTag(challengeInfo.get("roomID"))
                         .setConstraints(constraints)
                         .setBackoffCriteria(BackoffPolicy.LINEAR,
@@ -258,8 +296,7 @@ public class DistanceChallengeActivity extends AppCompatActivity implements Data
 
         WorkManager
                 .getInstance(this)
-                .enqueueUniquePeriodicWork(challengeInfo.get("roomID")+"-periodic", ExistingPeriodicWorkPolicy.KEEP,challPeriodicWorkRequest);
-
+                .enqueueUniqueWork(challengeInfo.get("roomID")+"-periodic", ExistingWorkPolicy.KEEP,challPeriodicWorkRequest);
 
     }
 
@@ -273,7 +310,7 @@ public class DistanceChallengeActivity extends AppCompatActivity implements Data
 
         OneTimeWorkRequest challEndDateWorkRequest =
                 new OneTimeWorkRequest.Builder(ChallengeEndDateWork.class)
-                        .setInitialDelay(endDate - currentTime, TimeUnit.MILLISECONDS)
+//                        .setInitialDelay(endDate - currentTime, TimeUnit.MILLISECONDS)
                         .addTag(challengeInfo.get("roomID"))
                         .setConstraints(constraints)
                         .setBackoffCriteria(BackoffPolicy.LINEAR,
