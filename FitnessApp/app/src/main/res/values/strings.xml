@@ -51,9 +51,11 @@
     <string name="leaderBoard">LeaderBoard</string>
     <string name="takePhoto">Take Photo</string>
     <string name="enterWeightHint">enter weight</string>
-    <string name="weightPresetInstr1">1. Take a photo of yourself standing on a scale while showing the weight. Make sure the weight is clear and visible</string>
-    <string name="weightPresetInstr2">2. Enter the exact weight shown on your scale and then submit both the photo and the entered weight</string>
+    <string name="weightPresetInstr1">1. Click Generate, you will get a random gesture, and 30 sec to do the following steps</string>
+    <string name="weightPresetInstr2">2. Take a photo of yourself standing on a scale while showing the weight and with a randomly generated hand gesture</string>
+    <string name="weightPresetInstr3">3. Enter the exact weight shown on your scale and then submit both the photo and the entered weight</string>
     <string name="submit">Submit</string>
+    <string name="generate">Generate</string>
     <string-array name="challenge_types">
         <item>Distance</item>
         <item>Weight Loss</item>

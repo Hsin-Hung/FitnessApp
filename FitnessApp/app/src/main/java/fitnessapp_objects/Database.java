@@ -587,8 +587,6 @@ public class Database {
 
     public boolean cleanUpEmptyChallenges(String roomID){
 
-        FirebaseAuth mAuth = FirebaseAuth.getInstance();
-
         final DocumentReference challengeRef = db.collection("challenges").document(roomID);
 
         db.runTransaction(new Transaction.Function<Void>() {
