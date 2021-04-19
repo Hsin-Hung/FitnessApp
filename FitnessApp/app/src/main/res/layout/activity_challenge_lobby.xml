@@ -54,6 +54,7 @@
             android:layout_marginTop="20dp"
             android:layout_height="wrap_content"
             android:numColumns="3"
+            android:gravity="center"
             android:columnWidth="50dp"
             android:verticalSpacing="1dp"
             android:horizontalSpacing="1dp">
