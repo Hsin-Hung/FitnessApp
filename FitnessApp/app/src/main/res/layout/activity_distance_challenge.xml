@@ -109,7 +109,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:background="@drawable/descbtn1"
+            android:background="@drawable/descbtn2"
             android:onClick="refresh"
             android:text="@string/refresh"
             android:textColor="#FFFFFF" />
