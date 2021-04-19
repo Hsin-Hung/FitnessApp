@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_color"
+    android:background="@drawable/background2"
     tools:context=".WeightLossChallengeInitActivity">
 
     <ImageView
@@ -30,23 +30,28 @@
         app:layout_constraintTop_toBottomOf="@+id/weight_img" />
 
     <LinearLayout
-        android:layout_width="366dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:orientation="horizontal"
-        android:weightSum="3"
+        android:layout_marginTop="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/take_photo_btn">
 
+
         <EditText
             android:id="@+id/enter_weight_et"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="2"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/descbtn1"
             android:ems="10"
             android:hint="@string/enterWeightHint"
-            android:inputType="numberDecimal" />
+            android:textColorHint="#FFFFFF"
+            android:inputType="numberDecimal"
+            android:textAlignment="center"
+            android:textColor="#FFFFFF" />
 
         <Button
             android:id="@+id/submit_btn"
@@ -54,8 +59,10 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:backgroundTint="@color/btn_color"
+
             android:onClick="submit"
-            android:text="@string/submit" />
+            android:text="@string/submit"
+            android:textAlignment="center" />
     </LinearLayout>
 
     <LinearLayout
