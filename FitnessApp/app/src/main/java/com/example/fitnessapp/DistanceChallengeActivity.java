@@ -32,7 +32,10 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptionsExtension;
 import com.google.android.gms.fitness.Fitness;
 import com.google.android.gms.fitness.RecordingClient;
 import com.google.android.gms.fitness.data.DataType;
+import com.google.android.gms.fitness.data.Field;
+import com.google.android.gms.fitness.data.Value;
 import com.google.android.gms.fitness.request.OnDataPointListener;
+import com.google.android.gms.fitness.request.SensorRequest;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.firebase.Timestamp;
 
@@ -156,6 +159,7 @@ public class DistanceChallengeActivity extends AppCompatActivity implements Data
 //        startPeriodicDistanceUpdateTask();
 //        startEndDateNotifyTask();
         WorkManagerAPI.getInstance().viewAllWork(WorkManager.getInstance(this), challengeInfo.get("roomID"));
+        startSensorClientListener();
     }
 
 
@@ -181,50 +185,50 @@ public class DistanceChallengeActivity extends AppCompatActivity implements Data
     public void startDistanceChangeListener(){
         db.startStatsChangeListener(challengeInfo.get("roomID"), ChallengeType.DISTANCE, this);
     }
-//
-//    public void startSensorClientListener(){
-//
-//        listener = dataPoint -> {
-//
-//            float totalDistance = 0;
-//            for (Field field : dataPoint.getDataType().getFields()) {
-//                Value value = dataPoint.getValue(field);
-//                Log.i(TAG, "Detected DataPoint field: " + field.getName());
-//                Log.i(TAG, "Detected DataPoint value: " + value);
-//
-//                totalDistance += value.asFloat();
-//            }
-//            myDistanceTV.setText(String.valueOf(totalDistance));
-//
-//        };
-//        Fitness.getSensorsClient(this, GoogleSignIn.getAccountForExtension(this, fitnessOptions))
-//                .add(
-//                        new SensorRequest.Builder()
-//                                // for custom data sets.
-//                                .setDataType(DataType.AGGREGATE_DISTANCE_DELTA) // Can't be omitted.
-//                                .setSamplingRate(10, TimeUnit.SECONDS)
-//                                .build(),
-//                        listener
-//                )
-//                .addOnSuccessListener(unused ->
-//                        Log.i(TAG, "Listener registered!"))
-//                .addOnFailureListener(task ->
-//                        Log.e(TAG, "Listener not registered.", task.getCause()));
-//    }
+
+    public void startSensorClientListener(){
+
+        listener = dataPoint -> {
+
+            float totalDistance = 0;
+            for (Field field : dataPoint.getDataType().getFields()) {
+                Value value = dataPoint.getValue(field);
+                Log.i(TAG, "Detected DataPoint field: " + field.getName());
+                Log.i(TAG, "Detected DataPoint value: " + value);
+
+                totalDistance += value.asFloat();
+            }
+            myDistanceTV.setText(String.valueOf(totalDistance));
+
+        };
+        Fitness.getSensorsClient(this, GoogleSignIn.getAccountForExtension(this, fitnessOptions))
+                .add(
+                        new SensorRequest.Builder()
+                                // for custom data sets.
+                                .setDataType(DataType.AGGREGATE_DISTANCE_DELTA) // Can't be omitted.
+                                .setSamplingRate(10, TimeUnit.SECONDS)
+                                .build(),
+                        listener
+                )
+                .addOnSuccessListener(unused ->
+                        Log.i(TAG, "Listener registered!"))
+                .addOnFailureListener(task ->
+                        Log.e(TAG, "Listener not registered.", task.getCause()));
+    }
 
 
 
-//    public void removeSensorClientListener(){
-//
-//        if(listener==null)return;
-//        Fitness.getSensorsClient(this, GoogleSignIn.getAccountForExtension(this, fitnessOptions))
-//                .remove(listener)
-//                .addOnSuccessListener(unused ->
-//                        Log.i(TAG, "Listener was removed!"))
-//                .addOnFailureListener(e ->
-//                        Log.i(TAG, "Listener was not removed."));
-//
-//    }
+    public void removeSensorClientListener(){
+
+        if(listener==null)return;
+        Fitness.getSensorsClient(this, GoogleSignIn.getAccountForExtension(this, fitnessOptions))
+                .remove(listener)
+                .addOnSuccessListener(unused ->
+                        Log.i(TAG, "Listener was removed!"))
+                .addOnFailureListener(e ->
+                        Log.i(TAG, "Listener was not removed."));
+
+    }
 
 
     @RequiresApi(api = Build.VERSION_CODES.Q)
