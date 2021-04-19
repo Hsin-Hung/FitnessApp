@@ -112,11 +112,6 @@ public class WeightChallengeActivity extends AppCompatActivity implements Databa
         }
 
 
-
-
-
-
-
         periodBTN = (Button) findViewById(R.id.period_btn);
         endBTN = (Button) findViewById(R.id.end_btn);
 
@@ -130,7 +125,7 @@ public class WeightChallengeActivity extends AppCompatActivity implements Databa
         endBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startPeriodicDistanceUpdateTask();
+                startEndDateNotifyTask();
             }
         });
     }
