@@ -9,8 +9,8 @@
 
     <Button
         android:id="@+id/button"
-        android:layout_width="89dp"
-        android:layout_height="43dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:backgroundTint="#0086D0F1"
         android:onClick="showMenu"
         android:text="⚪⚪⚪"
@@ -20,20 +20,22 @@
 
     <LinearLayout
         android:id="@+id/linearLayout2"
-        android:layout_width="407dp"
-        android:layout_height="707dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:gravity="center"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.205">
+        app:layout_constraintVertical_bias="0.245">
 
         <Button
             android:id="@+id/create_chall_homebtn"
-            android:layout_width="141dp"
-            android:layout_height="135dp"
+            android:layout_width="140dp"
+            android:layout_height="120dp"
             android:layout_marginTop="40dp"
             android:background="@drawable/chalbtn2"
             android:onClick="createChallenge"
@@ -44,8 +46,8 @@
 
         <Button
             android:id="@+id/join_chall_homebtn"
-            android:layout_width="141dp"
-            android:layout_height="135dp"
+            android:layout_width="140dp"
+            android:layout_height="120dp"
             android:layout_marginTop="10dp"
             android:background="@drawable/chalbtn2"
             android:onClick="joinChallenge"
@@ -56,8 +58,8 @@
 
         <Button
             android:id="@+id/your_chall_btn"
-            android:layout_width="141dp"
-            android:layout_height="135dp"
+            android:layout_width="140dp"
+            android:layout_height="120dp"
             android:layout_marginTop="10dp"
             android:background="@drawable/chalbtn2"
             android:onClick="myChallenges"
@@ -69,8 +71,8 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="140dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="@+id/linearLayout2"
@@ -78,20 +80,29 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
 
-        <Button
-            android:id="@+id/button10"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="revoke"
-            android:text="revoke(for testing)" />
-
-        <Button
-            android:id="@+id/button11"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="checkPermission"
-            android:text="check Permission" />
     </LinearLayout>
+
+    <Button
+        android:id="@+id/button10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="30dp"
+        android:onClick="revoke"
+        android:text="revoke(for testing)"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/button11"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="30dp"
+        android:onClick="checkPermission"
+        android:text="check Permission"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
