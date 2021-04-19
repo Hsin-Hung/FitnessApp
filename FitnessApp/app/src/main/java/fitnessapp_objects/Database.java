@@ -419,6 +419,7 @@ public class Database {
                 if(task.isSuccessful()){
                     account.removeChallenge(roomID);
                     handler.updateUI(true, null);
+                    cleanUpEmptyChallenges(roomID);
                 }
             }
         });
@@ -582,6 +583,47 @@ public class Database {
         if(statsChangeListener!=null)
         statsChangeListener.remove();
 
+    }
+
+    public boolean cleanUpEmptyChallenges(String roomID){
+
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+
+        final DocumentReference challengeRef = db.collection("challenges").document(roomID);
+
+        db.runTransaction(new Transaction.Function<Void>() {
+            @Override
+            public Void apply(Transaction transaction) throws FirebaseFirestoreException {
+                DocumentSnapshot snapshot = transaction.get(challengeRef);
+
+                // Note: this could be done without a transaction
+                //       by updating the population using FieldValue.increment()
+                ArrayList<Participant> participantArrayList = (ArrayList<Participant>) snapshot.get("participants");
+
+                if(participantArrayList.size()==0){
+                    transaction.delete(challengeRef);
+                }
+
+                // Success
+                return null;
+            }
+        }).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Log.d(TAG, "Transaction success!");
+            }
+        })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Transaction failure.", e);
+                    }
+                });
+
+
+
+
+        return true;
     }
 
 }
