@@ -1,5 +1,6 @@
 package com.example.fitnessapp;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
@@ -14,18 +15,56 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageMetadata;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+import com.squareup.okhttp.MultipartBuilder;
+import com.stripe.android.model.ConfirmPaymentIntentParams;
+import com.stripe.android.model.PaymentMethodCreateParams;
+import com.stripe.android.view.CardInputWidget;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.lang.ref.WeakReference;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class WeightLossChallengeInitActivity extends AppCompatActivity {
+import fitnessapp_objects.Database;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
+public class WeightLossChallengeInitActivity extends AppCompatActivity implements Database.UIUpdateCompletionHandler {
+
+    private static final String BACKEND_URL = "http://10.0.2.2:5000/";
+    private OkHttpClient httpClient = new OkHttpClient();
     static final int REQUEST_IMAGE_CAPTURE = 1;
     ImageView weightImg, gestureImg;
     EditText enter_weight_et;
     TextView randomGestureTV;
     Button takePhotoBTN, submitBTN;
+    private FirebaseAuth mAuth;
+    Bitmap imageBitmap;
+    HashMap<String,String> challengeInfo;
+    long endDate;
+    Database db;
+    FirebaseStorage storage = FirebaseStorage.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,8 +76,12 @@ public class WeightLossChallengeInitActivity extends AppCompatActivity {
         randomGestureTV = (TextView) findViewById(R.id.random_gesture_tv);
         takePhotoBTN = (Button) findViewById(R.id.take_photo_btn);
         submitBTN = (Button) findViewById(R.id.submit_btn);
+
         takePhotoBTN.setEnabled(false);
         submitBTN.setEnabled(false);
+        challengeInfo = (HashMap<String,String>) getIntent().getSerializableExtra("challengeInfo");
+        endDate = getIntent().getLongExtra("endDate",0);
+        db = Database.getInstance();
 
     }
 
@@ -56,7 +99,7 @@ public class WeightLossChallengeInitActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            imageBitmap = (Bitmap) extras.get("data");
             weightImg.setImageBitmap(imageBitmap);
         }
     }
@@ -71,9 +114,29 @@ public class WeightLossChallengeInitActivity extends AppCompatActivity {
 
         String weight = enter_weight_et.getText().toString();
 
-        if(weight.isEmpty())return;
+        if(weight.isEmpty() || imageBitmap==null )return;
 
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
+        String challengeID = challengeInfo.get("roomID");
 
+        // Create a storage reference from our app
+        StorageReference storageRef = storage.getReference();
+
+        // Create a reference to 'images/mountains.jpg'
+        StorageReference weightImagesRef = storageRef.child(challengeID + "/" + user.getUid() + "/startWeight.jpg");
+
+        StorageMetadata metadata = new StorageMetadata.Builder()
+                .setCustomMetadata("weight", weight)
+                .setCustomMetadata("userID", user.getUid())
+                .setCustomMetadata("challengeID", challengeID)
+                .build();
+
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
+        byte[] data = bos.toByteArray();
+
+        db.uploadImg(weightImagesRef, metadata, data,  this);
 
     }
 
@@ -100,5 +163,86 @@ public class WeightLossChallengeInitActivity extends AppCompatActivity {
 
 
 
+    }
+
+    @Override
+    public void updateUI(boolean isSuccess, Map<String, String> data) {
+        if(isSuccess){
+            FirebaseAuth mAuth = FirebaseAuth.getInstance();
+            FirebaseUser user = mAuth.getCurrentUser();
+            String imgPath = data.get("imgPath"), weight = data.get("weight");
+
+
+// Request a PaymentIntent from your server and store its client secret in paymentIntentClientSecret
+            // Create a PaymentIntent by calling the sample server's /create-payment-intent endpoint.
+            MediaType mediaType = MediaType.get("application/json; charset=utf-8");
+
+            String json = "{"
+                    + "\"userID\":" + "\"" + user.getUid() + "\","
+                    + "\"roomID\":" + "\"" + challengeInfo.get("roomID") + "\","
+                    + "\"imgPath\":" + "\"" + imgPath + "\","
+                    + "\"weight\":" + Float.parseFloat(weight)
+                    + "}";
+
+            RequestBody body = RequestBody.create(json, mediaType);
+            Request request = new Request.Builder()
+                    .url(BACKEND_URL + "weight-verify")
+                    .post(body)
+                    .build();
+            httpClient.newCall(request)
+                    .enqueue(new PayCallback(this));
+
+        }
+    }
+
+    private void startWeightChallenge(){
+
+        Intent intent = new Intent(this, WeightChallengeActivity.class);
+        intent.putExtra("challengeInfo", challengeInfo);
+        startActivity(intent);
+
+    }
+
+    /**
+     * PayCallback for the request to our backend server
+     */
+    private static final class PayCallback implements Callback {
+        @NonNull private final WeakReference<WeightLossChallengeInitActivity> activityRef;
+
+        PayCallback(@NonNull WeightLossChallengeInitActivity activity) {
+            activityRef = new WeakReference<>(activity);
+        }
+
+        @Override
+        public void onFailure(@NonNull Call call, @NonNull IOException e) {
+            final WeightLossChallengeInitActivity activity = activityRef.get();
+            if (activity == null) {
+                return;
+            }
+            activity.runOnUiThread(() ->
+                    Toast.makeText(
+                            activity, "Error: " + e.toString(), Toast.LENGTH_LONG
+                    ).show()
+            );
+        }
+
+        @Override
+        public void onResponse(@NonNull Call call, @NonNull final Response response)
+                throws IOException {
+            final WeightLossChallengeInitActivity activity = activityRef.get();
+            if (activity == null) {
+                return;
+            }
+
+            if (!response.isSuccessful()) {
+                activity.runOnUiThread(() ->
+                        Toast.makeText(
+                                activity, "Error: " + response.toString(), Toast.LENGTH_LONG
+                        ).show()
+                );
+            } else {
+                activity.startWeightChallenge();
+            }
+        }
     }
 }

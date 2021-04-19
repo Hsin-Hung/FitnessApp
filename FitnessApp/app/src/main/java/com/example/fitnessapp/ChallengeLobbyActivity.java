@@ -6,6 +6,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.work.WorkManager;
 
 import android.Manifest;
 import android.content.Intent;
@@ -38,6 +39,7 @@ import fitnessapp_objects.Database;
 import fitnessapp_objects.GoogleFitAPI;
 import fitnessapp_objects.Participant;
 import fitnessapp_objects.ParticipantModel;
+import fitnessapp_objects.WorkManagerAPI;
 
 public class ChallengeLobbyActivity extends AppCompatActivity implements Database.OnRoomChangeListener, Database.UIUpdateCompletionHandler{
 
@@ -48,8 +50,10 @@ public class ChallengeLobbyActivity extends AppCompatActivity implements Databas
     ParticipantGVAdapter adapter;
     String roomID;
     long endDate;
+    boolean weightPrompt;
     HashMap<String,String> challengeInfo;
     Database db;
+    WorkManagerAPI workManagerAPI;
     @RequiresApi(api = Build.VERSION_CODES.Q)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,12 +64,12 @@ public class ChallengeLobbyActivity extends AppCompatActivity implements Databas
         participants_view = (GridView) findViewById(R.id.participant_grid);
 
         participantModelArrayList = new ArrayList<>();
-
+        workManagerAPI = WorkManagerAPI.getInstance();
         adapter = new ParticipantGVAdapter(this, participantModelArrayList);
         participants_view.setAdapter(adapter);
         challengeInfo = (HashMap<String,String>) getIntent().getSerializableExtra("challengeInfo");
         endDate = getIntent().getLongExtra("endDate", 0);
-
+        weightPrompt = getIntent().getBooleanExtra("weightPrompt", true);
         roomNameTV.setText(challengeInfo.get("name"));
 
         roomID = challengeInfo.get("roomID");
@@ -119,6 +123,18 @@ public class ChallengeLobbyActivity extends AppCompatActivity implements Databas
 
     }
 
+    public void goToWeightPrompt(){
+
+
+
+    }
+
+    public void goToWeightMain(){
+
+
+
+    }
+
     public void challengeInfo(View view){
 
         Intent intent = new Intent(this, ChallengeInfoActivity.class);
@@ -139,6 +155,8 @@ public class ChallengeLobbyActivity extends AppCompatActivity implements Databas
     @Override
     public void updateUI(boolean isSuccess, Map<String, String> data) {
 
+        workManagerAPI.cancelAllTask(WorkManager.getInstance(this), roomID);
+        workManagerAPI.viewAllWork(WorkManager.getInstance(this), roomID);
         Intent intent = new Intent(this, HomeActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);

@@ -11,6 +11,7 @@ public class ChallengeEndDateWork extends Worker {
 
     Context context;
     Database db;
+    BackendAPI backendAPI;
 
     public ChallengeEndDateWork(
             @NonNull Context context,
@@ -18,6 +19,7 @@ public class ChallengeEndDateWork extends Worker {
         super(context, params);
         this.context = context;
         db = Database.getInstance();
+        backendAPI = BackendAPI.getInstance();
     }
 
     @Override
@@ -28,7 +30,7 @@ public class ChallengeEndDateWork extends Worker {
         if(roomIDInput == null) {
             return Result.failure();
         }
-        db.endChallenge(roomIDInput, context);
+        backendAPI.endChallenge(roomIDInput);
         // Indicate whether the work finished successfully with the Result
 
         return Result.success();

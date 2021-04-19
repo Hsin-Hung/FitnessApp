@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">健身达人</string>
+    <string name="backendURL">https://fitnessapp501.herokuapp.com/</string>
     <string name="sign_up">注册</string>
     <string name="sign_out">登出</string>
     <string name="log_in">登录</string>

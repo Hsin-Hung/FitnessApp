@@ -26,6 +26,7 @@ public class AuthPermission {
                 FitnessOptions.builder()
                         .addDataType(DataType.TYPE_DISTANCE_DELTA, FitnessOptions.ACCESS_READ)
                         .addDataType(DataType.AGGREGATE_DISTANCE_DELTA, FitnessOptions.ACCESS_READ)
+                        .addDataType(DataType.TYPE_WEIGHT, FitnessOptions.ACCESS_READ)
                         .build();
 
         return fitnessOptions;

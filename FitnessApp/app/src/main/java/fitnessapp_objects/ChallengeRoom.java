@@ -19,6 +19,7 @@ public class ChallengeRoom {
     private ChallengeType type;
     private ArrayList<Participant> participants;
     private boolean started;
+    private int pot;
 
     public ChallengeRoom(){
 
@@ -35,6 +36,7 @@ public class ChallengeRoom {
         this.betAmount = betAmount;
         this.started = true;
         participants = new ArrayList<>();
+        this.pot = 0;
 
     }
 
@@ -119,6 +121,14 @@ public class ChallengeRoom {
 
     }
 
+    public int getPot() {
+        return pot;
+    }
+
+    public void setPot(int pot) {
+        this.pot = pot;
+    }
+
     @Exclude
     /**
      *
@@ -136,7 +146,6 @@ public class ChallengeRoom {
         challengeRoom.put("betAmount", String.valueOf(betAmount));
 
         return challengeRoom;
-
 
     }
 }

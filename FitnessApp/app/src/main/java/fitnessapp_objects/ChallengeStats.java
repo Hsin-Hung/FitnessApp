@@ -4,6 +4,9 @@ public class ChallengeStats {
 
     String name;
     String id;
+    boolean hasBet;
+    boolean hasBegin;
+    boolean weightPrompt;
     float distance;
     float weight;
 
@@ -17,6 +20,10 @@ public class ChallengeStats {
         this.name = name;
         distance = 0;
         weight = 0;
+        hasBet = false;
+        hasBegin = false;
+        weightPrompt = true;
+
     }
 
     public String getName() {
@@ -49,5 +56,29 @@ public class ChallengeStats {
 
     public void setWeight(float weight) {
         this.weight = weight;
+    }
+
+    public boolean isHasBet() {
+        return hasBet;
+    }
+
+    public void setHasBet(boolean hasBet) {
+        this.hasBet = hasBet;
+    }
+
+    public boolean isHasBegin() {
+        return hasBegin;
+    }
+
+    public void setHasBegin(boolean hasBegin) {
+        this.hasBegin = hasBegin;
+    }
+
+    public boolean isWeightPrompt() {
+        return weightPrompt;
+    }
+
+    public void setWeightPrompt(boolean weightPrompt) {
+        this.weightPrompt = weightPrompt;
     }
 }

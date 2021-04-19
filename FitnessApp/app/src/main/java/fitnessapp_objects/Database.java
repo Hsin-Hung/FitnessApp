@@ -1,6 +1,7 @@
 package fitnessapp_objects;
 
 import android.content.Context;
+import android.net.Uri;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -25,6 +26,9 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.Transaction;
 import com.google.firebase.firestore.WriteBatch;
+import com.google.firebase.storage.StorageMetadata;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.util.*;
 
@@ -460,7 +464,7 @@ public class Database {
 
     }
 
-    public boolean updateChallengeStats(String roomID, float newStats){
+    public boolean updateChallengeStats(String roomID, float newStats, ChallengeType type){
 
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
@@ -478,7 +482,14 @@ public class Database {
                 boolean started = snapshot.getBoolean("started");
 
                 if(started){
-                    transaction.update(challengeStatsRef, "distance", newStats);
+
+                    if(type == ChallengeType.DISTANCE){
+                        transaction.update(challengeStatsRef, "distance", newStats);
+                    }else if(type == ChallengeType.WEIGHTLOSS){
+                        transaction.update(challengeStatsRef, "weight", newStats);
+                    }
+
+
                 }
 
                 // Success
@@ -620,6 +631,65 @@ public class Database {
 
 
 
+
+        return true;
+    }
+
+    public boolean uploadImg(StorageReference ref, StorageMetadata metadata, byte[] data, UIUpdateCompletionHandler handler){
+
+        UploadTask uploadTask = ref.putBytes(data, metadata);
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle unsuccessful uploads
+                handler.updateUI(false,null);
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
+                // ...
+                StorageMetadata metadata1 = taskSnapshot.getMetadata();
+                Map<String,String> data = new HashMap<>();
+                data.put("imgPath", metadata1.getReference().getPath());
+                data.put("weight", metadata1.getCustomMetadata("weight"));
+                handler.updateUI(true, data);
+            }
+        });
+
+        return true;
+    }
+
+    public boolean checkHasBegin(String roomID, UIUpdateCompletionHandler handler){
+
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
+
+        db.collection("challenges").document(roomID).collection("stats").document(user.getUid())
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+
+                            Boolean hasBegin = task.getResult().getBoolean("hasBegin");
+                            handler.updateUI(hasBegin, null);
+
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+        return true;
+    }
+
+    public boolean setWeightPrompt(String roomID){
+
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
+
+        db.collection("challenges").document(roomID).collection("stats").document(user.getUid())
+                .update("weightPrompt", true);
 
         return true;
     }

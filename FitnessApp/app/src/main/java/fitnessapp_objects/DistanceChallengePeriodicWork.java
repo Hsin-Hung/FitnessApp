@@ -26,14 +26,14 @@ import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
-public class ChallengePeriodicWork extends Worker {
+public class DistanceChallengePeriodicWork extends Worker {
 
     private final String TAG = "ChallengeWork";
     private Database db;
     long currentTime;
     Context context;
 
-    public ChallengePeriodicWork(
+    public DistanceChallengePeriodicWork(
             @NonNull Context context,
             @NonNull WorkerParameters params) {
         super(context, params);
@@ -79,7 +79,7 @@ public class ChallengePeriodicWork extends Worker {
                         }
                     }
 
-                    db.updateChallengeStats(roomIDInput, totalDistance);
+                    db.updateChallengeStats(roomIDInput, totalDistance, ChallengeType.DISTANCE);
 
                 })
                 .addOnFailureListener(e ->
