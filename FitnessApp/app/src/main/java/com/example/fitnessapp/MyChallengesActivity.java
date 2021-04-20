@@ -33,13 +33,14 @@ public class MyChallengesActivity extends AppCompatActivity implements Database.
         challengeRoomModelArrayList = new ArrayList<>();
         adapter = new ChallengeRoomLVAdapter(this, challengeRoomModelArrayList);
         myChallengesLV.setAdapter(adapter);
+
         myChallengesLV.setOnItemClickListener(this);
         db = Database.getInstance();
         db.getMyChallenges(this);
 
     }
 
-    public void reload(View view){
+    public void reload(View view) {
 
         db.getMyChallenges(this);
 
@@ -50,11 +51,11 @@ public class MyChallengesActivity extends AppCompatActivity implements Database.
 
         challengeRoomModelArrayList.clear();
 
-        for(Map.Entry<String,ChallengeRoom> entry : rooms.entrySet()){
+        for (Map.Entry<String, ChallengeRoom> entry : rooms.entrySet()) {
 
             ChallengeRoom room = entry.getValue();
 
-            ChallengeRoomModel model = new ChallengeRoomModel(entry.getKey(), room.getDescription(), room.getName(),room.getType(),room.isBet(), room.getBetAmount(),room.getEndDate(), room.getPassword(), room.isStarted());
+            ChallengeRoomModel model = new ChallengeRoomModel(entry.getKey(), room.getDescription(), room.getName(), room.getType(), room.isBet(), room.getBetAmount(), room.getEndDate(), room.getPassword(), room.isStarted());
             challengeRoomModelArrayList.add(model);
 
         }
@@ -67,11 +68,12 @@ public class MyChallengesActivity extends AppCompatActivity implements Database.
 
         ChallengeRoomModel challengeRoomModel = challengeRoomModelArrayList.get(position);
         Intent intent;
-        if(!challengeRoomModel.isStarted()){
+        if (!challengeRoomModel.isStarted()) {
             intent = new Intent(this, ChallengeEndActivity.class);
-        }else{
+        } else {
             intent = new Intent(this, ChallengeLobbyActivity.class);
         }
+        intent.putExtra("endDate", challengeRoomModel.getEndDate().toDate().getTime());
         intent.putExtra("challengeInfo", challengeRoomModel.getChallengeInfoMap());
         startActivity(intent);
     }

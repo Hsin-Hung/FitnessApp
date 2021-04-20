@@ -48,7 +48,7 @@
     <string name="settings">Settings</string>
     <string name="searchChallenges">Search Challenges to join</string>
     <string name="menu">Menu</string>
-    <string name="distance">My Distance:</string>
+    <string name="distance">My Distance(m):</string>
     <string name="weight">My Weight</string>
     <string name="leaderBoard">LeaderBoard</string>
     <string name="takePhoto">Take Photo</string>
@@ -62,6 +62,11 @@
     <string name="exit">EXIT</string>
     <string name="youWin">YOU WIN !</string>
     <string name="youLose">YOU LOSE !</string>
+    <string name="roomNameError">Room name cannot be empty !</string>
+    <string name="challTypeError">Need to pick a challenge type !</string>
+    <string name="endDateError">Need to pick a challenge end date !</string>
+    <string name="betError">Need to enter a bet amount !</string>
+    <string name="passError">Password too short, need to be at least 6 characters !</string>
     <string-array name="challenge_types">
         <item>Distance</item>
         <item>Weight Loss</item>

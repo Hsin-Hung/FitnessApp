@@ -26,8 +26,8 @@ public class WeightChallengePeriodicWork extends Worker {
 
     private final String TAG = "ChallengeWork";
     private Database db;
-    long currentTime;
-    Context context;
+    private long currentTime;
+    private Context context;
 
     public WeightChallengePeriodicWork(
             @NonNull Context context,

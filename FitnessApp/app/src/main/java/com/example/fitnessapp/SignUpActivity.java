@@ -51,10 +51,7 @@ public class SignUpActivity extends AppCompatActivity implements Database.UIUpda
     }
 
 
-
-
-
-    public void signUp(View view){
+    public void signUp(View view) {
 
         infoTV.setText("");
         String email = emailET.getText().toString(),
@@ -62,12 +59,12 @@ public class SignUpActivity extends AppCompatActivity implements Database.UIUpda
                 confirmPassword = confirmPasswordET.getText().toString(),
                 username = usernameET.getText().toString();
 
-        if(username.isEmpty()){
+        if (username.isEmpty()) {
             infoTV.setText("Username mustn't be empty !");
             return;
         }
 
-        if(!password.equals(confirmPassword)){
+        if (!password.equals(confirmPassword)) {
             infoTV.setText("Passwords don't match !");
             return;
         }
@@ -99,13 +96,16 @@ public class SignUpActivity extends AppCompatActivity implements Database.UIUpda
 
     }
 
+    /**
+     * @param isSuccess: indicate whether user account is successfully updated from firebase
+     * @param data:      not used here
+     */
+    public void updateUI(boolean isSuccess, Map<String, String> data) {
 
-    public void updateUI(boolean isSuccess, Map<String,String> data){
-
-        if(isSuccess){
+        if (isSuccess) {
             Intent intent = new Intent(this, HomeActivity.class);
             startActivity(intent);
-        }else{
+        } else {
             Toast.makeText(this, "SIGN IN FAIL !", Toast.LENGTH_SHORT).show();
         }
 

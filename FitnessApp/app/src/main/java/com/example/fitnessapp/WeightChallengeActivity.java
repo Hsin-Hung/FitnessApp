@@ -52,20 +52,21 @@ import fitnessapp_objects.WorkManagerAPI;
 
 public class WeightChallengeActivity extends AppCompatActivity implements Database.OnLeaderBoardStatsGetCompletionHandler, Database.UIUpdateCompletionHandler {
 
-    final String TAG = "WeightChallActivity";
-    final int GOOGLE_FIT_PERMISSIONS_REQUEST_CODE = 1;
-    GoogleSignInOptionsExtension fitnessOptions;
-    GoogleSignInAccount googleSigninAccount;
-    RecordingClient recordingClient;
-    HashMap<String,String> challengeInfo;
-    long endDate;
-    TextView myWeightTV, challTypeTV;
-    ListView leaderBoardLV;
-    ArrayList<ParticipantModel> participantModels;
-    LeaderBoardParticipantLVAdapter adapter;
-    Button refreshBTN;
-    Database db;
-    Button periodBTN, endBTN;
+    private final String TAG = "WeightChallActivity";
+    private final int GOOGLE_FIT_PERMISSIONS_REQUEST_CODE = 1;
+
+    private GoogleSignInOptionsExtension fitnessOptions;
+    private GoogleSignInAccount googleSigninAccount;
+    private RecordingClient recordingClient;
+    private HashMap<String,String> challengeInfo;
+    private long endDate;
+    private TextView myWeightTV, challTypeTV;
+    private ListView leaderBoardLV;
+    private String roomID;
+    private ArrayList<ParticipantModel> participantModels;
+    private LeaderBoardParticipantLVAdapter adapter;
+    private Button refreshBTN, periodBTN, endBTN;
+    private Database db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +76,10 @@ public class WeightChallengeActivity extends AppCompatActivity implements Databa
         myWeightTV = (TextView) findViewById(R.id.my_stats_tv);
         leaderBoardLV = (ListView) findViewById(R.id.leaderboard_lv);
         challTypeTV = (TextView) findViewById(R.id.chall_type_title_tv);
+        refreshBTN = (Button) findViewById(R.id.refresh_lb_btn);
+        periodBTN = (Button) findViewById(R.id.period_btn);
+        endBTN = (Button) findViewById(R.id.end_btn);
+
         challTypeTV.setText(getString(R.string.weight));
 
         participantModels = new ArrayList<>();
@@ -83,20 +88,22 @@ public class WeightChallengeActivity extends AppCompatActivity implements Databa
 
         myWeightTV.setText("0");
 
+        //noinspection unchecked
         challengeInfo = (HashMap<String,String>) getIntent().getSerializableExtra("challengeInfo");
         endDate = getIntent().getLongExtra("endDate",0);
+        roomID = challengeInfo.get("roomID");
 
         fitnessOptions = AuthPermission.getInstance().getFitnessOption();
 
         googleSigninAccount = GoogleSignIn.getAccountForExtension(this, fitnessOptions);
 
         db = Database.getInstance();
-        refreshBTN = (Button) findViewById(R.id.refresh_lb_btn);
+
 
         refreshBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                db.getLeaderBoardStats(challengeInfo.get("roomID"), WeightChallengeActivity.this);
+                db.getLeaderBoardStats(roomID, WeightChallengeActivity.this);
             }
         });
         if (!GoogleSignIn.hasPermissions(googleSigninAccount, fitnessOptions)) {
@@ -108,12 +115,8 @@ public class WeightChallengeActivity extends AppCompatActivity implements Databa
         } else {
             //permission granted
             initTask();
-            db.getLeaderBoardStats(challengeInfo.get("roomID"), this);
+            db.getLeaderBoardStats(roomID, this);
         }
-
-
-        periodBTN = (Button) findViewById(R.id.period_btn);
-        endBTN = (Button) findViewById(R.id.end_btn);
 
         periodBTN.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -138,24 +141,22 @@ public class WeightChallengeActivity extends AppCompatActivity implements Databa
 
     public void initTask(){
 
-        recordingClientSub();
         startWeightChangeListener();
-        db.getLeaderBoardStats(challengeInfo.get("roomID"), this);
+        db.getLeaderBoardStats(roomID, this);
 //        startPeriodicDistanceUpdateTask();
 //        startEndDateNotifyTask();
-        WorkManagerAPI.getInstance().viewAllWork(WorkManager.getInstance(this), challengeInfo.get("roomID"));
+        WorkManagerAPI.getInstance().viewAllWork(WorkManager.getInstance(this), roomID);
     }
 
     public void startWeightChangeListener(){
 
-        db.startStatsChangeListener(challengeInfo.get("roomID"), ChallengeType.WEIGHTLOSS, this);
+        db.startStatsChangeListener(roomID, ChallengeType.WEIGHTLOSS, this);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.Q)
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        System.out.println("request code: " + requestCode + "result code: " + resultCode);
 
         if(requestCode== Activity.RESULT_OK){
 
@@ -168,24 +169,11 @@ public class WeightChallengeActivity extends AppCompatActivity implements Databa
 //                            Toast.LENGTH_SHORT).show();
                     break;
                 default:
-                    Toast.makeText(WeightChallengeActivity.this, " idk where this from!",
+                    Toast.makeText(WeightChallengeActivity.this, "unknown request code !",
                             Toast.LENGTH_SHORT).show();
             }
 
         }
-
-    }
-
-    public void recordingClientSub(){
-
-        recordingClient = Fitness.getRecordingClient(this, googleSigninAccount);
-
-        recordingClient
-                .subscribe(DataType.TYPE_WEIGHT)
-                .addOnSuccessListener(unused ->
-                        Log.i(TAG, "TYPE_WEIGHT Successfully subscribed!"))
-                .addOnFailureListener( e ->
-                        Log.w(TAG, "There was a problem subscribing to TYPE_WEIGHT.", e));
 
     }
 
@@ -195,14 +183,16 @@ public class WeightChallengeActivity extends AppCompatActivity implements Databa
 
         for(ChallengeStats challengeStats: stats){
 
-            participantModels.add(new ParticipantModel(challengeStats.getName(), challengeStats.getId(), ChallengeType.WEIGHTLOSS, challengeStats.getWeight()));
+            ParticipantModel participantModel = new ParticipantModel(challengeStats.getName(), challengeStats.getId(), ChallengeType.WEIGHTLOSS, challengeStats.getWeight());
+            participantModel.setInitWeight(challengeStats.getInitWeight());
+            participantModels.add(participantModel);
 
         }
 
         Collections.sort(participantModels, new Comparator<ParticipantModel>() {
             @Override
             public int compare(ParticipantModel o1, ParticipantModel o2) {
-                if(o1.getWeight() > o2.getWeight())return -1;
+                if(o1.getWeightDiff() > o2.getWeightDiff())return -1;
                 return 1;
             }
         });
@@ -226,37 +216,37 @@ public class WeightChallengeActivity extends AppCompatActivity implements Databa
 
 //        PeriodicWorkRequest challPeriodicWorkRequest =
 //                new PeriodicWorkRequest.Builder(WeightChallengePeriodicWork.class,7, TimeUnit.DAYS)
-//                        .addTag(challengeInfo.get("roomID"))
+//                        .addTag(roomID)
 //                        .setConstraints(constraints)
 //                        .setBackoffCriteria(BackoffPolicy.LINEAR,
 //                                OneTimeWorkRequest.MIN_BACKOFF_MILLIS,
 //                                TimeUnit.MILLISECONDS)
 //                        .setInputData(new Data.Builder()
-//                                .putString("roomID", challengeInfo.get("roomID"))
+//                                .putString("roomID", roomID)
 //                                .build())
 //                        .build();
 //
 //
 //        WorkManager
 //                .getInstance(this)
-//                .enqueueUniquePeriodicWork(challengeInfo.get("roomID")+"-periodic", ExistingPeriodicWorkPolicy.KEEP,challPeriodicWorkRequest);
+//                .enqueueUniquePeriodicWork(roomID+"-periodic", ExistingPeriodicWorkPolicy.KEEP,challPeriodicWorkRequest);
 
                 OneTimeWorkRequest challPeriodicWorkRequest =
                 new OneTimeWorkRequest.Builder(WeightChallengePeriodicWork.class)
-                        .addTag(challengeInfo.get("roomID"))
+                        .addTag(roomID)
                         .setConstraints(constraints)
                         .setBackoffCriteria(BackoffPolicy.LINEAR,
                                 OneTimeWorkRequest.MIN_BACKOFF_MILLIS,
                                 TimeUnit.MILLISECONDS)
                         .setInputData(new Data.Builder()
-                                .putString("roomID", challengeInfo.get("roomID"))
+                                .putString("roomID", roomID)
                                 .build())
                         .build();
 
 
         WorkManager
                 .getInstance(this)
-                .enqueueUniqueWork(challengeInfo.get("roomID")+"-periodic", ExistingWorkPolicy.KEEP,challPeriodicWorkRequest);
+                .enqueueUniqueWork(roomID+"-periodic", ExistingWorkPolicy.KEEP,challPeriodicWorkRequest);
 
 
 
@@ -273,19 +263,19 @@ public class WeightChallengeActivity extends AppCompatActivity implements Databa
         OneTimeWorkRequest challEndDateWorkRequest =
                 new OneTimeWorkRequest.Builder(ChallengeEndDateWork.class)
                         .setInitialDelay(endDate - currentTime, TimeUnit.MILLISECONDS)
-                        .addTag(challengeInfo.get("roomID"))
+                        .addTag(roomID)
                         .setConstraints(constraints)
                         .setBackoffCriteria(BackoffPolicy.LINEAR,
                                 OneTimeWorkRequest.MIN_BACKOFF_MILLIS,
                                 TimeUnit.MILLISECONDS)
                         .setInputData(new Data.Builder()
-                                .putString("roomID", challengeInfo.get("roomID"))
+                                .putString("roomID", roomID)
                                 .build())
                         .build();
 
         WorkManager
                 .getInstance(this)
-                .enqueueUniqueWork(challengeInfo.get("roomID")+"-endDate", ExistingWorkPolicy.KEEP, challEndDateWorkRequest);
+                .enqueueUniqueWork(roomID+"-endDate", ExistingWorkPolicy.KEEP, challEndDateWorkRequest);
 
     }
 }

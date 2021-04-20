@@ -50,7 +50,6 @@ public class CreateChallengePresetActivity extends AppCompatActivity implements 
     private Date endDate;
     private ChallengeType challTypePicked;
     private boolean isBet;
-    private String createdRoomID;
     private ChallengeRoom room;
 
     private Database db;
@@ -77,7 +76,7 @@ public class CreateChallengePresetActivity extends AppCompatActivity implements 
         betAmountET.setEnabled(false);
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.challenge_types, android.R.layout.simple_spinner_item);
+                R.array.challenge_types, R.layout.challenge_type_spinner_item);
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         challTypeSpinner.setAdapter(adapter);
@@ -91,10 +90,10 @@ public class CreateChallengePresetActivity extends AppCompatActivity implements 
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 isBet = isChecked;
-                if(isChecked){
+                if (isChecked) {
                     betAmountET.setVisibility(View.VISIBLE);
                     betAmountET.setEnabled(true);
-                }else{
+                } else {
                     betAmountET.setVisibility(View.INVISIBLE);
                     betAmountET.setEnabled(false);
                 }
@@ -103,13 +102,17 @@ public class CreateChallengePresetActivity extends AppCompatActivity implements 
 
     }
 
-    private void setInitDate(){
+    /**
+     * set the date intervals for the date picker fragment
+     */
+    private void setInitDate() {
         final Calendar c = Calendar.getInstance();
         c.add(Calendar.DAY_OF_YEAR, 1);
         int year = c.get(Calendar.YEAR);
         int month = c.get(Calendar.MONTH);
         int day = c.get(Calendar.DAY_OF_MONTH);
-        pickDateBTN.setText(year +"/"+ (month+1) +"/"+ day);
+        String default_date = year + "/" + (month + 1) + "/" + day;
+        pickDateBTN.setText(default_date);
 
         endDate = new Date(c.getTimeInMillis());
         dialogFragment = new DatePickerFragment(this);
@@ -131,63 +134,71 @@ public class CreateChallengePresetActivity extends AppCompatActivity implements 
 
     @Override
     public void setDate(int year, int month, int day) {
-        String dateString = year +"/"+ (month+1) +"/"+ day;
+        String dateString = year + "/" + (month + 1) + "/" + day;
         pickDateBTN.setText(dateString);
         Calendar c = Calendar.getInstance();
-        c.set(year, month, day,0,0);
+        c.set(year, month, day, 0, 0);
         endDate.setTime(c.getTimeInMillis());
     }
 
 
-    public boolean checkAllFieldValid(){
+    /**
+     * check if all the field has valid input
+     */
+    public boolean checkAllFieldValid() {
 
-        if(roomNameET.getText().toString().isEmpty()){
-            errorTV.setText("Room name cannot be empty !");
-        }else if(challTypePicked == null){
-            errorTV.setText("Need to pick a challenge type !");
-        }else if(endDate == null){
-            errorTV.setText("Need to pick a challenge end date !");
-        }else if(betSwitch.isChecked() && betAmountET.getText().toString().isEmpty()){
-            errorTV.setText("Need to enter a bet amount !");
-        }else if(passwordET.getText().toString().length()<PASSWORD_MIN_LEN){
-            errorTV.setText("Password too short, need to be at least 6 characters !");
-        }else{
+        if (roomNameET.getText().toString().isEmpty()) {
+            errorTV.setText(getString(R.string.roomNameError));
+        } else if (challTypePicked == null) {
+            errorTV.setText(getString(R.string.challTypeError));
+        } else if (endDate == null) {
+            errorTV.setText(getString(R.string.endDateError));
+        } else if (betSwitch.isChecked() && betAmountET.getText().toString().isEmpty()) {
+            errorTV.setText(getString(R.string.betError));
+        } else if (passwordET.getText().toString().length() < PASSWORD_MIN_LEN) {
+            errorTV.setText(getString(R.string.passError));
+        } else {
             return true;
         }
-
-
-        return false;
-
+        return true;
     }
 
-    public void createChallenge(View view){
-        if(checkAllFieldValid()) updateDatabase();
+    /**
+     * create challenge button to create a challenge
+     */
+    public void createChallenge(View view) {
+        if (checkAllFieldValid()) updateDatabase();
     }
 
-    public boolean updateDatabase(){
+    public boolean updateDatabase() {
 
-        String name = roomNameET.getText().toString();
+        String name = roomNameET.getText().toString(), description = challDescrET.getText().toString(), password = passwordET.getText().toString();
         int betAmount = 0;
-        if(!betAmountET.getText().toString().isEmpty()){
+        if (!betAmountET.getText().toString().isEmpty()) {
             betAmount = Integer.parseInt(betAmountET.getText().toString());
         }
 
-        room = new ChallengeRoom(name, challTypePicked, challDescrET.getText().toString(), passwordET.getText().toString(), new Timestamp(endDate), isBet, betAmount);
+        room = new ChallengeRoom(name, challTypePicked, description, password, new Timestamp(endDate), isBet, betAmount);
+
         FirebaseUser user = mAuth.getCurrentUser();
         UserAccount userAccount = UserAccount.getInstance();
-        room.addParticipant(new Participant(userAccount.getName(),user.getUid()));
-        createdRoomID = db.updateChallengeRoom(room, this);
+        room.addParticipant(new Participant(userAccount.getName(), user.getUid()));
+        db.updateChallengeRoom(room, this);
         return true;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
-    public void updateUI(boolean isSuccess, Map<String,String> data) {
+    public void updateUI(boolean isSuccess, Map<String, String> data) {
 
-        if(isSuccess){
-            System.out.println("Successfully do all challenge room updates on firestore");
+        if (isSuccess) {
+
             Intent intent = new Intent(this, ChallengeLobbyActivity.class);
+
+            String roomID = data.get("roomID");
+            if (roomID == null) return;
             room.setId(data.get("roomID"));
+
             intent.putExtra("endDate", room.getEndDate().toDate().getTime());
             intent.putExtra("challengeInfo", room.getFirestoreChallengeRoomMap());
             startActivity(intent);

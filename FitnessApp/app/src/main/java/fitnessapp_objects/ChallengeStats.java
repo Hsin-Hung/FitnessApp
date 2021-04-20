@@ -9,6 +9,7 @@ public class ChallengeStats {
     boolean weightPrompt;
     float distance;
     float weight;
+    float initWeight;
 
     public ChallengeStats(){
 
@@ -23,6 +24,7 @@ public class ChallengeStats {
         hasBet = false;
         hasBegin = false;
         weightPrompt = true;
+        initWeight = 0;
 
     }
 
@@ -80,5 +82,13 @@ public class ChallengeStats {
 
     public void setWeightPrompt(boolean weightPrompt) {
         this.weightPrompt = weightPrompt;
+    }
+
+    public float getInitWeight() {
+        return initWeight;
+    }
+
+    public void setInitWeight(float initWeight) {
+        this.initWeight = initWeight;
     }
 }

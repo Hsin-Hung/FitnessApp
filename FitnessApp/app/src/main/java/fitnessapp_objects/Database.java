@@ -377,8 +377,6 @@ public class Database {
         FirebaseUser user = mAuth.getCurrentUser();
         UserAccount account = UserAccount.getInstance();
 
-        System.out.println(account.getName());
-        System.out.println(user.getUid());
         db.collection("challenges")
                 .whereArrayContains("participants", new Participant(account.getName(),user.getUid()))
                 .get()

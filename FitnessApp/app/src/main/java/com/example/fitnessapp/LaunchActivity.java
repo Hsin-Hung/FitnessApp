@@ -33,18 +33,23 @@ import fitnessapp_objects.UserAccount;
 
 public class LaunchActivity extends AppCompatActivity implements View.OnClickListener, Database.UIUpdateCompletionHandler {
 
+    private static final String TAG = "LaunchActivity";
+    private final int RC_SIGN_IN = 1;
+
     private GoogleSignInClient mGoogleSignInClient;
     private SignInButton googleSignInBTN;
     private FirebaseAuth mAuth;
     private UserAccount userAccount;
     private Database db;
-    private final int RC_SIGN_IN = 1;
-    private static final String TAG = "LaunchActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_launch);
+
+        mAuth = FirebaseAuth.getInstance();
+        db = Database.getInstance();
+        userAccount = UserAccount.getInstance();
 
         googleSignInBTN = (SignInButton) findViewById(R.id.sign_in_button);
         googleSignInBTN.setOnClickListener(this);
@@ -60,30 +65,34 @@ public class LaunchActivity extends AppCompatActivity implements View.OnClickLis
 
         // Build a GoogleSignInClient with the options specified by gso.
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-        mAuth = FirebaseAuth.getInstance();
-        db = Database.getInstance();
-        userAccount = UserAccount.getInstance();
-
 
     }
 
-    // go to the sign in page
-    public void signIn(View view){
+    /**
+     * Sign in button to go to the log in screen
+     */
+    public void signIn(View view) {
 
         Intent intent = new Intent(this, LogInActivity.class);
         startActivity(intent);
 
     }
 
-    // go to the sign up page
-    public void signUp(View view){
+
+    /**
+     * Sign up button to go to the sign up screen
+     */
+    public void signUp(View view) {
 
         Intent intent = new Intent(this, SignUpActivity.class);
         startActivity(intent);
 
     }
 
-    private void googleSignIn(){
+    /**
+     * SIgn in with g-mail
+     */
+    private void googleSignIn() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
@@ -115,6 +124,11 @@ public class LaunchActivity extends AppCompatActivity implements View.OnClickLis
         }
     }
 
+    /**
+     * Authenticate with firebase with google sign in
+     *
+     * @param idToken: the account token to auth with firebase
+     */
     private void firebaseAuthWithGoogle(String idToken) {
         AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
         mAuth.signInWithCredential(credential)
@@ -128,11 +142,11 @@ public class LaunchActivity extends AppCompatActivity implements View.OnClickLis
                             FirebaseUser user = mAuth.getCurrentUser();
                             boolean isNew = task.getResult().getAdditionalUserInfo().isNewUser();
 
-                            if(isNew){
+                            if (isNew) {
                                 userAccount.setName(user.getDisplayName());
                                 userAccount.setEmail(user.getEmail());
                                 db.updateUserAccount(LaunchActivity.this);
-                            }else{
+                            } else {
                                 db.updateLocalUserAccount(user.getUid(), LaunchActivity.this);
                             }
                         } else {
@@ -144,13 +158,16 @@ public class LaunchActivity extends AppCompatActivity implements View.OnClickLis
                 });
     }
 
+    /**
+     * @param isSuccess: indicate whether user account is successfully updated from firebase
+     * @param data:      not used here
+     */
+    public void updateUI(boolean isSuccess, Map<String, String> data) {
 
-    public void updateUI(boolean isSuccess, Map<String,String> data){
-
-        if(isSuccess){
+        if (isSuccess) {
             Intent intent = new Intent(this, HomeActivity.class);
             startActivity(intent);
-        }else{
+        } else {
             Toast.makeText(this, "SIGN IN FAIL !", Toast.LENGTH_SHORT).show();
         }
 

@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import fitnessapp_objects.ChallengeType;
 import fitnessapp_objects.Database;
 import fitnessapp_objects.Participant;
 import fitnessapp_objects.ParticipantModel;
@@ -41,22 +42,21 @@ import okhttp3.Response;
 
 public class ChallengeLobbyActivity extends AppCompatActivity implements Database.OnRoomChangeListener, Database.UIUpdateCompletionHandler, Database.OnBooleanPromptHandler, Database.OnPlaceBetHandler {
 
+    private final int MY_PERMISSIONS_REQUEST_ACTIVITY = 2;
 
     private static final String BACKEND_URL = "https://fitnessapp501.herokuapp.com/";
-    private OkHttpClient httpClient = new OkHttpClient();
-    final int MY_PERMISSIONS_REQUEST_ACTIVITY = 2;
-    TextView roomNameTV;
-    GridView participants_view;
-    ArrayList<ParticipantModel> participantModelArrayList;
-    ParticipantGVAdapter adapter;
-    String roomID;
-    String type;
-    boolean weightPrompt = true;
-    long endDate;
-    HashMap<String,String> challengeInfo;
-    Database db;
-    WorkManagerAPI workManagerAPI;
-    int betAmount = 0;
+    private final OkHttpClient httpClient = new OkHttpClient();
+    private TextView roomNameTV;
+    private GridView participants_view;
+    private ArrayList<ParticipantModel> participantModelArrayList;
+    private ParticipantGVAdapter adapter;
+    private String roomID, type;
+    private boolean weightPrompt = true;
+    private long endDate;
+    private HashMap<String, String> challengeInfo;
+    private Database db;
+    private WorkManagerAPI workManagerAPI;
+    private int betAmount = 0;
 
     @RequiresApi(api = Build.VERSION_CODES.Q)
     @Override
@@ -68,18 +68,20 @@ public class ChallengeLobbyActivity extends AppCompatActivity implements Databas
         participants_view = (GridView) findViewById(R.id.participant_grid);
 
         participantModelArrayList = new ArrayList<>();
+
         workManagerAPI = WorkManagerAPI.getInstance();
         adapter = new ParticipantGVAdapter(this, participantModelArrayList);
         participants_view.setAdapter(adapter);
-        challengeInfo = (HashMap<String,String>) getIntent().getSerializableExtra("challengeInfo");
 
-        betAmount = Integer.parseInt(challengeInfo.getOrDefault("betAmount","0"));
-        type = challengeInfo.get("type");
-
+        //noinspection unchecked
+        challengeInfo = (HashMap<String, String>) getIntent().getSerializableExtra("challengeInfo");
+        betAmount = Integer.parseInt(challengeInfo.getOrDefault("betAmount", "0"));
+        type = challengeInfo.getOrDefault("type", ChallengeType.DISTANCE.toString());
         endDate = getIntent().getLongExtra("endDate", 0);
-        roomNameTV.setText(challengeInfo.get("name"));
-
         roomID = challengeInfo.get("roomID");
+
+        roomNameTV.setText(challengeInfo.getOrDefault("name", "un-named"));
+
         db = Database.getInstance();
         db.startChallengeRoomChangeListener(roomID, this);
         checkSensitiveDataAccessPermission();
@@ -89,17 +91,22 @@ public class ChallengeLobbyActivity extends AppCompatActivity implements Databas
     @Override
     protected void onDestroy() {
         db.detachChallengeRoomListener();
-
         super.onDestroy();
     }
 
-    public void modifyParticipant(ArrayList<Participant> participants){
+    /**
+     *
+     * update the grid view for new participants
+     *
+     * @param participants: new list of participants
+     */
+    public void modifyParticipant(ArrayList<Participant> participants) {
 
         participantModelArrayList.clear();
 
-        for(Participant p: participants){
+        for (Participant p : participants) {
 
-           participantModelArrayList.add(new ParticipantModel(p.getName(), p.getId()));
+            participantModelArrayList.add(new ParticipantModel(p.getName(), p.getId()));
 
         }
 
@@ -108,17 +115,18 @@ public class ChallengeLobbyActivity extends AppCompatActivity implements Databas
 
     }
 
-    public void beginChallenge(View view){
-        Intent intent;
-        System.out.println(challengeInfo.get("type"));
-        switch(challengeInfo.get("type")){
+    /**
+     * begin the challenge
+     */
+    public void beginChallenge(View view) {
 
+        switch (type) {
             case "DISTANCE":
-                if(betAmount>0){
-                  db.checkHasBet(roomID, this);
-                  return;
+                if (betAmount > 0) {
+                    db.checkHasBet(roomID, this);
+                }else{
+                    goToDistance();
                 }
-                intent = new Intent(this, DistanceChallengeActivity.class);
                 break;
             case "WEIGHTLOSS":
                 db.checkWeightPrompt(roomID, this);
@@ -128,13 +136,13 @@ public class ChallengeLobbyActivity extends AppCompatActivity implements Databas
                 return;
 
         }
-        intent.putExtra("challengeInfo", challengeInfo);
-        intent.putExtra("endDate",endDate);
-        startActivity(intent);
 
     }
 
-    public void challengeInfo(View view){
+    /**
+     * go and view the challenge info
+     */
+    public void challengeInfo(View view) {
 
         Intent intent = new Intent(this, ChallengeInfoActivity.class);
         intent.putExtra("challengeInfo", challengeInfo);
@@ -143,7 +151,7 @@ public class ChallengeLobbyActivity extends AppCompatActivity implements Databas
     }
 
 
-    public void quit(View view){
+    public void quit(View view) {
 
         db.quitChallenge(roomID, this);
 
@@ -170,7 +178,7 @@ public class ChallengeLobbyActivity extends AppCompatActivity implements Databas
 
 
     @RequiresApi(api = Build.VERSION_CODES.Q)
-    public void checkSensitiveDataAccessPermission(){
+    public void checkSensitiveDataAccessPermission() {
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACTIVITY_RECOGNITION)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -178,7 +186,7 @@ public class ChallengeLobbyActivity extends AppCompatActivity implements Databas
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.ACTIVITY_RECOGNITION, Manifest.permission.ACCESS_FINE_LOCATION},
                     MY_PERMISSIONS_REQUEST_ACTIVITY);
-        }else{
+        } else {
             Toast.makeText(ChallengeLobbyActivity.this, " Successfully granted permissions for ACTIVITY_RECOGNITION and ACCESS_FINE_LOCATION!",
                     Toast.LENGTH_SHORT).show();
 
@@ -212,9 +220,10 @@ public class ChallengeLobbyActivity extends AppCompatActivity implements Databas
 //                        startActivityForResult(new Intent(Settings.ACTION_PRIVACY_SETTINGS), 0);
 //                    });
                     a.setNegativeButton("Okay!", (dialog, which) -> {
-                        onBackPressed();
+
                     });
                     a.show();
+                    onBackPressed();
 
                 }
                 return;
@@ -222,30 +231,18 @@ public class ChallengeLobbyActivity extends AppCompatActivity implements Databas
 
     }
 
+    /**
+     *
+     * place the initial bet for the user
+     *
+     * @param place: indicated whether the user has already placed a bet or not
+     */
+    public void placeBet(boolean place) {
 
-    public void goToWeightScreen() {
-        Intent intent;
-        if(weightPrompt){
-            intent = new Intent(this, WeightLossChallengeInitActivity.class);
-        }else{
-            intent = new Intent(this, WeightChallengeActivity.class);
-        }
-        intent.putExtra("challengeInfo", challengeInfo);
-        intent.putExtra("endDate",endDate);
-        startActivity(intent);
-
-    }
-
-    public void placeBet(boolean place){
-
-        if(place){
-            if(type.equals("DISTANCE")){
-                goToDistance();
-            }else{
-                goToWeightScreen();
-            }
-
-            return;
+        // if the user has already placed the bet, then simply go to the
+        // corresponding screen
+        if (place || betAmount<=0) {
+            goToScreen();
         }
 
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
@@ -267,17 +264,23 @@ public class ChallengeLobbyActivity extends AppCompatActivity implements Databas
                 .enqueue(new ChallengeLobbyActivity.PayCallback(this));
     }
 
+    /**
+     *
+     * check if the weight challenge user needs the enter weight prompt again
+     *
+     * @param weightPrompt: indicate whether the user needs to input new weight img or not
+     */
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void passBoolean(boolean weightPrompt) {
 
 
-                this.weightPrompt = weightPrompt;
-                if(betAmount>0){
-                    db.checkHasBet(roomID, this);
-                }else{
-                    goToWeightScreen();
-                }
+        this.weightPrompt = weightPrompt;
+        if (betAmount > 0) {
+            db.checkHasBet(roomID, this);
+        } else {
+            goToWeightScreen();
+        }
 
 
     }
@@ -286,7 +289,8 @@ public class ChallengeLobbyActivity extends AppCompatActivity implements Databas
      * PayCallback for the request to our backend server
      */
     private static final class PayCallback implements Callback {
-        @NonNull private final WeakReference<ChallengeLobbyActivity> activityRef;
+        @NonNull
+        private final WeakReference<ChallengeLobbyActivity> activityRef;
 
         PayCallback(@NonNull ChallengeLobbyActivity activity) {
             activityRef = new WeakReference<>(activity);
@@ -320,21 +324,45 @@ public class ChallengeLobbyActivity extends AppCompatActivity implements Databas
                         ).show()
                 );
             } else {
-                if(activity.type.equals("DISTANCE")){
-                    activity.goToDistance();
-                }else{
-                    activity.goToWeightScreen();
-                }
-
+                activity.goToScreen();
             }
         }
     }
 
-    public void goToDistance(){
+    public void goToScreen(){
+
+        switch(type){
+
+            case "DISTANCE":
+                goToDistance();
+                break;
+            case "WEIGHTLOSS":
+                goToWeightScreen();
+                break;
+        }
+
+
+
+    }
+
+    public void goToDistance() {
 
         Intent intent = new Intent(this, DistanceChallengeActivity.class);
         intent.putExtra("challengeInfo", challengeInfo);
-        intent.putExtra("endDate",endDate);
+        intent.putExtra("endDate", endDate);
         startActivity(intent);
+    }
+
+    public void goToWeightScreen() {
+        Intent intent;
+        if (weightPrompt) {
+            intent = new Intent(this, WeightLossChallengeInitActivity.class);
+        } else {
+            intent = new Intent(this, WeightChallengeActivity.class);
+        }
+        intent.putExtra("challengeInfo", challengeInfo);
+        intent.putExtra("endDate", endDate);
+        startActivity(intent);
+
     }
 }

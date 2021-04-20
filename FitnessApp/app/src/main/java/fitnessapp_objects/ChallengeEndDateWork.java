@@ -18,8 +18,8 @@ public class ChallengeEndDateWork extends Worker {
 
     private static final String BACKEND_URL = "https://fitnessapp501.herokuapp.com/";
     private OkHttpClient httpClient = new OkHttpClient();
-    Context context;
-    Database db;
+    private Context context;
+    private Database db;
 
     public ChallengeEndDateWork(
             @NonNull Context context,

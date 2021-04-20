@@ -61,22 +61,27 @@ import fitnessapp_objects.WorkManagerAPI;
 
 public class DistanceChallengeActivity extends AppCompatActivity implements Database.OnLeaderBoardStatsGetCompletionHandler, Database.UIUpdateCompletionHandler {
 
-    final String TAG = "DistanceChallActivity";
-    final int GOOGLE_FIT_PERMISSIONS_REQUEST_CODE = 1;
-    GoogleSignInOptionsExtension fitnessOptions;
-    GoogleSignInAccount googleSigninAccount;
-    RecordingClient recordingClient;
-    HashMap<String,String> challengeInfo;
-    long endDate;
-    TextView myDistanceTV, challTypeTV;
-    ListView leaderBoardLV;
-    ArrayList<ParticipantModel> participantModels;
-    LeaderBoardParticipantLVAdapter adapter;
-    OnDataPointListener listener;
-    Database db;
-    Button periodBTN, endBTN;
+    private final String TAG = "DistanceChallActivity";
+    private final int GOOGLE_FIT_PERMISSIONS_REQUEST_CODE = 1;
 
-    Button refreshBTN;
+    private GoogleSignInOptionsExtension fitnessOptions;
+    private GoogleSignInAccount googleSigninAccount;
+
+    private RecordingClient recordingClient;
+    private HashMap<String, String> challengeInfo;
+    private String roomID;
+    private long endDate;
+    private TextView myDistanceTV, challTypeTV;
+    private Button periodBTN, endBTN, refreshBTN;
+    private ListView leaderBoardLV;
+
+    private ArrayList<ParticipantModel> participantModels;
+    private LeaderBoardParticipantLVAdapter adapter;
+
+    private OnDataPointListener listener;
+    private Database db;
+
+
     @SuppressLint("LongLogTag")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,6 +91,8 @@ public class DistanceChallengeActivity extends AppCompatActivity implements Data
         myDistanceTV = (TextView) findViewById(R.id.my_stats_tv);
         leaderBoardLV = (ListView) findViewById(R.id.leaderboard_lv);
         challTypeTV = (TextView) findViewById(R.id.chall_type_title_tv);
+        refreshBTN = (Button) findViewById(R.id.refresh_lb_btn);
+
         challTypeTV.setText(getString(R.string.distance));
 
         participantModels = new ArrayList<>();
@@ -94,20 +101,22 @@ public class DistanceChallengeActivity extends AppCompatActivity implements Data
 
         myDistanceTV.setText("0");
 
-        challengeInfo = (HashMap<String,String>) getIntent().getSerializableExtra("challengeInfo");
-        endDate = getIntent().getLongExtra("endDate",0);
+        //noinspection unchecked
+        challengeInfo = (HashMap<String, String>) getIntent().getSerializableExtra("challengeInfo");
+        endDate = getIntent().getLongExtra("endDate", 0);
+        roomID = challengeInfo.get("roomID");
 
         fitnessOptions = AuthPermission.getInstance().getFitnessOption();
 
         googleSigninAccount = GoogleSignIn.getAccountForExtension(this, fitnessOptions);
 
         db = Database.getInstance();
-        refreshBTN = (Button) findViewById(R.id.refresh_lb_btn);
+
 
         refreshBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                db.getLeaderBoardStats(challengeInfo.get("roomID"), DistanceChallengeActivity.this);
+                db.getLeaderBoardStats(roomID, DistanceChallengeActivity.this);
             }
         });
 
@@ -123,8 +132,7 @@ public class DistanceChallengeActivity extends AppCompatActivity implements Data
         }
 
 
-
-        ////////////////
+        //////////////// TODO- remove below, for testing
 
         periodBTN = (Button) findViewById(R.id.period_btn);
         endBTN = (Button) findViewById(R.id.end_btn);
@@ -147,23 +155,30 @@ public class DistanceChallengeActivity extends AppCompatActivity implements Data
 
     @Override
     protected void onDestroy() {
+        removeSensorClientListener();
         db.removeStatsChangeListener();
         super.onDestroy();
     }
 
-    public void initTask(){
+    /**
+     * initialize all the task for this challenge
+     */
+    public void initTask() {
 
         recordingClientSub();
+        startSensorClientListener();
+
         startDistanceChangeListener();
-        db.getLeaderBoardStats(challengeInfo.get("roomID"), this);
+        db.getLeaderBoardStats(roomID, this);
 //        startPeriodicDistanceUpdateTask();
 //        startEndDateNotifyTask();
-        WorkManagerAPI.getInstance().viewAllWork(WorkManager.getInstance(this), challengeInfo.get("roomID"));
-        startSensorClientListener();
+        WorkManagerAPI.getInstance().viewAllWork(WorkManager.getInstance(this), roomID);
     }
 
-
-    public void recordingClientSub(){
+    /**
+     * subscribe to recording client to record distance data in background
+     */
+    public void recordingClientSub() {
 
         recordingClient = Fitness.getRecordingClient(this, googleSigninAccount);
 
@@ -171,22 +186,28 @@ public class DistanceChallengeActivity extends AppCompatActivity implements Data
                 .subscribe(DataType.TYPE_DISTANCE_DELTA)
                 .addOnSuccessListener(unused ->
                         Log.i(TAG, "TYPE_DISTANCE_DELTA Successfully subscribed!"))
-                .addOnFailureListener( e ->
+                .addOnFailureListener(e ->
                         Log.w(TAG, "There was a problem subscribing to TYPE_DISTANCE_DELTA.", e));
 
         recordingClient.subscribe(DataType.AGGREGATE_DISTANCE_DELTA)
                 .addOnSuccessListener(unused ->
                         Log.i(TAG, "AGGREGATE_DISTANCE_DELTA Successfully subscribed!"))
-                .addOnFailureListener( e ->
+                .addOnFailureListener(e ->
                         Log.w(TAG, "There was a problem subscribing to AGGREGATE_DISTANCE_DELTA.", e));
 
     }
 
-    public void startDistanceChangeListener(){
+    /**
+     * listen to changes on the distance data
+     */
+    public void startDistanceChangeListener() {
         db.startStatsChangeListener(challengeInfo.get("roomID"), ChallengeType.DISTANCE, this);
     }
 
-    public void startSensorClientListener(){
+    /**
+     * register to sensor client for real time distance data
+     */
+    public void startSensorClientListener() {
 
         listener = dataPoint -> {
 
@@ -217,10 +238,9 @@ public class DistanceChallengeActivity extends AppCompatActivity implements Data
     }
 
 
+    public void removeSensorClientListener() {
 
-    public void removeSensorClientListener(){
-
-        if(listener==null)return;
+        if (listener == null) return;
         Fitness.getSensorsClient(this, GoogleSignIn.getAccountForExtension(this, fitnessOptions))
                 .remove(listener)
                 .addOnSuccessListener(unused ->
@@ -235,11 +255,9 @@ public class DistanceChallengeActivity extends AppCompatActivity implements Data
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        System.out.println("request code: " + requestCode + "result code: " + resultCode);
+        if (requestCode == Activity.RESULT_OK) {
 
-        if(requestCode== Activity.RESULT_OK){
-
-            switch (requestCode){
+            switch (requestCode) {
 
                 case GOOGLE_FIT_PERMISSIONS_REQUEST_CODE:
                     System.out.println(" Successfully granted permissions !");
@@ -248,7 +266,7 @@ public class DistanceChallengeActivity extends AppCompatActivity implements Data
 //                            Toast.LENGTH_SHORT).show();
                     break;
                 default:
-                    Toast.makeText(DistanceChallengeActivity.this, " idk where this from!",
+                    Toast.makeText(DistanceChallengeActivity.this, " unknown request code",
                             Toast.LENGTH_SHORT).show();
             }
 
@@ -257,7 +275,7 @@ public class DistanceChallengeActivity extends AppCompatActivity implements Data
     }
 
 
-    public void startPeriodicDistanceUpdateTask(){
+    public void startPeriodicDistanceUpdateTask() {
 
         long currentTime = new Timestamp(new Date()).toDate().getTime();
 
@@ -265,16 +283,16 @@ public class DistanceChallengeActivity extends AppCompatActivity implements Data
                 .setRequiredNetworkType(NetworkType.CONNECTED)
                 .build();
 
-//
+
 //        PeriodicWorkRequest challPeriodicWorkRequest =
 //                new PeriodicWorkRequest.Builder(DistanceChallengePeriodicWork.class,PeriodicWorkRequest.MIN_PERIODIC_INTERVAL_MILLIS, TimeUnit.MILLISECONDS)
-//                        .addTag(challengeInfo.get("roomID"))
+//                        .addTag(roomID)
 //                        .setConstraints(constraints)
 //                        .setBackoffCriteria(BackoffPolicy.LINEAR,
 //                                OneTimeWorkRequest.MIN_BACKOFF_MILLIS,
 //                                TimeUnit.MILLISECONDS)
 //                        .setInputData(new Data.Builder()
-//                                .putString("roomID", challengeInfo.get("roomID"))
+//                                .putString("roomID", roomID)
 //                                .putLong("startDate", currentTime)
 //                                .build())
 //                        .build();
@@ -282,17 +300,17 @@ public class DistanceChallengeActivity extends AppCompatActivity implements Data
 //
 //        WorkManager
 //                .getInstance(this)
-//                .enqueueUniquePeriodicWork(challengeInfo.get("roomID")+"-periodic", ExistingPeriodicWorkPolicy.KEEP,challPeriodicWorkRequest);
+//                .enqueueUniquePeriodicWork(roomID+"-periodic", ExistingPeriodicWorkPolicy.KEEP,challPeriodicWorkRequest);
 
         OneTimeWorkRequest challPeriodicWorkRequest =
-                new  OneTimeWorkRequest.Builder(DistanceChallengePeriodicWork.class)
-                        .addTag(challengeInfo.get("roomID"))
+                new OneTimeWorkRequest.Builder(DistanceChallengePeriodicWork.class)
+                        .addTag(roomID)
                         .setConstraints(constraints)
                         .setBackoffCriteria(BackoffPolicy.LINEAR,
                                 OneTimeWorkRequest.MIN_BACKOFF_MILLIS,
                                 TimeUnit.MILLISECONDS)
                         .setInputData(new Data.Builder()
-                                .putString("roomID", challengeInfo.get("roomID"))
+                                .putString("roomID", roomID)
                                 .putLong("startDate", currentTime)
                                 .build())
                         .build();
@@ -300,11 +318,11 @@ public class DistanceChallengeActivity extends AppCompatActivity implements Data
 
         WorkManager
                 .getInstance(this)
-                .enqueueUniqueWork(challengeInfo.get("roomID")+"-periodic", ExistingWorkPolicy.KEEP,challPeriodicWorkRequest);
+                .enqueueUniqueWork(roomID + "-periodic", ExistingWorkPolicy.KEEP, challPeriodicWorkRequest);
 
     }
 
-    public void startEndDateNotifyTask(){
+    public void startEndDateNotifyTask() {
 
         long currentTime = new Timestamp(new Date()).toDate().getTime();
 
@@ -314,20 +332,21 @@ public class DistanceChallengeActivity extends AppCompatActivity implements Data
 
         OneTimeWorkRequest challEndDateWorkRequest =
                 new OneTimeWorkRequest.Builder(ChallengeEndDateWork.class)
-//                        .setInitialDelay(endDate - currentTime, TimeUnit.MILLISECONDS)
-                        .addTag(challengeInfo.get("roomID"))
+                        //.setInitialDelay(endDate - currentTime, TimeUnit.MILLISECONDS)
+                        .setInitialDelay(5000, TimeUnit.MILLISECONDS)
+                        .addTag(roomID)
                         .setConstraints(constraints)
                         .setBackoffCriteria(BackoffPolicy.LINEAR,
                                 OneTimeWorkRequest.MIN_BACKOFF_MILLIS,
                                 TimeUnit.MILLISECONDS)
                         .setInputData(new Data.Builder()
-                                .putString("roomID", challengeInfo.get("roomID"))
+                                .putString("roomID", roomID)
                                 .build())
                         .build();
 
         WorkManager
                 .getInstance(this)
-                .enqueueUniqueWork(challengeInfo.get("roomID")+"-endDate", ExistingWorkPolicy.KEEP, challEndDateWorkRequest);
+                .enqueueUniqueWork(roomID + "-endDate", ExistingWorkPolicy.KEEP, challEndDateWorkRequest);
 
     }
 
@@ -335,16 +354,17 @@ public class DistanceChallengeActivity extends AppCompatActivity implements Data
     public void statsTransfer(ArrayList<ChallengeStats> stats) {
         participantModels.clear();
 
-        for(ChallengeStats challengeStats: stats){
+        for (ChallengeStats challengeStats : stats) {
 
             participantModels.add(new ParticipantModel(challengeStats.getName(), challengeStats.getId(), challengeStats.getDistance(), ChallengeType.DISTANCE));
 
         }
 
+        //sort the fetched participants based on their distance ranking
         Collections.sort(participantModels, new Comparator<ParticipantModel>() {
             @Override
             public int compare(ParticipantModel o1, ParticipantModel o2) {
-                if(o1.getDistance() > o2.getDistance())return -1;
+                if (o1.getDistance() > o2.getDistance()) return -1;
                 return 1;
             }
         });
@@ -354,9 +374,9 @@ public class DistanceChallengeActivity extends AppCompatActivity implements Data
 
     @Override
     public void updateUI(boolean isSuccess, Map<String, String> data) {
-        if(isSuccess){
+        if (isSuccess) {
             myDistanceTV.setText(data.get("distance"));
-            db.getLeaderBoardStats(challengeInfo.get("roomID"), DistanceChallengeActivity.this);
+            db.getLeaderBoardStats(roomID, DistanceChallengeActivity.this);
         }
     }
 }

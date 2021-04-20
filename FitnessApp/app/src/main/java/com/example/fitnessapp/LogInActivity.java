@@ -39,18 +39,26 @@ public class LogInActivity extends AppCompatActivity implements Database.UIUpdat
         mAuth = FirebaseAuth.getInstance();
     }
 
-    public void updateUI(boolean isSuccess, Map<String,String> data){
+    /**
+     *
+     * @param isSuccess: indicate whether user account is successfully updated from firebase
+     * @param data: not used here
+     */
+    public void updateUI(boolean isSuccess, Map<String, String> data) {
 
-        if(isSuccess){
+        if (isSuccess) {
             Intent intent = new Intent(this, HomeActivity.class);
             startActivity(intent);
-        }else{
+        } else {
             Toast.makeText(this, "SIGN IN FAIL !", Toast.LENGTH_SHORT).show();
         }
 
     }
 
-    public void signInWithEP(View view){
+    /**
+     * sign in with e-mail and password
+     */
+    public void signInWithEP(View view) {
 
         String email = emailET.getText().toString(), password = passET.getText().toString();
 

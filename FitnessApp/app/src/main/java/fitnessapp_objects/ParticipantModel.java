@@ -7,6 +7,7 @@ public class ParticipantModel{
     private ChallengeType type;
     private float distance;
     private float weight;
+    private float initWeight;
 
     public ParticipantModel(String name, String id){
 
@@ -67,5 +68,15 @@ public class ParticipantModel{
         this.type = type;
     }
 
+    public float getInitWeight() {
+        return initWeight;
+    }
 
+    public void setInitWeight(float initWeight) {
+        this.initWeight = initWeight;
+    }
+
+    public float getWeightDiff(){
+        return initWeight - weight;
+    }
 }

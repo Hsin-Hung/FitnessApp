@@ -26,14 +26,16 @@ import fitnessapp_objects.WorkManagerAPI;
 
 public class ChallengeEndActivity extends AppCompatActivity implements Database.OnLeaderBoardStatsGetCompletionHandler, Database.UIUpdateCompletionHandler, Database.OnBooleanPromptHandler {
 
-    ListView leaderBoardLV;
-    TextView challengeResultTV;
-    ArrayList<ParticipantModel> participantModels;
-    LeaderBoardParticipantLVAdapter adapter;
-    HashMap<String,String> challengeInfo;
-    Database db;
-    String type, roomID;
-    WorkManagerAPI workManagerAPI;
+    private ListView leaderBoardLV;
+    private TextView challengeResultTV;
+
+    private ArrayList<ParticipantModel> participantModels;
+    private LeaderBoardParticipantLVAdapter adapter;
+
+    private HashMap<String,String> challengeInfo;
+    private Database db;
+    private String type, roomID;
+    private WorkManagerAPI workManagerAPI;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

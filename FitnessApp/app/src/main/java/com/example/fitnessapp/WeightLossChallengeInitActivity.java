@@ -6,10 +6,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -52,45 +54,51 @@ import okhttp3.Response;
 
 public class WeightLossChallengeInitActivity extends AppCompatActivity implements Database.UIUpdateCompletionHandler {
 
+    private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final String BACKEND_URL = "https://fitnessapp501.herokuapp.com/";
+    private String TAG = "WeightChallengeInitActivity";
+    private final long TIME_TO_SUBMIT = 30000;
+
     private OkHttpClient httpClient = new OkHttpClient();
-    static final int REQUEST_IMAGE_CAPTURE = 1;
-    ImageView weightImg, gestureImg;
-    EditText enter_weight_et;
-    TextView randomGestureTV;
-    Button takePhotoBTN, submitBTN;
-    private FirebaseAuth mAuth;
-    Bitmap imageBitmap;
-    HashMap<String,String> challengeInfo;
-    long endDate;
-    Database db;
-    FirebaseStorage storage = FirebaseStorage.getInstance();
+    private ImageView weightImg, gestureImg;
+    private EditText enter_weight_et;
+    private Button takePhotoBTN, submitBTN;
+    private Bitmap imageBitmap;
+    private HashMap<String,String> challengeInfo;
+    private long endDate;
+    private Database db;
+    private FirebaseStorage storage = FirebaseStorage.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_weight_loss_challenge_init);
+
         weightImg = (ImageView) findViewById(R.id.weight_img);
         gestureImg = (ImageView) findViewById(R.id.gesture_img);
         enter_weight_et = (EditText) findViewById(R.id.enter_weight_et);
-        randomGestureTV = (TextView) findViewById(R.id.random_gesture_tv);
         takePhotoBTN = (Button) findViewById(R.id.take_photo_btn);
         submitBTN = (Button) findViewById(R.id.submit_btn);
 
         takePhotoBTN.setEnabled(false);
         submitBTN.setEnabled(false);
+        //noinspection unchecked
         challengeInfo = (HashMap<String,String>) getIntent().getSerializableExtra("challengeInfo");
         endDate = getIntent().getLongExtra("endDate",0);
         db = Database.getInstance();
 
     }
 
+    /**
+     * take a picture of your scale with the generated gesture
+     */
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         try {
             startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
         } catch (ActivityNotFoundException e) {
             // display error state to the user
+            Log.i(TAG, "Error taking photo");
         }
     }
 
@@ -104,12 +112,20 @@ public class WeightLossChallengeInitActivity extends AppCompatActivity implement
         }
     }
 
+
     public void takePhoto(View view){
-
-        dispatchTakePictureIntent();
-
+        if (this.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)){
+            // this device has a camera
+            dispatchTakePictureIntent();
+        } else {
+            // no camera on this device
+            Log.i(TAG, "No camera");
+        }
     }
 
+    /**
+     * submit the photo and the input weight
+     */
     public void submit(View view){
 
         String weight = enter_weight_et.getText().toString();
@@ -159,7 +175,7 @@ public class WeightLossChallengeInitActivity extends AppCompatActivity implement
                     }
                 });
             }
-        }, 30000);
+        }, TIME_TO_SUBMIT);
 
 
 

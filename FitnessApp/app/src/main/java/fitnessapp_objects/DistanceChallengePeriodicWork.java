@@ -30,8 +30,8 @@ public class DistanceChallengePeriodicWork extends Worker {
 
     private final String TAG = "ChallengeWork";
     private Database db;
-    long currentTime;
-    Context context;
+    private long currentTime;
+    private Context context;
 
     public DistanceChallengePeriodicWork(
             @NonNull Context context,

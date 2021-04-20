@@ -49,23 +49,31 @@ public class JoinChallengeActivity extends AppCompatActivity implements Database
 
     }
 
-    public void randomChallenges(View view){
+    /**
+     * get random challenges
+     */
+    public void randomChallenges(View view) {
 
         db.getPendingChallengeRooms(this);
 
     }
 
+    /**
+     * update the list view with the challenge rooms fetched from the data base
+     *
+     * @param rooms
+     */
     @Override
-    public void challengeRoomsTransfer(Map<String,ChallengeRoom> rooms) {
+    public void challengeRoomsTransfer(Map<String, ChallengeRoom> rooms) {
 
         challengeRoomModelArrayList.clear();
 
-        for(Map.Entry<String,ChallengeRoom> entry : rooms.entrySet()){
+        for (Map.Entry<String, ChallengeRoom> entry : rooms.entrySet()) {
 
             ChallengeRoom room = entry.getValue();
 
-            ChallengeRoomModel model = new ChallengeRoomModel(entry.getKey(), room.getDescription(), room.getName(),room.getType(),
-                    room.isBet(), room.getBetAmount(),room.getEndDate(), room.getPassword(), room.isStarted());
+            ChallengeRoomModel model = new ChallengeRoomModel(entry.getKey(), room.getDescription(), room.getName(), room.getType(),
+                    room.isBet(), room.getBetAmount(), room.getEndDate(), room.getPassword(), room.isStarted());
             challengeRoomModelArrayList.add(model);
 
         }
@@ -84,27 +92,22 @@ public class JoinChallengeActivity extends AppCompatActivity implements Database
     }
 
     @Override
-    public void onDialogPositiveClick(Map<String,String> roomInfo, boolean success) {
+    public void onDialogPositiveClick(Map<String, String> roomInfo, boolean success) {
 
-        if(success){
-
-            db.joinChallengeRoom(roomInfo.get("roomID"), this);
-
-
-        }
+        if (success) db.joinChallengeRoom(roomInfo.get("roomID"), this);
 
     }
 
-
+    /**
+     * go to the selected challenge
+     */
     @Override
-    public void updateUI(boolean isSuccess, Map<String,String> data) {
-        if(isSuccess){
-
+    public void updateUI(boolean isSuccess, Map<String, String> data) {
+        if (isSuccess) {
             Intent intent = new Intent(this, ChallengeLobbyActivity.class);
-            intent.putExtra("endDate",pickedChallengeRoom.getEndDate().toDate().getTime());
             intent.putExtra("challengeInfo", pickedChallengeRoom.getChallengeInfoMap());
+            intent.putExtra("endDate", pickedChallengeRoom.getEndDate().toDate().getTime());
             startActivity(intent);
-
         }
     }
 
