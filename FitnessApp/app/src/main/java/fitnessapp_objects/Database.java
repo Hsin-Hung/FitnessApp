@@ -774,4 +774,27 @@ public class Database {
         return true;
     }
 
+    public boolean assignRandomDIstance(String roomID){
+
+        db.collection("challenges").document(roomID).collection("stats").get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Log.d(TAG, document.getId() + " => " + document.getData());
+
+                                Random rand = new Random();
+                                db.collection("challenges").document(roomID).
+                                        collection("stats").document(document.getId()).update("distance", rand.nextInt(200));
+
+                            }
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+        return true;
+    }
+
 }

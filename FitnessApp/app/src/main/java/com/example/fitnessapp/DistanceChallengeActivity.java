@@ -81,6 +81,8 @@ public class DistanceChallengeActivity extends AppCompatActivity implements Data
     private OnDataPointListener listener;
     private Database db;
 
+    private Button simulateBTN;
+
 
     @SuppressLint("LongLogTag")
     @Override
@@ -157,6 +159,14 @@ public class DistanceChallengeActivity extends AppCompatActivity implements Data
             }
         });
 
+
+        simulateBTN = (Button) findViewById(R.id.simulate_btn);
+        simulateBTN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                db.assignRandomDIstance(roomID);
+            }
+        });
     }
 
     @Override
