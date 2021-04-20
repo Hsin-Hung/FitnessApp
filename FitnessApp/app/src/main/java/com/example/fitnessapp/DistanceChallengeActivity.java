@@ -349,7 +349,6 @@ public class DistanceChallengeActivity extends AppCompatActivity implements Data
         OneTimeWorkRequest challEndDateWorkRequest =
                 new OneTimeWorkRequest.Builder(ChallengeEndDateWork.class)
                         //.setInitialDelay(endDate - currentTime, TimeUnit.MILLISECONDS)
-                        .setInitialDelay(5000, TimeUnit.MILLISECONDS)
                         .addTag(roomID)
                         .setConstraints(constraints)
                         .setBackoffCriteria(BackoffPolicy.LINEAR,
