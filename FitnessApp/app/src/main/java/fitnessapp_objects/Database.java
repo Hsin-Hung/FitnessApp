@@ -38,7 +38,7 @@ public class Database {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final String TAG = "Database";
     private final int NUM_RANDOM = 5;
-    private ListenerRegistration challengeRoomListener, coinChangeListener, statsChangeListener;
+    private ListenerRegistration challengeRoomListener, coinChangeListener, statsChangeListener, challengeStatusListener;
 
     private Database(){
 
@@ -795,6 +795,33 @@ public class Database {
                     }
                 });
         return true;
+    }
+
+    public boolean startChallengeStatusListener(String roomID, OnBooleanPromptHandler handler){
+
+        challengeStatusListener = db.collection("challenges").document(roomID).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+
+                if(value.exists()){
+                    Boolean started = value.getBoolean("started");
+                    handler.passBoolean(started);
+                }else{
+                    Log.d(TAG, "No such document");
+
+                }
+
+            }
+        });
+
+        return true;
+    }
+
+    public void removeChallengeStatusListener(){
+
+        if(challengeStatusListener!=null)challengeStatusListener.remove();
+
+
     }
 
 }

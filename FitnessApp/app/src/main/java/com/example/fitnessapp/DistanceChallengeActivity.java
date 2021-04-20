@@ -59,7 +59,7 @@ import fitnessapp_objects.ParticipantModel;
 import fitnessapp_objects.WorkManagerAPI;
 
 
-public class DistanceChallengeActivity extends AppCompatActivity implements Database.OnLeaderBoardStatsGetCompletionHandler, Database.UIUpdateCompletionHandler {
+public class DistanceChallengeActivity extends AppCompatActivity implements Database.OnLeaderBoardStatsGetCompletionHandler, Database.UIUpdateCompletionHandler, Database.OnBooleanPromptHandler {
 
     private final String TAG = "DistanceChallActivity";
     private final int GOOGLE_FIT_PERMISSIONS_REQUEST_CODE = 1;
@@ -119,7 +119,7 @@ public class DistanceChallengeActivity extends AppCompatActivity implements Data
         googleSigninAccount = GoogleSignIn.getAccountForExtension(this, fitnessOptions);
 
         db = Database.getInstance();
-
+        db.startChallengeStatusListener(roomID, this);
 
         refreshBTN.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -173,6 +173,7 @@ public class DistanceChallengeActivity extends AppCompatActivity implements Data
     protected void onDestroy() {
         removeSensorClientListener();
         db.removeStatsChangeListener();
+        db.removeChallengeStatusListener();
         super.onDestroy();
     }
 
@@ -399,5 +400,15 @@ public class DistanceChallengeActivity extends AppCompatActivity implements Data
     @Override
     public void onBackPressed() {
         finish();
+    }
+
+    @Override
+    public void passBoolean(boolean started) {
+        if(!started){
+            Intent intent = new Intent(this, ChallengeEndActivity.class);
+            intent.putExtra("endDate", endDate);
+            intent.putExtra("challengeInfo", challengeInfo);
+            startActivity(intent);
+        }
     }
 }

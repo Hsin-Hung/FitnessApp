@@ -34,8 +34,8 @@
 
         <Button
             android:id="@+id/create_chall_homebtn"
-            android:layout_width="140dp"
-            android:layout_height="120dp"
+            android:layout_width="160dp"
+            android:layout_height="160dp"
             android:layout_marginTop="40dp"
             android:background="@drawable/chalbtn2"
             android:onClick="createChallenge"
@@ -46,8 +46,8 @@
 
         <Button
             android:id="@+id/join_chall_homebtn"
-            android:layout_width="140dp"
-            android:layout_height="120dp"
+            android:layout_width="160dp"
+            android:layout_height="160dp"
             android:layout_marginTop="10dp"
             android:background="@drawable/chalbtn2"
             android:onClick="joinChallenge"
@@ -58,8 +58,8 @@
 
         <Button
             android:id="@+id/your_chall_btn"
-            android:layout_width="140dp"
-            android:layout_height="120dp"
+            android:layout_width="160dp"
+            android:layout_height="160dp"
             android:layout_marginTop="10dp"
             android:background="@drawable/chalbtn2"
             android:onClick="myChallenges"
@@ -81,17 +81,6 @@
         app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
 
     </LinearLayout>
-
-    <Button
-        android:id="@+id/button11"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="30dp"
-        android:onClick="checkPermission"
-        android:text="check Permission"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
