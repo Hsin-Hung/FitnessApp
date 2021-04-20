@@ -389,8 +389,6 @@ public class DistanceChallengeActivity extends AppCompatActivity implements Data
 
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent(this, ChallengeLobbyActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
+        finish();
     }
 }
