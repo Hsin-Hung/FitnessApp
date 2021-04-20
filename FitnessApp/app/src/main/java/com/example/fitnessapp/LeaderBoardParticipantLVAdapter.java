@@ -25,6 +25,8 @@ public class LeaderBoardParticipantLVAdapter extends ArrayAdapter<ParticipantMod
 
     @NonNull
     @Override
+
+    //this shows the components/lists that would go inside of leaderboard for ranking
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         View listitemView = convertView;
         if (listitemView == null) {

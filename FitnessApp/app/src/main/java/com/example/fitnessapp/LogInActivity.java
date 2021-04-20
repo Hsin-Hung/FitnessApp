@@ -39,6 +39,8 @@ public class LogInActivity extends AppCompatActivity implements Database.UIUpdat
         mAuth = FirebaseAuth.getInstance();
     }
 
+
+    //if UI is successful -> home page ELSE: display that it failed
     public void updateUI(boolean isSuccess, Map<String,String> data){
 
         if(isSuccess){
