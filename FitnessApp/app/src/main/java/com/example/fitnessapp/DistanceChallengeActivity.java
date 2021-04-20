@@ -88,17 +88,23 @@ public class DistanceChallengeActivity extends AppCompatActivity implements Data
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_challenge);
 
+        //myDistanceTV shows the total distance by the user
         myDistanceTV = (TextView) findViewById(R.id.my_stats_tv);
+        //current leaderboard of the distance challenge
         leaderBoardLV = (ListView) findViewById(R.id.leaderboard_lv);
+        //showing challengeType - this case , it will be Distance
         challTypeTV = (TextView) findViewById(R.id.chall_type_title_tv);
         refreshBTN = (Button) findViewById(R.id.refresh_lb_btn);
 
         challTypeTV.setText(getString(R.string.distance));
 
+
+        //leaderboard components need participant models objects
         participantModels = new ArrayList<>();
         adapter = new LeaderBoardParticipantLVAdapter(this, participantModels);
         leaderBoardLV.setAdapter(adapter);
 
+        //set myDistance as 0
         myDistanceTV.setText("0");
 
         //noinspection unchecked
@@ -359,6 +365,7 @@ public class DistanceChallengeActivity extends AppCompatActivity implements Data
             participantModels.add(new ParticipantModel(challengeStats.getName(), challengeStats.getId(), challengeStats.getDistance(), ChallengeType.DISTANCE));
 
         }
+
 
         //sort the fetched participants based on their distance ranking
         Collections.sort(participantModels, new Comparator<ParticipantModel>() {
