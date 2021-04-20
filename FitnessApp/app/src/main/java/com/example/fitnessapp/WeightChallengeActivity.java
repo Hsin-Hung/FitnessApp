@@ -284,6 +284,8 @@ public class WeightChallengeActivity extends AppCompatActivity implements Databa
     @Override
     public void onBackPressed() {
         Intent intent = new Intent(this, ChallengeLobbyActivity.class);
+        intent.putExtra("endDate", endDate);
+        intent.putExtra("challengeInfo", challengeInfo);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }

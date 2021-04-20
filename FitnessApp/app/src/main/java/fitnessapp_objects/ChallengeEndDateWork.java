@@ -14,6 +14,9 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 
+/**
+ * Work for workmanager
+ */
 public class ChallengeEndDateWork extends Worker {
 
     private static final String BACKEND_URL = "https://fitnessapp501.herokuapp.com/";

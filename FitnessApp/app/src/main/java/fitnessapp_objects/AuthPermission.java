@@ -5,6 +5,9 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.fitness.FitnessOptions;
 import com.google.android.gms.fitness.data.DataType;
 
+/**
+ * helper class for reusing authentication related methods
+ */
 public class AuthPermission {
 
     public static AuthPermission authPermission = null;
@@ -19,7 +22,9 @@ public class AuthPermission {
 
     }
 
-
+    /**
+     * get the fitness options needed for this app to pass to google sign in
+     */
     public FitnessOptions getFitnessOption(){
 
         FitnessOptions fitnessOptions =

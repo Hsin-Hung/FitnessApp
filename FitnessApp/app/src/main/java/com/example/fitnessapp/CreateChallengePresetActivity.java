@@ -160,7 +160,7 @@ public class CreateChallengePresetActivity extends AppCompatActivity implements 
         } else {
             return true;
         }
-        return true;
+        return false;
     }
 
     /**
