@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.work.WorkManager;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ListView;
@@ -85,14 +86,15 @@ public class ChallengeEndActivity extends AppCompatActivity implements Database.
                 break;
             case "WEIGHTLOSS":
                 for(ChallengeStats challengeStats: stats){
-
-                    participantModels.add(new ParticipantModel(challengeStats.getName(), challengeStats.getId(), ChallengeType.WEIGHTLOSS, challengeStats.getWeight()));
+                    ParticipantModel participantModel = new ParticipantModel(challengeStats.getName(), challengeStats.getId(), ChallengeType.WEIGHTLOSS, challengeStats.getWeight());
+                    participantModel.setInitWeight(challengeStats.getInitWeight());
+                    participantModels.add(participantModel);
 
                 }
                 Collections.sort(participantModels, new Comparator<ParticipantModel>() {
                     @Override
                     public int compare(ParticipantModel o1, ParticipantModel o2) {
-                        if(o1.getWeight() > o2.getWeight())return -1;
+                        if(o1.getWeightDiff() > o2.getWeightDiff())return -1;
                         return 1;
                     }
                 });
@@ -119,9 +121,16 @@ public class ChallengeEndActivity extends AppCompatActivity implements Database.
         if(check){
 
             challengeResultTV.setText(getString(R.string.youWin));
+            challengeResultTV.setTextColor(Color.GREEN);
         }else{
 
             challengeResultTV.setText(getString(R.string.youLose));
+            challengeResultTV.setTextColor(Color.RED);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+
     }
 }

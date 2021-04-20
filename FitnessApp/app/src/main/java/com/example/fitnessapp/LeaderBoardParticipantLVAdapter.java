@@ -42,7 +42,7 @@ public class LeaderBoardParticipantLVAdapter extends ArrayAdapter<ParticipantMod
         if(participantModel.getType()== ChallengeType.DISTANCE){
             stats.setText(String.valueOf(participantModel.getDistance()));
         }else if(participantModel.getType()==ChallengeType.WEIGHTLOSS){
-            stats.setText(String.valueOf(participantModel.getWeight()));
+            stats.setText(String.valueOf(participantModel.getWeightDiff()));
         }
 
         return listitemView;

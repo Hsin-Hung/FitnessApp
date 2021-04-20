@@ -243,6 +243,7 @@ public class ChallengeLobbyActivity extends AppCompatActivity implements Databas
         // corresponding screen
         if (place || betAmount<=0) {
             goToScreen();
+            return;
         }
 
         FirebaseAuth mAuth = FirebaseAuth.getInstance();

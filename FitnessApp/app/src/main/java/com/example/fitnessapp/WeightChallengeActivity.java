@@ -32,6 +32,8 @@ import com.google.android.gms.fitness.RecordingClient;
 import com.google.android.gms.fitness.data.DataType;
 import com.google.firebase.Timestamp;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -158,7 +160,7 @@ public class WeightChallengeActivity extends AppCompatActivity implements Databa
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode== Activity.RESULT_OK){
+        if(requestCode == Activity.RESULT_OK){
 
             switch (requestCode){
 
@@ -277,5 +279,12 @@ public class WeightChallengeActivity extends AppCompatActivity implements Databa
                 .getInstance(this)
                 .enqueueUniqueWork(roomID+"-endDate", ExistingWorkPolicy.KEEP, challEndDateWorkRequest);
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(this, ChallengeLobbyActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
     }
 }
