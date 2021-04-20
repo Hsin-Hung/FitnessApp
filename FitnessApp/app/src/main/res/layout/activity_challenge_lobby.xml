@@ -51,7 +51,7 @@
         <GridView
             android:id="@+id/participant_grid"
             android:layout_width="wrap_content"
-            android:layout_height="370dp"
+            android:layout_height="230dp"
             android:layout_marginTop="20dp"
             android:columnWidth="50dp"
             android:gravity="center"
