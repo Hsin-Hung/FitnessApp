@@ -223,7 +223,6 @@ public class ChallengeLobbyActivity extends AppCompatActivity implements Databas
 
                     });
                     a.show();
-                    onBackPressed();
 
                 }
                 return;
