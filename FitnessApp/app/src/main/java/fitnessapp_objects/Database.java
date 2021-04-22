@@ -931,7 +931,10 @@ public class Database {
 
     public void removeChallengeStatusListener(){
 
-        if(challengeStatusListener!=null)challengeStatusListener.remove();
+        if(challengeStatusListener!=null){
+            Log.d(TAG, "Remove status change listener");
+            challengeStatusListener.remove();
+        }
 
 
     }

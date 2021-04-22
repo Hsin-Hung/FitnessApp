@@ -76,7 +76,6 @@ public class ChallengeLobbyActivity extends AppCompatActivity implements Databas
         beginInfoTV = (TextView) findViewById(R.id.begin_info_tv);
         participants_view = (GridView) findViewById(R.id.participant_grid);
         beginChallBTN = (Button) findViewById(R.id.begin_chall_btn);
-
         participantModelArrayList = new ArrayList<>();
 
         workManagerAPI = WorkManagerAPI.getInstance();
@@ -93,17 +92,24 @@ public class ChallengeLobbyActivity extends AppCompatActivity implements Databas
         roomNameTV.setText(challengeInfo.getOrDefault("name", "un-named"));
 
         db = Database.getInstance();
-        db.startChallengeRoomChangeListener(roomID, this);
-        db.startCoinChangeListener(this);
         checkSensitiveDataAccessPermission();
 
     }
 
     @Override
-    protected void onDestroy() {
+    protected void onStart() {
+        super.onStart();
+        db.startChallengeRoomChangeListener(roomID, this);
+        db.startCoinChangeListener(this);
+        beginChallBTN.setEnabled(true);
+    }
+
+
+    @Override
+    protected void onPause() {
+        super.onPause();
         db.removeCoinChangeListener();
         db.detachChallengeRoomListener();
-        super.onDestroy();
     }
 
     /**
@@ -134,17 +140,6 @@ public class ChallengeLobbyActivity extends AppCompatActivity implements Databas
 
         beginChallBTN.setEnabled(false);
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        beginChallBTN.setEnabled(true);
-                    }
-                });
-            }
-        }, BTN_DISABLE_TIME);
         switch (type) {
             case "DISTANCE":
                 if (betAmount > 0) {
@@ -280,6 +275,7 @@ public class ChallengeLobbyActivity extends AppCompatActivity implements Databas
         // if the user doesn't have enough coin to bet
         if(UserAccount.getInstance().getCoin()<betAmount && !place){
             beginInfoTV.setText(getString(R.string.notEnoughCoin));
+            beginChallBTN.setEnabled(true);
             return;
         }
 
@@ -352,6 +348,9 @@ public class ChallengeLobbyActivity extends AppCompatActivity implements Databas
                             activity, "Error: " + e.toString(), Toast.LENGTH_LONG
                     ).show()
             );
+            activity.runOnUiThread(() ->
+                    activity.beginChallBTN.setEnabled(true)
+            );
         }
 
         @Override
@@ -368,6 +367,11 @@ public class ChallengeLobbyActivity extends AppCompatActivity implements Databas
                                 activity, "Error: " + response.toString(), Toast.LENGTH_LONG
                         ).show()
                 );
+                activity.runOnUiThread(() ->
+                        activity.beginChallBTN.setEnabled(true)
+                        );
+
+
             } else {
                 UserAccount.getInstance().bet(activity.betAmount);
                 activity.goToScreen();

@@ -99,7 +99,6 @@ public class WeightChallengeActivity extends AppCompatActivity implements Databa
         googleSigninAccount = GoogleSignIn.getAccountForExtension(this, fitnessOptions);
 
         db = Database.getInstance();
-        db.startChallengeStatusListener(roomID,this);
 
         refreshBTN.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -135,10 +134,17 @@ public class WeightChallengeActivity extends AppCompatActivity implements Databa
     }
 
     @Override
-    protected void onDestroy() {
+    protected void onStart() {
+        super.onStart();
+        startWeightChangeListener();
+        db.startChallengeStatusListener(roomID,this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
         db.removeStatsChangeListener();
         db.removeChallengeStatusListener();
-        super.onDestroy();
     }
 
     /**
@@ -146,9 +152,8 @@ public class WeightChallengeActivity extends AppCompatActivity implements Databa
      */
     public void initTask(){
 
-        startWeightChangeListener();
-        db.getLeaderBoardStats(roomID, this);
         startPeriodicDistanceUpdateTask();
+        db.getLeaderBoardStats(roomID, this);
         startEndDateNotifyTask();
         WorkManagerAPI.getInstance().viewAllWork(WorkManager.getInstance(this), roomID);
     }

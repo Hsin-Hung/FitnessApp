@@ -121,7 +121,6 @@ public class DistanceChallengeActivity extends AppCompatActivity implements Data
         googleSigninAccount = GoogleSignIn.getAccountForExtension(this, fitnessOptions);
 
         db = Database.getInstance();
-        db.startChallengeStatusListener(roomID, this);
 
         refreshBTN.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -172,11 +171,19 @@ public class DistanceChallengeActivity extends AppCompatActivity implements Data
     }
 
     @Override
-    protected void onDestroy() {
+    protected void onStart() {
+        super.onStart();
+        startSensorClientListener();
+        startDistanceChangeListener();
+        db.startChallengeStatusListener(roomID, this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
         removeSensorClientListener();
         db.removeStatsChangeListener();
         db.removeChallengeStatusListener();
-        super.onDestroy();
     }
 
     /**
@@ -185,9 +192,6 @@ public class DistanceChallengeActivity extends AppCompatActivity implements Data
     public void initTask() {
 
         recordingClientSub();
-        startSensorClientListener();
-
-        startDistanceChangeListener();
         db.getLeaderBoardStats(roomID, this);
         startPeriodicDistanceUpdateTask();
         startEndDateNotifyTask();

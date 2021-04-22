@@ -55,7 +55,7 @@ import okhttp3.Response;
 /**
  * this class represents the screen that prompts the participant for weight image, which the backend will verify to prevent cheating
  */
-public class WeightLossChallengeInitActivity extends AppCompatActivity implements Database.UIUpdateCompletionHandler {
+public class WeightLossChallengeInitActivity extends AppCompatActivity implements Database.UIUpdateCompletionHandler, Database.OnBooleanPromptHandler {
 
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final String BACKEND_URL = "https://fitnessapp501.herokuapp.com/";
@@ -67,6 +67,7 @@ public class WeightLossChallengeInitActivity extends AppCompatActivity implement
     private EditText enter_weight_et;
     private Button takePhotoBTN, submitBTN;
     private Bitmap imageBitmap;
+    private String roomID;
     private HashMap<String,String> challengeInfo;
     private long endDate;
     private Database db;
@@ -85,11 +86,26 @@ public class WeightLossChallengeInitActivity extends AppCompatActivity implement
 
         takePhotoBTN.setEnabled(false);
         submitBTN.setEnabled(false);
+
         //noinspection unchecked
         challengeInfo = (HashMap<String,String>) getIntent().getSerializableExtra("challengeInfo");
+        roomID = challengeInfo.get("roomID");
         endDate = getIntent().getLongExtra("endDate",0);
         db = Database.getInstance();
 
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        db.startChallengeStatusListener(roomID, this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        db.removeChallengeStatusListener();
     }
 
     /**
@@ -130,7 +146,6 @@ public class WeightLossChallengeInitActivity extends AppCompatActivity implement
      * submit the photo and the input weight
      */
     public void submit(View view){
-
         String weight = enter_weight_et.getText().toString();
 
         if(weight.isEmpty() || imageBitmap==null )return;
@@ -154,7 +169,8 @@ public class WeightLossChallengeInitActivity extends AppCompatActivity implement
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
         byte[] data = bos.toByteArray();
-
+        takePhotoBTN.setEnabled(false);
+        submitBTN.setEnabled(false);
         db.uploadImg(weightImagesRef, metadata, data,  this);
 
     }
@@ -217,6 +233,20 @@ public class WeightLossChallengeInitActivity extends AppCompatActivity implement
         intent.putExtra("challengeInfo", challengeInfo);
         intent.putExtra("endDate", endDate);
         startActivity(intent);
+
+    }
+
+    @Override
+    public void passBoolean(boolean started) {
+
+        if(!started){
+
+            Intent intent = new Intent(this, ChallengeEndActivity.class);
+            intent.putExtra("endDate", endDate);
+            intent.putExtra("challengeInfo", challengeInfo);
+            startActivity(intent);
+
+        }
 
     }
 
