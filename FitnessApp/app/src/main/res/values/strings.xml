@@ -33,6 +33,7 @@
     <string name="back">BACK</string>
     <string name="save">Save</string>
     <string name="refresh">Refresh</string>
+    <string name="randomChall">Random Challenges</string>
     <string name="createYourChallenge">Create My Challenge</string>
     <string name="pay">PAY</string>
     <string name="buyCoin">Buy Coin</string>

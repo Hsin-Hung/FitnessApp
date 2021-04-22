@@ -17,7 +17,6 @@
             android:id="@+id/room_name_info_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
             android:gravity="center"
             android:textColor="#FFFFFF"
             android:textSize="24sp"
@@ -45,19 +44,20 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:background="@drawable/button1"
+            android:backgroundTint="@color/exit_btn_color"
             android:onClick="quit"
             android:text="@string/quitChallenge" />
 
         <GridView
             android:id="@+id/participant_grid"
             android:layout_width="wrap_content"
-            android:layout_height="230dp"
+            android:layout_height="380dp"
             android:layout_marginTop="20dp"
             android:columnWidth="50dp"
             android:gravity="center"
-            android:horizontalSpacing="1dp"
+            android:horizontalSpacing="3dp"
             android:numColumns="3"
-            android:verticalSpacing="1dp">
+            android:verticalSpacing="3dp">
 
         </GridView>
 
@@ -66,9 +66,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:background="@drawable/button1"
+            android:background="@drawable/signup"
             android:onClick="beginChallenge"
-            android:text="@string/beginChallenge" />
+            android:text="@string/beginChallenge"
+            android:textColor="#FFFFFF" />
 
         <TextView
             android:id="@+id/begin_info_tv"

@@ -10,4 +10,6 @@
     <color name="background2">#155289</color>
     <color name="background_color">#86D0F1</color>
     <color name="btn_color">#2854C3</color>
+    <color name="exit_btn_color">#EA8181</color>
+    <color name="begin_chall_btn">#78DF7D</color>
 </resources>

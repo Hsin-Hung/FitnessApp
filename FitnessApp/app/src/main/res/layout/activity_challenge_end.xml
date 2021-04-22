@@ -35,7 +35,7 @@
         android:id="@+id/button4"
         android:layout_width="231dp"
         android:layout_height="50dp"
-        android:backgroundTint="#EA8181"
+        android:backgroundTint="@color/exit_btn_color"
         android:onClick="exit"
         android:text="@string/exit"
         app:layout_constraintBottom_toBottomOf="parent"

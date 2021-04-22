@@ -63,7 +63,7 @@ public class WeightChallengeActivity extends AppCompatActivity implements Databa
     private String roomID;
     private ArrayList<ParticipantModel> participantModels;
     private LeaderBoardParticipantLVAdapter adapter;
-    private Button refreshBTN, periodBTN, endBTN;
+    private Button refreshBTN, periodBTN, endBTN, simulateBTN;
     private Database db;
 
     @Override
@@ -77,6 +77,9 @@ public class WeightChallengeActivity extends AppCompatActivity implements Databa
         refreshBTN = (Button) findViewById(R.id.refresh_lb_btn);
         periodBTN = (Button) findViewById(R.id.period_btn);
         endBTN = (Button) findViewById(R.id.end_btn);
+        simulateBTN = (Button) findViewById(R.id.simulate_btn);
+
+        simulateBTN.setVisibility(View.INVISIBLE);
 
         challTypeTV.setText(getString(R.string.weight));
 
@@ -224,6 +227,7 @@ public class WeightChallengeActivity extends AppCompatActivity implements Databa
         PeriodicWorkRequest challPeriodicWorkRequest =
                 new PeriodicWorkRequest.Builder(WeightChallengePeriodicWork.class,7, TimeUnit.DAYS)
                         .addTag(roomID)
+                        .setInitialDelay(7, TimeUnit.DAYS)
                         .setConstraints(constraints)
                         .setBackoffCriteria(BackoffPolicy.LINEAR,
                                 OneTimeWorkRequest.MIN_BACKOFF_MILLIS,

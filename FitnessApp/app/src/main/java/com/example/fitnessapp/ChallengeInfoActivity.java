@@ -39,4 +39,9 @@ public class ChallengeInfoActivity extends AppCompatActivity {
     public void back(View view){
         finish();
     }
+
+    @Override
+    public void onBackPressed() {
+
+    }
 }

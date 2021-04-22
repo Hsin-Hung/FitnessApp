@@ -62,7 +62,7 @@
             android:layout_marginBottom="10dp"
             android:background="@drawable/descbtn2"
             android:onClick="randomChallenges"
-            android:text="@string/refresh"
+            android:text="@string/randomChall"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

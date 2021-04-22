@@ -68,6 +68,8 @@
     <string name="endDateError">需要選個挑戰結束日期 !</string>
     <string name="betError">需要選個挑戰賭注 !</string>
     <string name="passError">密碼太短 !</string>
+    <string name="notEnoughCoin">硬幣不夠 !</string>
+    <string name="randomChall">隨機挑戰</string>
     <string-array name="challenge_types">
         <item>距离</item>
         <item>减重</item>
