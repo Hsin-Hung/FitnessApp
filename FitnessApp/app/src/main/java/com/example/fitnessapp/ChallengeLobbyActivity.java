@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.auth.User;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
@@ -31,6 +32,7 @@ import fitnessapp_objects.ChallengeType;
 import fitnessapp_objects.Database;
 import fitnessapp_objects.Participant;
 import fitnessapp_objects.ParticipantModel;
+import fitnessapp_objects.UserAccount;
 import fitnessapp_objects.WorkManagerAPI;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -49,7 +51,7 @@ public class ChallengeLobbyActivity extends AppCompatActivity implements Databas
 
     private static final String BACKEND_URL = "https://fitnessapp501.herokuapp.com/";
     private final OkHttpClient httpClient = new OkHttpClient();
-    private TextView roomNameTV;
+    private TextView roomNameTV, beginInfoTV;
     private GridView participants_view;
     private ArrayList<ParticipantModel> participantModelArrayList;
     private ParticipantGVAdapter adapter;
@@ -68,6 +70,7 @@ public class ChallengeLobbyActivity extends AppCompatActivity implements Databas
         setContentView(R.layout.activity_challenge_lobby);
 
         roomNameTV = (TextView) findViewById(R.id.room_name_info_tv);
+        beginInfoTV = (TextView) findViewById(R.id.begin_info_tv);
         participants_view = (GridView) findViewById(R.id.participant_grid);
 
         participantModelArrayList = new ArrayList<>();
@@ -87,12 +90,14 @@ public class ChallengeLobbyActivity extends AppCompatActivity implements Databas
 
         db = Database.getInstance();
         db.startChallengeRoomChangeListener(roomID, this);
+        db.startCoinChangeListener(this);
         checkSensitiveDataAccessPermission();
 
     }
 
     @Override
     protected void onDestroy() {
+        db.removeCoinChangeListener();
         db.detachChallengeRoomListener();
         super.onDestroy();
     }
@@ -122,6 +127,7 @@ public class ChallengeLobbyActivity extends AppCompatActivity implements Databas
      * begin the challenge
      */
     public void beginChallenge(View view) {
+
 
         switch (type) {
             case "DISTANCE":
@@ -164,13 +170,24 @@ public class ChallengeLobbyActivity extends AppCompatActivity implements Databas
 
 
     @Override
-    public void updateUI(boolean isSuccess, Map<String, String> data) {
+    public void updateUI(boolean isSuccess, Map<String, String> data, int callbackCode) {
 
-        workManagerAPI.cancelAllTask(WorkManager.getInstance(this), roomID);
-        workManagerAPI.viewAllWork(WorkManager.getInstance(this), roomID);
-        Intent intent = new Intent(this, HomeActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
+        if(isSuccess){
+
+            switch(callbackCode){
+
+                case 0:
+                    workManagerAPI.cancelAllTask(WorkManager.getInstance(this), roomID);
+                    workManagerAPI.viewAllWork(WorkManager.getInstance(this), roomID);
+                    Intent intent = new Intent(this, HomeActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+                    break;
+
+            }
+
+
+        }
 
     }
 
@@ -242,6 +259,12 @@ public class ChallengeLobbyActivity extends AppCompatActivity implements Databas
      * @param place: indicated whether the user has already placed a bet or not
      */
     public void placeBet(boolean place) {
+
+        // if the user doesn't have enough coin to bet
+        if(UserAccount.getInstance().getCoin()<betAmount && !place){
+            beginInfoTV.setText(getString(R.string.notEnoughCoin));
+            return;
+        }
 
         // if the user has already placed the bet, then simply go to the
         // corresponding screen
@@ -329,6 +352,7 @@ public class ChallengeLobbyActivity extends AppCompatActivity implements Databas
                         ).show()
                 );
             } else {
+                UserAccount.getInstance().bet(activity.betAmount);
                 activity.goToScreen();
             }
         }

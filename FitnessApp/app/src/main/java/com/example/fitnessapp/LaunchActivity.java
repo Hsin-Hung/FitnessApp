@@ -123,7 +123,7 @@ public class LaunchActivity extends AppCompatActivity implements View.OnClickLis
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
             Log.w(TAG, "Google sign in failed", e);
-            updateUI(false, null);
+            updateUI(false, null,0);
         }
     }
 
@@ -155,7 +155,7 @@ public class LaunchActivity extends AppCompatActivity implements View.OnClickLis
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
-                            updateUI(false, null);
+                            updateUI(false, null, 0);
                         }
                     }
                 });
@@ -165,7 +165,7 @@ public class LaunchActivity extends AppCompatActivity implements View.OnClickLis
      * @param isSuccess: indicate whether user account is successfully updated from firebase
      * @param data:      not used here
      */
-    public void updateUI(boolean isSuccess, Map<String, String> data) {
+    public void updateUI(boolean isSuccess, Map<String, String> data, int callbackCode) {
 
         if (isSuccess) {
             Intent intent = new Intent(this, HomeActivity.class);

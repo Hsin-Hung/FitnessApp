@@ -125,7 +125,7 @@ public class ChallengeEndActivity extends AppCompatActivity implements Database.
      * go back to lobby screen
      */
     @Override
-    public void updateUI(boolean isSuccess, Map<String, String> data) {
+    public void updateUI(boolean isSuccess, Map<String, String> data, int callbackCode) {
 
         if(isSuccess){
             workManagerAPI.cancelAllTask(WorkManager.getInstance(this), roomID);
@@ -154,7 +154,7 @@ public class ChallengeEndActivity extends AppCompatActivity implements Database.
         FirebaseUser user = mAuth.getCurrentUser();
 
         boolean isWin = data.get("winner").equals(user.getUid());
-        String pot = data.get("pot"), bet = data.get("bet");
+        String pot = data.get("pot"), betAmount = data.get("betAmount");
         if(isWin){
 
             challengeResultTV.setText(getString(R.string.youWin));
@@ -166,7 +166,7 @@ public class ChallengeEndActivity extends AppCompatActivity implements Database.
 
             challengeResultTV.setText(getString(R.string.youLose));
             challengeResultTV.setTextColor(Color.RED);
-            String coinResult = "you've lost " + bet + " coins";
+            String coinResult = "you've lost " + betAmount + " coins";
             coinResultTV.setText(coinResult);
 
         }

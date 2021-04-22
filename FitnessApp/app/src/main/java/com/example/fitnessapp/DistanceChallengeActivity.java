@@ -150,14 +150,14 @@ public class DistanceChallengeActivity extends AppCompatActivity implements Data
         periodBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startPeriodicDistanceUpdateTask();
+                startPeriodicDistanceUpdateTaskTest();
             }
         });
 
         endBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startEndDateNotifyTask();
+                startEndDateNotifyTaskTest();
             }
         });
 
@@ -189,8 +189,8 @@ public class DistanceChallengeActivity extends AppCompatActivity implements Data
 
         startDistanceChangeListener();
         db.getLeaderBoardStats(roomID, this);
-//        startPeriodicDistanceUpdateTask();
-//        startEndDateNotifyTask();
+        startPeriodicDistanceUpdateTask();
+        startEndDateNotifyTask();
         WorkManagerAPI.getInstance().viewAllWork(WorkManager.getInstance(this), roomID);
     }
 
@@ -305,25 +305,40 @@ public class DistanceChallengeActivity extends AppCompatActivity implements Data
                 .build();
 
 
-//        PeriodicWorkRequest challPeriodicWorkRequest =
-//                new PeriodicWorkRequest.Builder(DistanceChallengePeriodicWork.class,PeriodicWorkRequest.MIN_PERIODIC_INTERVAL_MILLIS, TimeUnit.MILLISECONDS)
-//                        .addTag(roomID)
-//                        .setConstraints(constraints)
-//                        .setBackoffCriteria(BackoffPolicy.LINEAR,
-//                                OneTimeWorkRequest.MIN_BACKOFF_MILLIS,
-//                                TimeUnit.MILLISECONDS)
-//                        .setInputData(new Data.Builder()
-//                                .putString("roomID", roomID)
-//                                .putLong("startDate", currentTime)
-//                                .build())
-//                        .build();
-//
-//
-//        WorkManager
-//                .getInstance(this)
-//                .enqueueUniquePeriodicWork(roomID+"-periodic", ExistingPeriodicWorkPolicy.KEEP,challPeriodicWorkRequest);
+        PeriodicWorkRequest challPeriodicWorkRequest =
+                new PeriodicWorkRequest.Builder(DistanceChallengePeriodicWork.class,PeriodicWorkRequest.MIN_PERIODIC_INTERVAL_MILLIS, TimeUnit.MILLISECONDS)
+                        .addTag(roomID)
+                        .setConstraints(constraints)
+                        .setBackoffCriteria(BackoffPolicy.LINEAR,
+                                OneTimeWorkRequest.MIN_BACKOFF_MILLIS,
+                                TimeUnit.MILLISECONDS)
+                        .setInputData(new Data.Builder()
+                                .putString("roomID", roomID)
+                                .putLong("startDate", currentTime)
+                                .build())
+                        .build();
 
-        OneTimeWorkRequest challPeriodicWorkRequest =
+
+        WorkManager
+                .getInstance(this)
+                .enqueueUniquePeriodicWork(roomID+"-periodic", ExistingPeriodicWorkPolicy.KEEP,challPeriodicWorkRequest);
+
+
+
+    }
+
+    /**
+     * this is a testing period distance update task for the GRADERS
+     */
+    public void startPeriodicDistanceUpdateTaskTest(){
+
+        long currentTime = new Timestamp(new Date()).toDate().getTime();
+
+        Constraints constraints = new Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED)
+                .build();
+
+        OneTimeWorkRequest challPeriodicWorkRequestTest =
                 new OneTimeWorkRequest.Builder(DistanceChallengePeriodicWork.class)
                         .addTag(roomID)
                         .setConstraints(constraints)
@@ -339,7 +354,8 @@ public class DistanceChallengeActivity extends AppCompatActivity implements Data
 
         WorkManager
                 .getInstance(this)
-                .enqueueUniqueWork(roomID + "-periodic", ExistingWorkPolicy.KEEP, challPeriodicWorkRequest);
+                .enqueueUniqueWork(roomID + "-periodicTest", ExistingWorkPolicy.KEEP, challPeriodicWorkRequestTest);
+
 
     }
 
@@ -348,13 +364,15 @@ public class DistanceChallengeActivity extends AppCompatActivity implements Data
      */
     public void startEndDateNotifyTask() {
 
+        long currentTime = new Timestamp(new Date()).toDate().getTime();
+
         Constraints constraints = new Constraints.Builder()
                 .setRequiredNetworkType(NetworkType.CONNECTED)
                 .build();
 
         OneTimeWorkRequest challEndDateWorkRequest =
                 new OneTimeWorkRequest.Builder(ChallengeEndDateWork.class)
-                        //.setInitialDelay(endDate - currentTime, TimeUnit.MILLISECONDS)
+                        .setInitialDelay(endDate - currentTime, TimeUnit.MILLISECONDS)
                         .addTag(roomID)
                         .setConstraints(constraints)
                         .setBackoffCriteria(BackoffPolicy.LINEAR,
@@ -368,6 +386,32 @@ public class DistanceChallengeActivity extends AppCompatActivity implements Data
         WorkManager
                 .getInstance(this)
                 .enqueueUniqueWork(roomID + "-endDate", ExistingWorkPolicy.KEEP, challEndDateWorkRequest);
+
+    }
+
+    public void startEndDateNotifyTaskTest(){
+
+        Constraints constraints = new Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED)
+                .build();
+
+        OneTimeWorkRequest challEndDateWorkRequestTest =
+                new OneTimeWorkRequest.Builder(ChallengeEndDateWork.class)
+                        .addTag(roomID)
+                        .setConstraints(constraints)
+                        .setBackoffCriteria(BackoffPolicy.LINEAR,
+                                OneTimeWorkRequest.MIN_BACKOFF_MILLIS,
+                                TimeUnit.MILLISECONDS)
+                        .setInputData(new Data.Builder()
+                                .putString("roomID", roomID)
+                                .build())
+                        .build();
+
+        WorkManager
+                .getInstance(this)
+                .enqueueUniqueWork(roomID + "-endDateTest", ExistingWorkPolicy.KEEP, challEndDateWorkRequestTest);
+
+
 
     }
 
@@ -401,7 +445,7 @@ public class DistanceChallengeActivity extends AppCompatActivity implements Data
     }
 
     @Override
-    public void updateUI(boolean isSuccess, Map<String, String> data) {
+    public void updateUI(boolean isSuccess, Map<String, String> data, int callbackCode) {
         if (isSuccess) {
             myDistanceTV.setText(data.get("distance"));
             db.getLeaderBoardStats(roomID, DistanceChallengeActivity.this);

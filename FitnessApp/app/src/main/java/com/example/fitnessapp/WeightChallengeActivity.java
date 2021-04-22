@@ -6,9 +6,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.work.BackoffPolicy;
 import androidx.work.Constraints;
 import androidx.work.Data;
+import androidx.work.ExistingPeriodicWorkPolicy;
 import androidx.work.ExistingWorkPolicy;
 import androidx.work.NetworkType;
 import androidx.work.OneTimeWorkRequest;
+import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 
 import android.app.Activity;
@@ -54,7 +56,6 @@ public class WeightChallengeActivity extends AppCompatActivity implements Databa
 
     private GoogleSignInOptionsExtension fitnessOptions;
     private GoogleSignInAccount googleSigninAccount;
-    private RecordingClient recordingClient;
     private HashMap<String,String> challengeInfo;
     private long endDate;
     private TextView myWeightTV, challTypeTV;
@@ -118,14 +119,14 @@ public class WeightChallengeActivity extends AppCompatActivity implements Databa
         periodBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startPeriodicDistanceUpdateTask();
+                startPeriodicDistanceUpdateTaskTest();
             }
         });
 
         endBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startEndDateNotifyTask();
+                startEndDateNotifyTaskTest();
             }
         });
     }
@@ -144,8 +145,8 @@ public class WeightChallengeActivity extends AppCompatActivity implements Databa
 
         startWeightChangeListener();
         db.getLeaderBoardStats(roomID, this);
-//        startPeriodicDistanceUpdateTask();
-//        startEndDateNotifyTask();
+        startPeriodicDistanceUpdateTask();
+        startEndDateNotifyTask();
         WorkManagerAPI.getInstance().viewAllWork(WorkManager.getInstance(this), roomID);
     }
 
@@ -205,7 +206,7 @@ public class WeightChallengeActivity extends AppCompatActivity implements Databa
     }
 
     @Override
-    public void updateUI(boolean isSuccess, Map<String, String> data) {
+    public void updateUI(boolean isSuccess, Map<String, String> data, int callbackCode) {
         if(isSuccess)myWeightTV.setText(data.get("weight"));
     }
 
@@ -220,24 +221,35 @@ public class WeightChallengeActivity extends AppCompatActivity implements Databa
                 .build();
 
 
-//        PeriodicWorkRequest challPeriodicWorkRequest =
-//                new PeriodicWorkRequest.Builder(WeightChallengePeriodicWork.class,7, TimeUnit.DAYS)
-//                        .addTag(roomID)
-//                        .setConstraints(constraints)
-//                        .setBackoffCriteria(BackoffPolicy.LINEAR,
-//                                OneTimeWorkRequest.MIN_BACKOFF_MILLIS,
-//                                TimeUnit.MILLISECONDS)
-//                        .setInputData(new Data.Builder()
-//                                .putString("roomID", roomID)
-//                                .build())
-//                        .build();
-//
-//
-//        WorkManager
-//                .getInstance(this)
-//                .enqueueUniquePeriodicWork(roomID+"-periodic", ExistingPeriodicWorkPolicy.KEEP,challPeriodicWorkRequest);
+        PeriodicWorkRequest challPeriodicWorkRequest =
+                new PeriodicWorkRequest.Builder(WeightChallengePeriodicWork.class,7, TimeUnit.DAYS)
+                        .addTag(roomID)
+                        .setConstraints(constraints)
+                        .setBackoffCriteria(BackoffPolicy.LINEAR,
+                                OneTimeWorkRequest.MIN_BACKOFF_MILLIS,
+                                TimeUnit.MILLISECONDS)
+                        .setInputData(new Data.Builder()
+                                .putString("roomID", roomID)
+                                .build())
+                        .build();
 
-                OneTimeWorkRequest challPeriodicWorkRequest =
+
+        WorkManager
+                .getInstance(this)
+                .enqueueUniquePeriodicWork(roomID+"-periodic", ExistingPeriodicWorkPolicy.KEEP,challPeriodicWorkRequest);
+
+    }
+
+    /**
+     * periodic work task for the GRADER to test with
+     */
+    public void startPeriodicDistanceUpdateTaskTest(){
+
+        Constraints constraints = new Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED)
+                .build();
+
+        OneTimeWorkRequest challPeriodicWorkRequestTest =
                 new OneTimeWorkRequest.Builder(WeightChallengePeriodicWork.class)
                         .addTag(roomID)
                         .setConstraints(constraints)
@@ -252,8 +264,7 @@ public class WeightChallengeActivity extends AppCompatActivity implements Databa
 
         WorkManager
                 .getInstance(this)
-                .enqueueUniqueWork(roomID+"-periodic", ExistingWorkPolicy.KEEP,challPeriodicWorkRequest);
-
+                .enqueueUniqueWork(roomID+"-periodicTest", ExistingWorkPolicy.KEEP,challPeriodicWorkRequestTest);
 
 
     }
@@ -287,6 +298,33 @@ public class WeightChallengeActivity extends AppCompatActivity implements Databa
                 .enqueueUniqueWork(roomID+"-endDate", ExistingWorkPolicy.KEEP, challEndDateWorkRequest);
 
     }
+
+    public void startEndDateNotifyTaskTest(){
+
+        Constraints constraints = new Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED)
+                .build();
+
+        OneTimeWorkRequest challEndDateWorkRequestTest =
+                new OneTimeWorkRequest.Builder(ChallengeEndDateWork.class)
+                        .addTag(roomID)
+                        .setConstraints(constraints)
+                        .setBackoffCriteria(BackoffPolicy.LINEAR,
+                                OneTimeWorkRequest.MIN_BACKOFF_MILLIS,
+                                TimeUnit.MILLISECONDS)
+                        .setInputData(new Data.Builder()
+                                .putString("roomID", roomID)
+                                .build())
+                        .build();
+
+        WorkManager
+                .getInstance(this)
+                .enqueueUniqueWork(roomID+"-endDateTest", ExistingWorkPolicy.KEEP, challEndDateWorkRequestTest);
+
+
+
+    }
+
 
     @Override
     public void onBackPressed() {

@@ -185,7 +185,7 @@ public class WeightLossChallengeInitActivity extends AppCompatActivity implement
     }
 
     @Override
-    public void updateUI(boolean isSuccess, Map<String, String> data) {
+    public void updateUI(boolean isSuccess, Map<String, String> data, int callbackCode) {
         if(isSuccess){
             FirebaseAuth mAuth = FirebaseAuth.getInstance();
             FirebaseUser user = mAuth.getCurrentUser();
@@ -215,6 +215,7 @@ public class WeightLossChallengeInitActivity extends AppCompatActivity implement
 
         Intent intent = new Intent(this, WeightChallengeActivity.class);
         intent.putExtra("challengeInfo", challengeInfo);
+        intent.putExtra("endDate", endDate);
         startActivity(intent);
 
     }

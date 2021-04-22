@@ -69,6 +69,14 @@
             android:background="@drawable/button1"
             android:onClick="beginChallenge"
             android:text="@string/beginChallenge" />
+
+        <TextView
+            android:id="@+id/begin_info_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

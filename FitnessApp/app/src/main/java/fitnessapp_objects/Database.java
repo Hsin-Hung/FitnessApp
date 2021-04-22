@@ -65,7 +65,7 @@ public class Database {
     }
     public interface UIUpdateCompletionHandler {
 
-        void updateUI(boolean isSuccess, Map<String, String> data);
+        void updateUI(boolean isSuccess, Map<String, String> data, int callbackCode);
     }
     public interface  OnLeaderBoardStatsGetCompletionHandler{
         void statsTransfer(ArrayList<ChallengeStats> stats);
@@ -112,7 +112,7 @@ public class Database {
                     public void onSuccess(Void aVoid) {
                         Log.d(TAG, "DocumentSnapshot successfully written!");
                         if(handler!=null){
-                            handler.updateUI(true, null);
+                            handler.updateUI(true, null, 0);
                         }
 
                     }
@@ -122,7 +122,7 @@ public class Database {
                     public void onFailure(@NonNull Exception e) {
                         Log.w(TAG, "Error writing document", e);
                         if(handler!=null){
-                            handler.updateUI(false, null);
+                            handler.updateUI(false, null, 0);
                         }
 
                     }
@@ -169,7 +169,7 @@ public class Database {
                     Map<String, String> roomID = new HashMap<>();
                     roomID.put("roomID", challengeRef.getId());
                     userAccount.addNewChallenge(challengeRef.getId());
-                    handler.updateUI(true, roomID);
+                    handler.updateUI(true, roomID, 0);
                 }
 
             }
@@ -267,15 +267,15 @@ public class Database {
                         userAccount.setCoin(Integer.parseInt(document.get("coins").toString()));
 
                         Log.d(TAG, "DocumentSnapshot data: " + document.getData());
-                        handler.updateUI(true, null);
+                        handler.updateUI(true, null, 0);
                     } else {
                         Log.d(TAG, "No such document");
-                        handler.updateUI(false, null);
+                        handler.updateUI(false, null, 0);
                     }
 
                 } else {
                     Log.d(TAG, "get failed with ", task.getException());
-                    handler.updateUI(false, null);
+                    handler.updateUI(false, null, 0);
                 }
             }
         });
@@ -358,7 +358,7 @@ public class Database {
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isSuccessful()){
                     account.addNewChallenge(roomID);
-                    handler.updateUI(true, null);
+                    handler.updateUI(true, null, 0);
                 }
             }
         });
@@ -485,7 +485,7 @@ public class Database {
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isSuccessful()){
                     account.removeChallenge(roomID);
-                    handler.updateUI(true, null);
+                    handler.updateUI(true, null, 0);
                     cleanUpEmptyChallenges(roomID);
                 }
             }
@@ -512,11 +512,11 @@ public class Database {
                     public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
                             if(value.exists()){
                                 userAccount.setCoin(Integer.parseInt(value.getData().get("coins").toString()));
-                                handler.updateUI(true, null);
+                                handler.updateUI(true, null, 1);
 
                             }else{
                                 Log.d(TAG, "No such document");
-                                handler.updateUI(false, null);
+                                handler.updateUI(false, null, 1);
 
                             }
                     }
@@ -654,11 +654,11 @@ public class Database {
                                     System.out.println("No such challenge type !");
                                     return;
                             }
-                            handler.updateUI(true, data);
+                            handler.updateUI(true, data, 0);
 
                         }else{
                             Log.d(TAG, "No such document");
-                            handler.updateUI(false, null);
+                            handler.updateUI(false, null, 0);
 
                         }
                     }
@@ -740,7 +740,7 @@ public class Database {
             @Override
             public void onFailure(@NonNull Exception exception) {
                 // Handle unsuccessful uploads
-                handler.updateUI(false,null);
+                handler.updateUI(false,null, 0);
             }
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
@@ -751,7 +751,7 @@ public class Database {
                 Map<String,String> data = new HashMap<>();
                 data.put("imgPath", metadata1.getReference().getPath());
                 data.put("weight", metadata1.getCustomMetadata("weight"));
-                handler.updateUI(true, data);
+                handler.updateUI(true, data, 0);
             }
         });
 
@@ -821,7 +821,9 @@ public class Database {
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
 
-        db.collection("challenges").document(roomID).collection("stats").document(user.getUid())
+        final DocumentReference statsRef = db.collection("challenges").document(roomID).collection("stats").document(user.getUid());
+
+        statsRef
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
@@ -855,7 +857,7 @@ public class Database {
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                         if (task.isSuccessful()) {
                             Map<String,String> data = new HashMap<>();
-                            data.put("bet", task.getResult().get("bet").toString());
+                            data.put("betAmount", task.getResult().get("betAmount").toString());
                             data.put("pot", task.getResult().get("pot").toString());
                             data.put("winner", task.getResult().getString("winner"));
                             handler.passData(data);

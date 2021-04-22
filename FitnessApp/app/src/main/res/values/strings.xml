@@ -68,6 +68,7 @@
     <string name="endDateError">Need to pick a challenge end date !</string>
     <string name="betError">Need to enter a bet amount !</string>
     <string name="passError">Password too short, need to be at least 6 characters !</string>
+    <string name="notEnoughCoin">You don\'t have enough coin !</string>
     <string-array name="challenge_types">
         <item>Distance</item>
         <item>Weight Loss</item>

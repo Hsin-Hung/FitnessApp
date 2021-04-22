@@ -73,6 +73,9 @@ public class UserAccount {
         challenges.remove(challengeID);
 
     }
+    public void bet(int amount){
+        coin-=amount;
+    }
 
     /**
      *

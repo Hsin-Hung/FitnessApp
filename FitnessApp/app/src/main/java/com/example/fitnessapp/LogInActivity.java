@@ -47,7 +47,7 @@ public class LogInActivity extends AppCompatActivity implements Database.UIUpdat
      * @param isSuccess: indicate whether user account is successfully updated from firebase
      * @param data: not used here
      */
-    public void updateUI(boolean isSuccess, Map<String, String> data) {
+    public void updateUI(boolean isSuccess, Map<String, String> data, int callbackCode) {
 
         if (isSuccess) {
             Intent intent = new Intent(this, HomeActivity.class);
@@ -79,7 +79,7 @@ public class LogInActivity extends AppCompatActivity implements Database.UIUpdat
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
                             Toast.makeText(LogInActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
-                            updateUI(false, null);
+                            updateUI(false, null, 0);
                         }
                     }
                 });

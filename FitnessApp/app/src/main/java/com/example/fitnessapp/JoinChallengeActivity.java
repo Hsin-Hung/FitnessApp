@@ -105,7 +105,7 @@ public class JoinChallengeActivity extends AppCompatActivity implements Database
      * go to the selected challenge
      */
     @Override
-    public void updateUI(boolean isSuccess, Map<String, String> data) {
+    public void updateUI(boolean isSuccess, Map<String, String> data, int callbackCode) {
         if (isSuccess) {
             Intent intent = new Intent(this, ChallengeLobbyActivity.class);
             intent.putExtra("challengeInfo", pickedChallengeRoom.getChallengeInfoMap());

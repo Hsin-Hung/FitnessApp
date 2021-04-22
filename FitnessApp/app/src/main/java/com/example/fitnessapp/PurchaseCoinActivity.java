@@ -168,7 +168,7 @@ public class PurchaseCoinActivity extends AppCompatActivity implements Database.
     }
 
     @Override
-    public void updateUI(boolean isSuccess, Map<String, String> data) {
+    public void updateUI(boolean isSuccess, Map<String, String> data, int callbackCode) {
 
         if(isSuccess){
 

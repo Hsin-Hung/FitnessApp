@@ -192,7 +192,7 @@ public class CreateChallengePresetActivity extends AppCompatActivity implements 
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
-    public void updateUI(boolean isSuccess, Map<String, String> data) {
+    public void updateUI(boolean isSuccess, Map<String, String> data, int callbackCode) {
 
         if (isSuccess) {
 
