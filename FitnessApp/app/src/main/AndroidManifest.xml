@@ -17,33 +17,39 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FitnessApp"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ChallengeEndActivity"></activity>
-        <activity android:name=".WeightChallengeActivity" />
-        <activity android:name=".DistanceChallengeActivity" />
-        <activity android:name=".ChallengeInfoActivity" />
-        <activity android:name=".WeightLossChallengeInitActivity" />
-        <activity android:name=".PurchaseCoinActivity" />
-        <activity android:name=".MyChallengesActivity" />
-        <activity android:name=".SettingsActivity" />
-        <activity android:name=".ChallengeLobbyActivity" />
-        <activity android:name=".JoinChallengeActivity" />
-        <activity android:name=".CreateChallengePresetActivity" />
-        <activity android:name=".HomeActivity" />
-        <activity android:name=".SignUpActivity" />
-
+        <activity android:name=".ChallengeEndActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".WeightChallengeActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".DistanceChallengeActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ChallengeInfoActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".WeightLossChallengeInitActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".PurchaseCoinActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".MyChallengesActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".SettingsActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ChallengeLobbyActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".JoinChallengeActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".CreateChallengePresetActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".HomeActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".SignUpActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".LogInActivity"
+            android:screenOrientation="portrait"/>
         <meta-data
             android:name="com.google.android.gms.wallet.api.enabled"
             android:value="true" />
 
-        <activity android:name=".LaunchActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".LogInActivity"
+        <activity android:name=".LaunchActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
