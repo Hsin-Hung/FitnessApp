@@ -14,6 +14,9 @@ import java.util.ArrayList;
 
 import fitnessapp_objects.ChallengeRoomModel;
 
+/**
+ * adapter for list views to populate with challenge rooms
+ */
 public class ChallengeRoomLVAdapter extends ArrayAdapter<ChallengeRoomModel> {
 
     public ChallengeRoomLVAdapter(@NonNull Context context, ArrayList<ChallengeRoomModel> challengeRoomArrayList) {

@@ -17,18 +17,21 @@ import com.stripe.android.model.Card;
 
 import java.util.Map;
 
+/**
+ * a dialog fragment to enter password for joining a challenge
+ */
 public class PasswordDialogFragment extends DialogFragment {
 
-    String roomID, password;
-    Map<String, String> roomInfo;
+    private String roomID, password;
+    private Map<String, String> roomInfo;
 
     public interface PasswordDialogListener{
 
-        public void onDialogPositiveClick(Map<String,String> roomInfo, boolean success);
+        void onDialogPositiveClick(Map<String,String> roomInfo, boolean success);
 
     }
 
-    PasswordDialogListener listener;
+    private PasswordDialogListener listener;
 
     public PasswordDialogFragment(String roomID, String password, Map<String,String> roomInfo) {
 

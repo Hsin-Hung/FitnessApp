@@ -8,6 +8,9 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
 
+/**
+ * this class represents the setting screen for user preferences
+ */
 public class SettingsActivity extends AppCompatActivity {
 
     SwitchCompat color_switch;

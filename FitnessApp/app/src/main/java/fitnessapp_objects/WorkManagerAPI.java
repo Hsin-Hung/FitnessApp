@@ -10,6 +10,11 @@ import com.google.common.util.concurrent.ListenableFuture;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+/**
+ *
+ * this class is a work manager API that provides some common work manager's functionality
+ *
+ */
 public class WorkManagerAPI {
 
     final String TAG = "WorkManagerAPI";

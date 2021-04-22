@@ -58,7 +58,9 @@ import fitnessapp_objects.Database;
 import fitnessapp_objects.ParticipantModel;
 import fitnessapp_objects.WorkManagerAPI;
 
-
+/**
+ * this class represents distance challenge's main screen, which shows the distance leader board and your current distance since the start of the challenge
+ */
 public class DistanceChallengeActivity extends AppCompatActivity implements Database.OnLeaderBoardStatsGetCompletionHandler, Database.UIUpdateCompletionHandler, Database.OnBooleanPromptHandler {
 
     private final String TAG = "DistanceChallActivity";
@@ -291,7 +293,9 @@ public class DistanceChallengeActivity extends AppCompatActivity implements Data
 
     }
 
-
+    /**
+     * start the background worker task that fetches the participant's distance data from the history client once every 15 minutes
+     */
     public void startPeriodicDistanceUpdateTask() {
 
         long currentTime = new Timestamp(new Date()).toDate().getTime();
@@ -339,9 +343,10 @@ public class DistanceChallengeActivity extends AppCompatActivity implements Data
 
     }
 
+    /**
+     * start the background worker task that end the challenge when the end date is reached
+     */
     public void startEndDateNotifyTask() {
-
-        long currentTime = new Timestamp(new Date()).toDate().getTime();
 
         Constraints constraints = new Constraints.Builder()
                 .setRequiredNetworkType(NetworkType.CONNECTED)
@@ -366,6 +371,12 @@ public class DistanceChallengeActivity extends AppCompatActivity implements Data
 
     }
 
+    /**
+     *
+     * handler to pass the leaderboard stats data from the database
+     *
+     * @param stats: the stats for the leaderbaord
+     */
     @Override
     public void statsTransfer(ArrayList<ChallengeStats> stats) {
         participantModels.clear();

@@ -52,6 +52,9 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+/**
+ * this class represents the screen that prompts the participant for weight image, which the backend will verify to prevent cheating
+ */
 public class WeightLossChallengeInitActivity extends AppCompatActivity implements Database.UIUpdateCompletionHandler {
 
     private static final int REQUEST_IMAGE_CAPTURE = 1;

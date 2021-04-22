@@ -1,5 +1,8 @@
 package fitnessapp_objects;
 
+/**
+ * this class represents a participant model that is used by adapter to populate participant/leaderboard list view
+ */
 public class ParticipantModel{
 
     private String name;

@@ -10,6 +10,9 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
@@ -25,10 +28,13 @@ import fitnessapp_objects.Database;
 import fitnessapp_objects.ParticipantModel;
 import fitnessapp_objects.WorkManagerAPI;
 
-public class ChallengeEndActivity extends AppCompatActivity implements Database.OnLeaderBoardStatsGetCompletionHandler, Database.UIUpdateCompletionHandler, Database.OnBooleanPromptHandler {
+/**
+ * This class represent the end result screen after a challenge ends. It shows whether the user wins or loses, the final leaderboard, and how much coins they have gained or lost.
+ */
+public class ChallengeEndActivity extends AppCompatActivity implements Database.OnLeaderBoardStatsGetCompletionHandler, Database.UIUpdateCompletionHandler, Database.OnDataPassHandler {
 
     private ListView leaderBoardLV;
-    private TextView challengeResultTV;
+    private TextView challengeResultTV, coinResultTV;
 
     private ArrayList<ParticipantModel> participantModels;
     private LeaderBoardParticipantLVAdapter adapter;
@@ -45,6 +51,7 @@ public class ChallengeEndActivity extends AppCompatActivity implements Database.
 
         leaderBoardLV = (ListView) findViewById(R.id.lb_result_lv);
         challengeResultTV = (TextView) findViewById(R.id.chall_result_tv);
+        coinResultTV = (TextView) findViewById(R.id.coin_res_tv);
         participantModels = new ArrayList<>();
         adapter = new LeaderBoardParticipantLVAdapter(this, participantModels);
         challengeInfo = (HashMap<String,String>) getIntent().getSerializableExtra("challengeInfo");
@@ -57,13 +64,21 @@ public class ChallengeEndActivity extends AppCompatActivity implements Database.
         db.checkChallengeResult(roomID, this);
     }
 
-
+    /**
+     * exit the challenge
+     */
     public void exit(View view){
 
         db.quitChallenge(roomID, this);
 
     }
 
+    /**
+     *
+     * handler that is used to retrieve leaderboard data from database
+     *
+     * @param stats: leader board stats that are passed back from the database
+     */
     @Override
     public void statsTransfer(ArrayList<ChallengeStats> stats) {
 
@@ -106,31 +121,56 @@ public class ChallengeEndActivity extends AppCompatActivity implements Database.
 
     }
 
+    /**
+     * go back to lobby screen
+     */
     @Override
     public void updateUI(boolean isSuccess, Map<String, String> data) {
-        workManagerAPI.cancelAllTask(WorkManager.getInstance(this), roomID);
-        workManagerAPI.viewAllWork(WorkManager.getInstance(this), roomID);
-        Intent intent = new Intent(this, HomeActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
+
+        if(isSuccess){
+            workManagerAPI.cancelAllTask(WorkManager.getInstance(this), roomID);
+            workManagerAPI.viewAllWork(WorkManager.getInstance(this), roomID);
+            Intent intent = new Intent(this, HomeActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+        }
+
     }
 
-    @Override
-    public void passBoolean(boolean check) {
 
-        if(check){
+
+    @Override
+    public void onBackPressed() {
+
+    }
+
+    /**
+     * handler to pass the win or lose result from database
+     */
+    @Override
+    public void passData(Map<String, String> data) {
+
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
+
+        boolean isWin = data.get("winner").equals(user.getUid());
+        String pot = data.get("pot"), bet = data.get("bet");
+        if(isWin){
 
             challengeResultTV.setText(getString(R.string.youWin));
             challengeResultTV.setTextColor(Color.GREEN);
+            String coinResult = "you've gained " + pot + " coins";
+            coinResultTV.setText(coinResult);
+
         }else{
 
             challengeResultTV.setText(getString(R.string.youLose));
             challengeResultTV.setTextColor(Color.RED);
-        }
-    }
+            String coinResult = "you've lost " + bet + " coins";
+            coinResultTV.setText(coinResult);
 
-    @Override
-    public void onBackPressed() {
+        }
+
 
     }
 }

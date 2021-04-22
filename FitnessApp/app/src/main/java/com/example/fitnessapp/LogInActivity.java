@@ -20,6 +20,9 @@ import java.util.Map;
 
 import fitnessapp_objects.Database;
 
+/**
+ * this class represents the log in screen
+ */
 public class LogInActivity extends AppCompatActivity implements Database.UIUpdateCompletionHandler {
 
     private static final String TAG = "MyActivity";

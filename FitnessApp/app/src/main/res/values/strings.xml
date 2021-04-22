@@ -51,6 +51,7 @@
     <string name="distance">My Distance(m):</string>
     <string name="weight">My Weight(lbs)</string>
     <string name="leaderBoard">LeaderBoard</string>
+    <string name="finalLeaderBoard">Final LeaderBoard</string>
     <string name="takePhoto">Take Photo</string>
     <string name="weightloss">Weight Loss Challenge </string>
     <string name="enterWeightHint">enter weight</string>

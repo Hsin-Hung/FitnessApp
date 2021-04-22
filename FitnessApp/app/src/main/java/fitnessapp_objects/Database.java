@@ -31,7 +31,10 @@ import com.google.firebase.storage.UploadTask;
 
 import java.util.*;
 
-// All the firebase calling action will stay in this class, Singleton class
+/**
+ * this class acts as an API to read or write to the firebase
+ * A singleton class as there is only one database
+ */
 public class Database {
 
     private static Database dataBase_instance = null;
@@ -66,6 +69,12 @@ public class Database {
     }
     public interface  OnLeaderBoardStatsGetCompletionHandler{
         void statsTransfer(ArrayList<ChallengeStats> stats);
+    }
+
+    public interface OnDataPassHandler{
+
+        void passData(Map<String,String> data);
+
     }
 
     public interface OnBooleanPromptHandler {
@@ -122,7 +131,14 @@ public class Database {
         return true;
     }
 
-
+    /**
+     *
+     * update a new challenge room when created
+     *
+     * @param room
+     * @param handler
+     * @return
+     */
     public String updateChallengeRoom(ChallengeRoom room, UIUpdateCompletionHandler handler){
 
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
@@ -267,6 +283,11 @@ public class Database {
         return false;
     }
 
+    /**
+     * get all the started challenges from firebase and pass the result back to the calling class
+     * @param handler
+     * @return
+     */
     public boolean getPendingChallengeRooms(OnRoomGetCompletionHandler handler){
 
         db.collection("challenges")
@@ -301,6 +322,14 @@ public class Database {
         return false;
     }
 
+    /**
+     *
+     * join a challenge room of a given room ID and update the calling class's UI accordingly
+     *
+     * @param roomID
+     * @param handler
+     * @return
+     */
     public boolean joinChallengeRoom(String roomID, UIUpdateCompletionHandler handler){
 
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
@@ -338,6 +367,15 @@ public class Database {
        return true;
     }
 
+    /**
+     *
+     * get all the challenge rooms of a specific field and value and pass the result back to the calling class
+     *
+     * @param field
+     * @param targetValue
+     * @param handler
+     * @return
+     */
     public boolean getChallengeRooms(String field, String targetValue, OnRoomGetCompletionHandler handler){
 
         db.collection("challenges")
@@ -370,6 +408,13 @@ public class Database {
         return true;
     }
 
+    /**
+     *
+     * get all my challenges and pass the result back to the calling class
+     *
+     * @param handler
+     * @return
+     */
     public boolean getMyChallenges(OnRoomGetCompletionHandler handler){
 
 
@@ -405,6 +450,14 @@ public class Database {
         return true;
     }
 
+    /**
+     *
+     * quit the challenge of a given room ID and update the calling class's UI accordingly
+     *
+     * @param roomID
+     * @param handler
+     * @return
+     */
     public boolean quitChallenge(String roomID, UIUpdateCompletionHandler handler){
 
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
@@ -441,7 +494,13 @@ public class Database {
         return true;
     }
 
-
+    /**
+     *
+     * listen for coin changes in order to update the calling class's coin UI in real time
+     *
+     * @param handler
+     * @return
+     */
     public boolean startCoinChangeListener(UIUpdateCompletionHandler handler){
 
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
@@ -474,6 +533,15 @@ public class Database {
 
     }
 
+    /**
+     *
+     * update a participant's challenge stats
+     *
+     * @param roomID
+     * @param newStats
+     * @param type
+     * @return
+     */
     public boolean updateChallengeStats(String roomID, float newStats, ChallengeType type){
 
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
@@ -521,20 +589,14 @@ public class Database {
         return true;
     }
 
-    public boolean endChallenge(String roomID, Context context){
-
-        db.collection("challenges").document(roomID).update("started", false)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                Log.w(TAG, "Transaction success! End transaction !");
-                WorkManager.getInstance(context).cancelAllWorkByTag(roomID);
-            }
-        });
-
-        return true;
-    }
-
+    /**
+     *
+     * get the leader board stats of a given challenge room ID and pass the info back to the calling class
+     *
+     * @param roomID
+     * @param handler
+     * @return
+     */
     public boolean getLeaderBoardStats(String roomID, OnLeaderBoardStatsGetCompletionHandler handler){
 
         db.collection("challenges").document(roomID).collection("stats").get()
@@ -560,6 +622,15 @@ public class Database {
         return true;
     }
 
+    /**
+     *
+     * listen to real time challenge stats changes for a given challenge
+     *
+     * @param roomID
+     * @param type
+     * @param handler
+     * @return
+     */
     public boolean startStatsChangeListener(String roomID, ChallengeType type, UIUpdateCompletionHandler handler){
 
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
@@ -606,6 +677,13 @@ public class Database {
 
     }
 
+    /**
+     *
+     * garbage collect all empty challenges
+     *
+     * @param roomID
+     * @return
+     */
     public boolean cleanUpEmptyChallenges(String roomID){
 
         final DocumentReference challengeRef = db.collection("challenges").document(roomID);
@@ -645,6 +723,16 @@ public class Database {
         return true;
     }
 
+    /**
+     *
+     * upload the weight images to firebase storage
+     *
+     * @param ref
+     * @param metadata
+     * @param data
+     * @param handler
+     * @return
+     */
     public boolean uploadImg(StorageReference ref, StorageMetadata metadata, byte[] data, UIUpdateCompletionHandler handler){
 
         UploadTask uploadTask = ref.putBytes(data, metadata);
@@ -670,29 +758,13 @@ public class Database {
         return true;
     }
 
-    public boolean checkHasBegin(String roomID, UIUpdateCompletionHandler handler){
-
-        FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        FirebaseUser user = mAuth.getCurrentUser();
-
-        db.collection("challenges").document(roomID).collection("stats").document(user.getUid())
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful()) {
-
-                            Boolean hasBegin = task.getResult().getBoolean("hasBegin");
-                            handler.updateUI(hasBegin, null);
-
-                        } else {
-                            Log.d(TAG, "Error getting documents: ", task.getException());
-                        }
-                    }
-                });
-        return true;
-    }
-
+    /**
+     *
+     * set the weight prompt the participant of the given challenge room ID
+     *
+     * @param roomID
+     * @return
+     */
     public boolean setWeightPrompt(String roomID){
 
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
@@ -704,6 +776,14 @@ public class Database {
         return true;
     }
 
+    /**
+     *
+     * check to see if the participant should be prompted to take and submit a new weight image or not
+     *
+     * @param roomID
+     * @param handler
+     * @return
+     */
     public boolean checkWeightPrompt(String roomID, OnBooleanPromptHandler handler){
 
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
@@ -728,6 +808,14 @@ public class Database {
         return true;
     }
 
+    /**
+     *
+     * check to see if the participant has already bet or not
+     *
+     * @param roomID
+     * @param handler
+     * @return
+     */
     public boolean checkHasBet(String roomID, OnPlaceBetHandler handler){
 
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
@@ -751,19 +839,26 @@ public class Database {
         return true;
     }
 
-    public boolean checkChallengeResult(String roomID, OnBooleanPromptHandler handler){
-
-        FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        FirebaseUser user = mAuth.getCurrentUser();
+    /**
+     *
+     * check the result of a given challenge and pass the result back to the calling class
+     *
+     * @param roomID
+     * @param handler
+     * @return
+     */
+    public boolean checkChallengeResult(String roomID, OnDataPassHandler handler){
 
         db.collection("challenges").document(roomID).get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                         if (task.isSuccessful()) {
-
-                            String winner = task.getResult().getString("winner");
-                            handler.passBoolean(winner.equals(user.getUid()));
+                            Map<String,String> data = new HashMap<>();
+                            data.put("bet", task.getResult().get("bet").toString());
+                            data.put("pot", task.getResult().get("pot").toString());
+                            data.put("winner", task.getResult().getString("winner"));
+                            handler.passData(data);
 
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
@@ -774,6 +869,13 @@ public class Database {
         return true;
     }
 
+    /**
+     *
+     * testing method to assign random distances to distance challenge participants (for GRADER)
+     *
+     * @param roomID
+     * @return
+     */
     public boolean assignRandomDIstance(String roomID){
 
         db.collection("challenges").document(roomID).collection("stats").get()
@@ -797,6 +899,14 @@ public class Database {
         return true;
     }
 
+    /**
+     *
+     * listen for end challenge notification in order to direct the participant to the challenge end screen
+     *
+     * @param roomID
+     * @param handler
+     * @return
+     */
     public boolean startChallengeStatusListener(String roomID, OnBooleanPromptHandler handler){
 
         challengeStatusListener = db.collection("challenges").document(roomID).addSnapshotListener(new EventListener<DocumentSnapshot>() {

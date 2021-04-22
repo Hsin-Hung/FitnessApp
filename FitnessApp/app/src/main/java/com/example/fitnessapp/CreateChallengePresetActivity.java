@@ -35,6 +35,9 @@ import fitnessapp_objects.Database;
 import fitnessapp_objects.Participant;
 import fitnessapp_objects.UserAccount;
 
+/**
+ * this class represents the screen to enter all the needed info for creating a new challenge
+ */
 public class CreateChallengePresetActivity extends AppCompatActivity implements OnItemSelectedListener, OnDatePickListener, Database.UIUpdateCompletionHandler {
 
     private final int PASSWORD_MIN_LEN = 6;

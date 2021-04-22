@@ -9,9 +9,12 @@ import android.widget.TextView;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * this class represents the info of the challenge which include, name, description, end data, bet amount, and etc.
+ */
 public class ChallengeInfoActivity extends AppCompatActivity {
 
-    TextView descrypTV, typeTV, endDateTV, betAmountTV;
+    private TextView descrypTV, typeTV, endDateTV, betAmountTV;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +26,7 @@ public class ChallengeInfoActivity extends AppCompatActivity {
         endDateTV = (TextView) findViewById(R.id.end_date_info_tv);
         betAmountTV = (TextView) findViewById(R.id.bet_amount_info_tv);
 
+        //noinspection unchecked
         Map<String,String> challengeInfo = (HashMap<String,String>) getIntent().getSerializableExtra("challengeInfo");
 
         descrypTV.setText(challengeInfo.get("description"));

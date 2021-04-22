@@ -40,6 +40,9 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+/**
+ * this class represents the challenge lobby which shows the participants
+ */
 public class ChallengeLobbyActivity extends AppCompatActivity implements Database.OnRoomChangeListener, Database.UIUpdateCompletionHandler, Database.OnBooleanPromptHandler, Database.OnPlaceBetHandler {
 
     private final int MY_PERMISSIONS_REQUEST_ACTIVITY = 2;
@@ -150,7 +153,9 @@ public class ChallengeLobbyActivity extends AppCompatActivity implements Databas
 
     }
 
-
+    /**
+     * quit the challenge
+     */
     public void quit(View view) {
 
         db.quitChallenge(roomID, this);
@@ -329,6 +334,9 @@ public class ChallengeLobbyActivity extends AppCompatActivity implements Databas
         }
     }
 
+    /**
+     * direct the user to the correct challenge screen
+     */
     public void goToScreen(){
 
         switch(type){
@@ -345,6 +353,9 @@ public class ChallengeLobbyActivity extends AppCompatActivity implements Databas
 
     }
 
+    /**
+     * go the to distance challenge main screen
+     */
     public void goToDistance() {
 
         Intent intent = new Intent(this, DistanceChallengeActivity.class);
@@ -353,6 +364,9 @@ public class ChallengeLobbyActivity extends AppCompatActivity implements Databas
         startActivity(intent);
     }
 
+    /**
+     * go to the weight loss challenge main screen
+     */
     public void goToWeightScreen() {
         Intent intent;
         if (weightPrompt) {

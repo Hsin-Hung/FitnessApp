@@ -30,6 +30,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import fitnessapp_objects.AuthPermission;
 import fitnessapp_objects.UserAccount;
 
+/**
+ * this class represents the home screen of the app
+ */
 public class HomeActivity extends AppCompatActivity {
 
     private final int GOOGLE_FIT_PERMISSIONS_REQUEST_CODE = 1;
@@ -196,26 +199,6 @@ public class HomeActivity extends AppCompatActivity {
 
         }
 
-    }
-
-    /**
-     * test button for checking permissions
-     * TODO - remove when submitting the app
-     */
-    public void checkPermission(View view) {
-
-        fitnessOptions =
-                FitnessOptions.builder()
-                        .addDataType(DataType.TYPE_DISTANCE_DELTA, FitnessOptions.ACCESS_READ)
-                        .addDataType(DataType.AGGREGATE_DISTANCE_DELTA, FitnessOptions.ACCESS_READ)
-                        .build();
-
-        GoogleSignInAccount account = GoogleSignIn.getAccountForExtension(this, fitnessOptions);
-
-        boolean check = GoogleSignIn.hasPermissions(account, fitnessOptions);
-
-        Toast.makeText(HomeActivity.this, String.valueOf(check),
-                Toast.LENGTH_SHORT).show();
     }
 
 

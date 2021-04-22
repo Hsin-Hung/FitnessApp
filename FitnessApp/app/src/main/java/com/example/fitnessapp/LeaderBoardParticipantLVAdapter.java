@@ -16,6 +16,9 @@ import java.util.List;
 import fitnessapp_objects.ChallengeType;
 import fitnessapp_objects.ParticipantModel;
 
+/**
+ * this is an adapter class for populating leader board related list views
+ */
 public class LeaderBoardParticipantLVAdapter extends ArrayAdapter<ParticipantModel> {
 
 

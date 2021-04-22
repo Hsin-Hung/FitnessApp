@@ -41,6 +41,9 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+/**
+ * this class represents the screen for purchasing fitness coins with credit/debit cards
+ */
 public class PurchaseCoinActivity extends AppCompatActivity implements Database.UIUpdateCompletionHandler {
 
     private static final String BACKEND_URL = "https://fitnessapp501.herokuapp.com/";
@@ -78,6 +81,9 @@ public class PurchaseCoinActivity extends AppCompatActivity implements Database.
         super.onDestroy();
     }
 
+    /**
+     * start the buying and payment process
+     */
     private void startCheckout() {
 
         mAuth = FirebaseAuth.getInstance();

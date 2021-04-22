@@ -1,5 +1,8 @@
 package fitnessapp_objects;
 
+/**
+ * this class represents a participant
+ */
 public class Participant {
 
     String name;

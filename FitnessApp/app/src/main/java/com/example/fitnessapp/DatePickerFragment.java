@@ -17,7 +17,9 @@ import com.google.android.gms.common.util.DataUtils;
 import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 
-
+/**
+ * dialog fragment to pick end date in the challenge preset activity screen
+ */
 public class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener{
 
     OnDatePickListener onDatePickListener;
@@ -36,7 +38,7 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
 
     public interface OnDatePickListener{
 
-        public void setDate(int year, int month, int day);
+        void setDate(int year, int month, int day);
 
     }
 

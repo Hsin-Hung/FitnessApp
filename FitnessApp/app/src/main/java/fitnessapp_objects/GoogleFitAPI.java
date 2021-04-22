@@ -9,11 +9,14 @@ import com.google.android.gms.fitness.Fitness;
 import com.google.android.gms.fitness.FitnessOptions;
 import com.google.android.gms.fitness.data.DataType;
 
+/**
+ * a class that act as an API to access googlefit related methods
+ */
 public class GoogleFitAPI {
 
     private final String TAG = "GoogleFitAPI";
     private static GoogleFitAPI googleFitAPI_instance = null;
-    GoogleSignInOptionsExtension fitnessOptions;
+    private GoogleSignInOptionsExtension fitnessOptions;
 
     private GoogleFitAPI(){
 
@@ -36,10 +39,5 @@ public class GoogleFitAPI {
 
     }
 
-    public void subscribeToRecordingClient(){
-
-
-
-    }
 
 }

@@ -16,6 +16,9 @@ import fitnessapp_objects.ChallengeRoom;
 import fitnessapp_objects.ChallengeRoomModel;
 import fitnessapp_objects.Database;
 
+/**
+ * this class represents the screen for views all the participated challenges
+ */
 public class MyChallengesActivity extends AppCompatActivity implements Database.OnRoomGetCompletionHandler, AdapterView.OnItemClickListener {
 
     private ListView myChallengesLV;
@@ -40,6 +43,9 @@ public class MyChallengesActivity extends AppCompatActivity implements Database.
 
     }
 
+    /**
+     * reload my challenges
+     */
     public void reload(View view) {
 
         db.getMyChallenges(this);

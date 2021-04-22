@@ -4,17 +4,17 @@ import com.google.firebase.auth.FirebaseUser;
 
 import java.util.*;
 
-//UserAccount is a singleton, call UserAccount.getInstance() to get the user account.
+/**
+ * this class represents the user account object, which all the user information.
+ * A singleton class as there will only be one signed in user at any time.
+ */
 public class UserAccount {
 
     private String userID; // can get it from FirebaseAuth.getInstance().getCurrentUser().getUid()
     private String name;
     private String email;
     private int coin;
-    private FitnessData fitnessData;
-    private ArrayList<String> friendList; //store friends as a list of uid
     private ArrayList<String> challenges; // all the challenges this user currently joined, represent by challenge doc ID
-    private ChallengeHistory challengeHistory;
 
     private static UserAccount userAccount_instance = null;
 
@@ -63,30 +63,6 @@ public class UserAccount {
     public int getCoin() { return coin; }
 
     public void setCoin(int coin) { this.coin = coin; }
-
-    public FitnessData getFitnessData() {
-        return fitnessData;
-    }
-
-    public void setFitnessData(FitnessData fitnessData) {
-        this.fitnessData = fitnessData;
-    }
-
-    public ArrayList<String> getFriendList() {
-        return friendList;
-    }
-
-    public void setFriendList(ArrayList<String> friendList) {
-        this.friendList = friendList;
-    }
-
-    public ChallengeHistory getChallengeHistories() {
-        return challengeHistory;
-    }
-
-    public void setChallengeHistories(ChallengeHistory challengeHistories) {
-        this.challengeHistory = challengeHistories;
-    }
 
     public void addNewChallenge(String challengeID){
         challenges.add(challengeID);

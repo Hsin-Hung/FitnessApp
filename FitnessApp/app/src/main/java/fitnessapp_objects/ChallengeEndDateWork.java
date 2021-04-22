@@ -15,7 +15,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 
 /**
- * Work for workmanager
+ * Work for work manager to end a challenge
  */
 public class ChallengeEndDateWork extends Worker {
 

@@ -31,6 +31,9 @@ import java.util.Map;
 import fitnessapp_objects.Database;
 import fitnessapp_objects.UserAccount;
 
+/**
+ * this class represents the first screen of the app, which you pick to sign up or sign in with existing account
+ */
 public class LaunchActivity extends AppCompatActivity implements View.OnClickListener, Database.UIUpdateCompletionHandler {
 
     private static final String TAG = "LaunchActivity";

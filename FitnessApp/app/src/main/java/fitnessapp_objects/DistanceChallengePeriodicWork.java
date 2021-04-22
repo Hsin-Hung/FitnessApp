@@ -26,6 +26,9 @@ import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * work class for work manager to assign periodic background tasks to fetch distance data from history client
+ */
 public class DistanceChallengePeriodicWork extends Worker {
 
     private final String TAG = "ChallengeWork";

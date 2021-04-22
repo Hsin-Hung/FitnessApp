@@ -44,6 +44,9 @@ import fitnessapp_objects.ParticipantModel;
 import fitnessapp_objects.WeightChallengePeriodicWork;
 import fitnessapp_objects.WorkManagerAPI;
 
+/**
+ * this class represents the weight challenge main screen, which shows your current weight and a leaderbaord of the weight loss
+ */
 public class WeightChallengeActivity extends AppCompatActivity implements Database.OnLeaderBoardStatsGetCompletionHandler, Database.UIUpdateCompletionHandler, Database.OnBooleanPromptHandler {
 
     private final String TAG = "WeightChallActivity";
@@ -134,6 +137,9 @@ public class WeightChallengeActivity extends AppCompatActivity implements Databa
         super.onDestroy();
     }
 
+    /**
+     * initialize the UI to show your weight, leaderboard, and start all the needed background processes for the challenge
+     */
     public void initTask(){
 
         startWeightChangeListener();
@@ -143,6 +149,9 @@ public class WeightChallengeActivity extends AppCompatActivity implements Databa
         WorkManagerAPI.getInstance().viewAllWork(WorkManager.getInstance(this), roomID);
     }
 
+    /**
+     * update the weight in real time
+     */
     public void startWeightChangeListener(){
 
         db.startStatsChangeListener(roomID, ChallengeType.WEIGHTLOSS, this);
@@ -200,9 +209,11 @@ public class WeightChallengeActivity extends AppCompatActivity implements Databa
         if(isSuccess)myWeightTV.setText(data.get("weight"));
     }
 
+    /**
+     * start the background worker process that prompt the user for new weight image once a week
+     */
     public void startPeriodicDistanceUpdateTask(){
 
-        long currentTime = new Timestamp(new Date()).toDate().getTime();
 
         Constraints constraints = new Constraints.Builder()
                 .setRequiredNetworkType(NetworkType.CONNECTED)
@@ -247,6 +258,9 @@ public class WeightChallengeActivity extends AppCompatActivity implements Databa
 
     }
 
+    /**
+     * a background worker process that ends the challenge when the end date is reached
+     */
     public void startEndDateNotifyTask(){
 
         long currentTime = new Timestamp(new Date()).toDate().getTime();

@@ -21,6 +21,9 @@ import com.google.firebase.Timestamp;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * work class for work manager to assign periodic weight photo prompt for participants
+ */
 public class WeightChallengePeriodicWork extends Worker {
 
 

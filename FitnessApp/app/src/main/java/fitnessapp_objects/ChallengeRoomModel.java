@@ -6,17 +6,20 @@ import com.google.firebase.Timestamp;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * this challenge room model class is used by the adapter to populate list views
+ */
 public class ChallengeRoomModel {
 
-    String id;
-    String name;
-    String description;
-    ChallengeType type;
-    boolean isBet;
-    int betAmount;
-    Timestamp endDate;
-    String password;
-    boolean started;
+    private String id;
+    private String name;
+    private String description;
+    private ChallengeType type;
+    private boolean isBet;
+    private int betAmount;
+    private Timestamp endDate;
+    private String password;
+    private boolean started;
 
 
     public ChallengeRoomModel(String id, String description, String name, ChallengeType type, boolean isBet, int betAmount, Timestamp endDate, String password, boolean started) {

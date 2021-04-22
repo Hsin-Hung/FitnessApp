@@ -1,15 +1,19 @@
 package fitnessapp_objects;
 
+
+/**
+ * this class represents all the challenge stats of any participant
+ */
 public class ChallengeStats {
 
-    String name;
-    String id;
-    boolean hasBet;
-    boolean hasBegin;
-    boolean weightPrompt;
-    float distance;
-    float weight;
-    float initWeight;
+    private String name;
+    private String id;
+    private boolean hasBet;
+    private boolean hasBegin;
+    private boolean weightPrompt;
+    private float distance;
+    private float weight;
+    private float initWeight;
 
     public ChallengeStats(){
 

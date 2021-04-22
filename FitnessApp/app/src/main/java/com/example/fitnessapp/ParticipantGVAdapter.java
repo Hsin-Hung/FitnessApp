@@ -14,6 +14,9 @@ import java.util.ArrayList;
 
 import fitnessapp_objects.ParticipantModel;
 
+/**
+ * this is an adapter to populate the joined participants from the grid view
+ */
 public class ParticipantGVAdapter extends ArrayAdapter<ParticipantModel> {
 
 

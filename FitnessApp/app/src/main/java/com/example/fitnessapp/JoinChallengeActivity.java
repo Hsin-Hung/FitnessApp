@@ -17,6 +17,9 @@ import fitnessapp_objects.ChallengeRoom;
 import fitnessapp_objects.ChallengeRoomModel;
 import fitnessapp_objects.Database;
 
+/**
+ * this class represents the screen for users to join any challenge
+ */
 public class JoinChallengeActivity extends AppCompatActivity implements Database.OnRoomGetCompletionHandler, AdapterView.OnItemClickListener,
         PasswordDialogFragment.PasswordDialogListener, Database.UIUpdateCompletionHandler, SearchView.OnQueryTextListener {
 

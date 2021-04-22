@@ -7,6 +7,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * this class represent a challenge and contains all its info
+ */
 public class ChallengeRoom {
 
     private String id;

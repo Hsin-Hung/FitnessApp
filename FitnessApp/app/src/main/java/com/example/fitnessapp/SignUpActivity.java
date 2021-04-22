@@ -22,6 +22,9 @@ import java.util.Map;
 import fitnessapp_objects.Database;
 import fitnessapp_objects.UserAccount;
 
+/**
+ * this class represents the sign up screen
+ */
 public class SignUpActivity extends AppCompatActivity implements Database.UIUpdateCompletionHandler {
 
     private final String TAG = "SignUpActivity";
