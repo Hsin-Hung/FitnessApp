@@ -13,7 +13,9 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -48,9 +50,10 @@ import okhttp3.Response;
 public class ChallengeLobbyActivity extends AppCompatActivity implements Database.OnRoomChangeListener, Database.UIUpdateCompletionHandler, Database.OnBooleanPromptHandler, Database.OnPlaceBetHandler {
 
     private final int MY_PERMISSIONS_REQUEST_ACTIVITY = 2;
-
+    private long BTN_DISABLE_TIME = 5000;
     private static final String BACKEND_URL = "https://fitnessapp501.herokuapp.com/";
     private final OkHttpClient httpClient = new OkHttpClient();
+    private Button beginChallBTN;
     private TextView roomNameTV, beginInfoTV;
     private GridView participants_view;
     private ArrayList<ParticipantModel> participantModelArrayList;
@@ -72,6 +75,7 @@ public class ChallengeLobbyActivity extends AppCompatActivity implements Databas
         roomNameTV = (TextView) findViewById(R.id.room_name_info_tv);
         beginInfoTV = (TextView) findViewById(R.id.begin_info_tv);
         participants_view = (GridView) findViewById(R.id.participant_grid);
+        beginChallBTN = (Button) findViewById(R.id.begin_chall_btn);
 
         participantModelArrayList = new ArrayList<>();
 
@@ -128,7 +132,19 @@ public class ChallengeLobbyActivity extends AppCompatActivity implements Databas
      */
     public void beginChallenge(View view) {
 
+        beginChallBTN.setEnabled(false);
 
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        beginChallBTN.setEnabled(true);
+                    }
+                });
+            }
+        }, BTN_DISABLE_TIME);
         switch (type) {
             case "DISTANCE":
                 if (betAmount > 0) {
@@ -141,6 +157,7 @@ public class ChallengeLobbyActivity extends AppCompatActivity implements Databas
                 db.checkWeightPrompt(roomID, this);
                 return;
             default:
+                beginChallBTN.setEnabled(true);
                 System.out.println("No such challenge !");
                 return;
 
