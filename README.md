@@ -10,7 +10,7 @@ Marketing Report: https://docs.google.com/document/d/10yEVwmOK6W7ScaIVBPYl-nrl7o
 # Notes for GRADER when running the app:
 
 1. 
-    In Testing Mode, Google only allows test users to use the app with GoogleFit API, which our app does. In order for any gmail to access our app, we will have to publish our app and have an extensive app verification process with google. This provided gmail below is one the test user. 
+    Use this testing account to test the app: 
 
     Use this gmail to sign in the app with Google Sign In: 
 
