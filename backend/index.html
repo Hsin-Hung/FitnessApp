@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Stripe Example</title>
+  </head>  
+  <body>
+    <p>
+      Your server is running. You can test the payment sheet endpoint with:
+    </p>
+    
+    <code id="endpoint_test_command"></code>
+    
+    <script>
+      document.getElementById("endpoint_test_command").innerHTML = 
+        "$ curl -X POST " + window.location.href + "payment-sheet";
+    </script>
+  </body>
+</html>
